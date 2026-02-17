@@ -1,44 +1,42 @@
-import { Headphones, HelpCircle } from 'lucide-react'
+import { Phone, MessageCircle } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 const TopBar = () => {
   return (
-    <div className="bg-white border-b border-gray-200">
+    <div className="bg-gray-900 text-white">
       <div className="max-w-[1200px] mx-auto px-4">
         <div className="flex items-center justify-between h-9 text-xs">
           {/* Left side */}
-          <div className="flex items-center gap-2">
-            <span className="text-gray-700">
-              <span className="font-bold text-blue-600">공간나라</span>는{' '}
-              <span className="text-blue-600 font-medium">인테리어 전문 기업</span> 입니다
-            </span>
-            <span className="inline-flex items-center justify-center w-5 h-5 bg-gray-200 rounded-full text-[10px] text-gray-600 cursor-pointer hover:bg-gray-300">
-              GO
+          <div className="flex items-center gap-4">
+            <span className="text-gray-300">
+              <span className="font-bold text-white">공간나라</span> - 20년 전통 인테리어 전문 기업
             </span>
           </div>
 
           {/* Right side */}
-          <div className="flex items-center gap-3 text-gray-600">
-            <Link to="/login" className="hover:text-blue-600 transition-colors">
-              로그인
+          <div className="flex items-center gap-4 text-gray-300">
+            <a 
+              href="tel:1577-2288" 
+              className="flex items-center gap-1 hover:text-white transition-colors"
+            >
+              <Phone size={12} />
+              <span>1577-2288</span>
+            </a>
+            <span className="text-gray-600">|</span>
+            <Link 
+              to="/estimate" 
+              className="flex items-center gap-1 hover:text-white transition-colors"
+            >
+              <MessageCircle size={12} />
+              <span>빠른 상담</span>
             </Link>
-            <span className="text-gray-300">|</span>
-            <Link to="/signup" className="hover:text-blue-600 transition-colors">
-              회원가입
+            <span className="text-gray-600">|</span>
+            <Link to="/faq" className="hover:text-white transition-colors">
+              자주 묻는 질문
             </Link>
-            <span className="text-gray-300">|</span>
-            <Link to="/mypage" className="flex items-center gap-1 hover:text-blue-600 transition-colors">
-              마이페이지 <span className="text-[10px]">▼</span>
-            </Link>
-            <span className="text-gray-300">|</span>
-            <Link to="/support" className="flex items-center gap-1 hover:text-blue-600 transition-colors">
-              <Headphones size={12} />
-              고객센터
-            </Link>
-            <span className="text-gray-300">|</span>
-            <Link to="/faq" className="flex items-center gap-1 text-blue-600 hover:text-blue-700 transition-colors">
-              <HelpCircle size={12} />
-              자주하는 질문
+            <span className="text-gray-600">|</span>
+            <Link to="/location" className="hover:text-white transition-colors">
+              오시는 길
             </Link>
           </div>
         </div>
@@ -48,4 +46,3 @@ const TopBar = () => {
 }
 
 export default TopBar
-

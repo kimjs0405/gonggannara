@@ -1,10 +1,10 @@
 import { Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout'
 import HomePage from './pages/HomePage'
-import ProductsPage from './pages/ProductsPage'
-import ProductDetailPage from './pages/ProductDetailPage'
-import CartPage from './pages/CartPage'
-import LoginPage from './pages/LoginPage'
+import EstimatePage from './pages/EstimatePage'
+import PortfolioPage from './pages/PortfolioPage'
+import ReviewsPage from './pages/ReviewsPage'
+import AboutPage from './pages/AboutPage'
 
 // Admin
 import AdminLayout from './components/admin/AdminLayout'
@@ -17,13 +17,17 @@ import AdminUsersPage from './pages/admin/UsersPage'
 function App() {
   return (
     <Routes>
-      {/* 쇼핑몰 라우트 */}
+      {/* 메인 사이트 라우트 */}
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
-        <Route path="products" element={<ProductsPage />} />
-        <Route path="products/:id" element={<ProductDetailPage />} />
-        <Route path="cart" element={<CartPage />} />
-        <Route path="login" element={<LoginPage />} />
+        <Route path="estimate" element={<EstimatePage />} />
+        <Route path="portfolio" element={<PortfolioPage />} />
+        <Route path="portfolio/:id" element={<PortfolioPage />} />
+        <Route path="reviews" element={<ReviewsPage />} />
+        <Route path="about" element={<AboutPage />} />
+        <Route path="services/:category" element={<PortfolioPage />} />
+        <Route path="faq" element={<AboutPage />} />
+        <Route path="location" element={<AboutPage />} />
       </Route>
 
       {/* 관리자 로그인 (레이아웃 없음) */}

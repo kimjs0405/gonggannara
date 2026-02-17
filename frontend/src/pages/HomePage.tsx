@@ -1,63 +1,51 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronLeft, ChevronRight, Sofa, Lamp, Blinds, PaintBucket, Bath, Package, Palette, Armchair, BedDouble, Clock, Frame, Flower2, Sparkles } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Phone, CheckCircle, Star, ArrowRight } from 'lucide-react'
 
 const HomePage = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
 
-  const categories = [
-    { name: '가구·소파·침대', slug: 'furniture', icon: Sofa },
-    { name: '조명·인테리어등', slug: 'lighting', icon: Lamp },
-    { name: '커튼·블라인드', slug: 'curtain', icon: Blinds },
-    { name: '벽지·바닥재', slug: 'wallpaper', icon: PaintBucket },
-    { name: '주방·욕실용품', slug: 'kitchen', icon: Bath },
-    { name: '수납·정리용품', slug: 'storage', icon: Package },
-    { name: '홈데코·소품', slug: 'deco', icon: Palette },
-  ]
-
   const banners = [
     {
       id: 1,
-      category: '소파·거실가구',
-      bg: '#F5EFE6',
-      accent: '#8B7355',
+      title: '당신의 공간을\n새롭게 디자인합니다',
+      subtitle: '20년 경력의 인테리어 전문가가 함께합니다',
+      bg: 'bg-gradient-to-r from-slate-900 to-slate-700',
     },
     {
       id: 2,
-      category: '조명·무드등',
-      bg: '#FFF8E7',
-      accent: '#C4A574',
+      title: '무료 방문상담\n진행중',
+      subtitle: '견적부터 시공까지 원스톱 서비스',
+      bg: 'bg-gradient-to-r from-blue-900 to-blue-700',
     },
     {
       id: 3,
-      category: '침실·침구류',
-      bg: '#E8F0F2',
-      accent: '#5C7A8A',
+      title: '이달의 특별 혜택\n최대 20% 할인',
+      subtitle: '주방·욕실 리모델링 패키지',
+      bg: 'bg-gradient-to-r from-amber-900 to-amber-700',
     },
   ]
 
-  const categoryIcons = [
-    { name: '소파', icon: Sofa },
-    { name: '침대', icon: BedDouble },
-    { name: '조명', icon: Lamp },
-    { name: '의자', icon: Armchair },
-    { name: '책상', icon: Package },
-    { name: '수납장', icon: Package },
-    { name: '커튼', icon: Blinds },
-    { name: '러그', icon: Palette },
-    { name: '시계', icon: Clock },
-    { name: '액자', icon: Frame },
-    { name: '화분', icon: Flower2 },
-    { name: '신상품', icon: Sparkles, isNew: true },
+  const services = [
+    { name: '거실 인테리어', desc: '품격있는 거실 공간', image: '🛋️' },
+    { name: '주방 인테리어', desc: '실용적인 주방 설계', image: '🍳' },
+    { name: '침실 인테리어', desc: '편안한 휴식 공간', image: '🛏️' },
+    { name: '욕실 인테리어', desc: '깔끔한 욕실 리모델링', image: '🚿' },
+    { name: '사무실 인테리어', desc: '효율적인 업무 환경', image: '🏢' },
+    { name: '상업공간', desc: '매장·카페·식당', image: '🏪' },
   ]
 
-  const products = [
-    { id: 1, name: '이탈리아 천연가죽 4인 소파', price: 1890000, originalPrice: 2400000, discount: 21, category: '소파', badge: 'BEST' },
-    { id: 2, name: '루이스폴센 PH5 펜던트 조명', price: 890000, originalPrice: 1200000, discount: 26, category: '조명', badge: 'HOT' },
-    { id: 3, name: '원목 월넛 6단 서랍장', price: 680000, originalPrice: 850000, discount: 20, category: '수납장', badge: 'NEW' },
-    { id: 4, name: '호텔식 암막커튼 세트 (4장)', price: 128000, originalPrice: 180000, discount: 29, category: '커튼' },
-    { id: 5, name: '허먼밀러 에어론 체어', price: 1650000, originalPrice: 1890000, discount: 13, category: '의자' },
-    { id: 6, name: '페르시안 핸드메이드 러그', price: 450000, originalPrice: 620000, discount: 27, category: '러그' },
+  const portfolios = [
+    { id: 1, title: '모던 아파트 전체 리모델링', location: '서울 강남구', area: '32평', style: '모던' },
+    { id: 2, title: '미니멀 원룸 인테리어', location: '서울 마포구', area: '10평', style: '미니멀' },
+    { id: 3, title: '북유럽 스타일 거실', location: '경기 성남시', area: '25평', style: '북유럽' },
+    { id: 4, title: '카페 인테리어 시공', location: '서울 홍대', area: '45평', style: '인더스트리얼' },
+  ]
+
+  const reviews = [
+    { name: '김*수', rating: 5, content: '처음부터 끝까지 친절하게 설명해주시고, 결과물도 너무 만족스러워요!', date: '2024.01' },
+    { name: '이*희', rating: 5, content: '예산에 맞춰서 최선의 방안을 제시해주셨어요. 강력 추천합니다.', date: '2024.01' },
+    { name: '박*준', rating: 5, content: '시공 기간도 정확하게 지켜주시고 마무리도 깔끔했습니다.', date: '2023.12' },
   ]
 
   useEffect(() => {
@@ -69,212 +57,160 @@ const HomePage = () => {
 
   return (
     <div>
-      {/* Main Banner Section */}
-      <div className="bg-white border-b">
-        <div className="max-w-[1200px] mx-auto px-4 py-5">
-          <div className="flex gap-5">
-            {/* Left Sidebar Category */}
-            <div className="w-[200px] flex-shrink-0">
-              <div className="bg-[#2563EB] rounded-lg overflow-hidden">
-                {categories.map((category, index) => {
-                  const IconComponent = category.icon
-                  return (
+      {/* Hero Banner */}
+      <div className="relative h-[500px] overflow-hidden">
+        <div
+          className="flex transition-transform duration-700 ease-in-out h-full"
+          style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+        >
+          {banners.map((banner) => (
+            <div
+              key={banner.id}
+              className={`min-w-full h-full ${banner.bg} flex items-center`}
+            >
+              <div className="max-w-[1200px] mx-auto px-4 w-full">
+                <div className="max-w-xl">
+                  <h1 className="text-5xl font-black text-white leading-tight whitespace-pre-line mb-4">
+                    {banner.title}
+                  </h1>
+                  <p className="text-xl text-white/80 mb-8">{banner.subtitle}</p>
+                  <div className="flex gap-4">
                     <Link
-                      key={index}
-                      to={`/products?category=${category.slug}`}
-                      className={`flex items-center gap-3 px-4 py-[14px] text-white hover:bg-[#1D4ED8] transition-colors ${
-                        index !== 0 ? 'border-t border-[#3B82F6]' : ''
-                      }`}
+                      to="/estimate"
+                      className="px-8 py-4 bg-white text-gray-900 rounded-lg font-bold hover:bg-gray-100 transition-colors"
                     >
-                      <IconComponent className="w-5 h-5" strokeWidth={1.5} />
-                      <span className="text-[13px]">{category.name}</span>
+                      무료 견적받기
                     </Link>
-                  )
-                })}
-              </div>
-            </div>
-
-            {/* Main Banner Slider */}
-            <div className="flex-1 relative overflow-hidden rounded-lg" style={{ height: '380px' }}>
-              <div
-                className="flex transition-transform duration-500 ease-in-out h-full"
-                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-              >
-                {banners.map((banner) => (
-                  <div
-                    key={banner.id}
-                    className="min-w-full h-full flex items-center justify-center relative"
-                    style={{ backgroundColor: banner.bg }}
-                  >
-                    {/* 상품 이미지 영역 (placeholder) */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-[500px] h-[300px] bg-white/30 rounded-2xl flex items-center justify-center">
-                        <div className="text-center">
-                          <div className="w-32 h-32 mx-auto bg-white/50 rounded-xl mb-4 flex items-center justify-center">
-                            <Sofa className="w-16 h-16" style={{ color: banner.accent }} strokeWidth={1} />
-                          </div>
-                          <p className="text-lg font-medium" style={{ color: banner.accent }}>{banner.category}</p>
-                        </div>
-                      </div>
-                    </div>
-                    {/* 배너 텍스트 */}
-                    <div className="absolute bottom-8 left-8 bg-white/90 backdrop-blur-sm rounded-lg px-6 py-4">
-                      <p className="text-2xl font-bold text-gray-800">{banner.category}</p>
-                      <p className="text-sm text-gray-500 mt-1">최대 40% 할인</p>
-                    </div>
+                    <Link
+                      to="/portfolio"
+                      className="px-8 py-4 border-2 border-white text-white rounded-lg font-bold hover:bg-white/10 transition-colors"
+                    >
+                      시공사례 보기
+                    </Link>
                   </div>
-                ))}
-              </div>
-
-              <button
-                onClick={() => setCurrentSlide((prev) => (prev - 1 + banners.length) % banners.length)}
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-shadow"
-              >
-                <ChevronLeft className="w-5 h-5 text-gray-600" />
-              </button>
-              <button
-                onClick={() => setCurrentSlide((prev) => (prev + 1) % banners.length)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-shadow"
-              >
-                <ChevronRight className="w-5 h-5 text-gray-600" />
-              </button>
-
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                {banners.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentSlide(idx)}
-                    className={`w-2.5 h-2.5 rounded-full transition-colors ${
-                      currentSlide === idx ? 'bg-[#2563EB]' : 'bg-black/20'
-                    }`}
-                  />
-                ))}
+                </div>
               </div>
             </div>
+          ))}
+        </div>
 
-            {/* Right Side Banners */}
-            <div className="w-[200px] flex-shrink-0 flex flex-col gap-4">
-              <Link to="/events" className="flex-1 bg-[#FEF3E2] rounded-lg p-5 hover:shadow-md transition-shadow">
-                <p className="text-xs text-[#B8860B] font-medium">EVENT</p>
-                <p className="text-[15px] font-bold text-gray-800 mt-1">신규회원 혜택</p>
-                <p className="text-xs text-gray-500 mt-1">최대 10만원 쿠폰팩</p>
-                <div className="mt-4 w-12 h-12 bg-white rounded-lg flex items-center justify-center">
-                  <Sparkles className="w-6 h-6 text-[#B8860B]" />
-                </div>
-              </Link>
-              <Link to="/products?shipping=free" className="flex-1 bg-[#E8F5E9] rounded-lg p-5 hover:shadow-md transition-shadow">
-                <p className="text-xs text-[#2E7D32] font-medium">FREE SHIPPING</p>
-                <p className="text-[15px] font-bold text-gray-800 mt-1">무료배송</p>
-                <p className="text-xs text-gray-500 mt-1">5만원 이상 구매시</p>
-                <div className="mt-4 w-12 h-12 bg-white rounded-lg flex items-center justify-center">
-                  <Package className="w-6 h-6 text-[#2E7D32]" />
-                </div>
-              </Link>
-            </div>
-          </div>
+        {/* Navigation */}
+        <button
+          onClick={() => setCurrentSlide((prev) => (prev - 1 + banners.length) % banners.length)}
+          className="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 backdrop-blur rounded-full flex items-center justify-center hover:bg-white/30 transition-colors"
+        >
+          <ChevronLeft className="w-6 h-6 text-white" />
+        </button>
+        <button
+          onClick={() => setCurrentSlide((prev) => (prev + 1) % banners.length)}
+          className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 backdrop-blur rounded-full flex items-center justify-center hover:bg-white/30 transition-colors"
+        >
+          <ChevronRight className="w-6 h-6 text-white" />
+        </button>
+
+        {/* Dots */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+          {banners.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrentSlide(idx)}
+              className={`w-3 h-3 rounded-full transition-colors ${
+                currentSlide === idx ? 'bg-white' : 'bg-white/40'
+              }`}
+            />
+          ))}
         </div>
       </div>
 
-      {/* Category Icons */}
-      <div className="bg-white border-b">
-        <div className="max-w-[1200px] mx-auto px-4 py-5">
-          <div className="flex items-center">
-            {/* Left Banner */}
-            <div className="w-[120px] flex-shrink-0 bg-[#2563EB] rounded-lg p-4 text-white mr-4">
-              <p className="text-[10px] opacity-80">공간나라</p>
-              <p className="text-sm font-bold mt-0.5">이달의 혜택</p>
-              <p className="text-[10px] opacity-70 mt-2 leading-tight">인테리어 용품<br/>특가 할인!</p>
-            </div>
-
-            {/* Category Grid */}
-            <div className="flex-1 flex items-center justify-between">
-              {categoryIcons.map((category, index) => {
-                const IconComponent = category.icon
-                return (
-                  <Link
-                    key={index}
-                    to="/products"
-                    className="flex flex-col items-center gap-2 px-2 group"
-                  >
-                    <div className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all group-hover:shadow-md relative ${
-                      category.isNew ? 'bg-red-50' : 'bg-gray-50'
-                    }`}>
-                      <IconComponent 
-                        className={`w-6 h-6 ${category.isNew ? 'text-red-500' : 'text-gray-600'}`} 
-                        strokeWidth={1.5} 
-                      />
-                      {category.isNew && (
-                        <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[9px] rounded-full flex items-center justify-center font-bold">
-                          N
-                        </span>
-                      )}
-                    </div>
-                    <span className="text-xs text-gray-600">{category.name}</span>
-                  </Link>
-                )
-              })}
-            </div>
-
-            {/* Right Banner */}
-            <div className="w-[120px] flex-shrink-0 bg-[#059669] rounded-lg p-4 text-white ml-4">
-              <p className="text-[10px] opacity-80">이용가이드</p>
-              <p className="text-sm font-bold mt-0.5">주문방법</p>
-              <p className="text-[10px] opacity-70 mt-2">자세히보기 →</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Popular Products */}
-      <div className="bg-[#F8F9FA] py-10">
+      {/* Quick Contact Bar */}
+      <div className="bg-blue-600 py-4">
         <div className="max-w-[1200px] mx-auto px-4">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <h2 className="text-xl font-bold text-gray-800">인기 인테리어 상품</h2>
-              <span className="px-2.5 py-1 bg-[#2563EB] text-white text-[11px] rounded">VIP 전용</span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-8">
+              {['무료 방문상담', '정확한 견적', '책임 시공', 'A/S 보장'].map((item) => (
+                <div key={item} className="flex items-center gap-2 text-white">
+                  <CheckCircle className="w-5 h-5" />
+                  <span className="font-medium">{item}</span>
+                </div>
+              ))}
             </div>
-            <Link to="/products" className="text-sm text-gray-400 hover:text-[#2563EB] transition-colors">
-              전체보기 &gt;
+            <a
+              href="tel:1577-2288"
+              className="flex items-center gap-3 px-6 py-3 bg-white rounded-lg text-blue-600 font-bold hover:bg-gray-100 transition-colors"
+            >
+              <Phone className="w-5 h-5" />
+              <span>1577-2288</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Services */}
+      <div className="py-20 bg-white">
+        <div className="max-w-[1200px] mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-black text-gray-900 mb-3">인테리어 서비스</h2>
+            <p className="text-gray-500">공간나라가 제공하는 전문 인테리어 서비스를 만나보세요</p>
+          </div>
+
+          <div className="grid grid-cols-6 gap-4">
+            {services.map((service, idx) => (
+              <Link
+                key={idx}
+                to={`/services/${service.name}`}
+                className="bg-gray-50 rounded-2xl p-6 text-center hover:shadow-lg hover:-translate-y-1 transition-all group"
+              >
+                <div className="text-5xl mb-4">{service.image}</div>
+                <h3 className="font-bold text-gray-800 mb-1 group-hover:text-blue-600 transition-colors">
+                  {service.name}
+                </h3>
+                <p className="text-sm text-gray-500">{service.desc}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Portfolio Preview */}
+      <div className="py-20 bg-gray-50">
+        <div className="max-w-[1200px] mx-auto px-4">
+          <div className="flex items-end justify-between mb-10">
+            <div>
+              <h2 className="text-3xl font-black text-gray-900 mb-3">포트폴리오</h2>
+              <p className="text-gray-500">공간나라의 시공 사례를 확인해보세요</p>
+            </div>
+            <Link
+              to="/portfolio"
+              className="flex items-center gap-2 text-blue-600 font-medium hover:gap-3 transition-all"
+            >
+              전체보기 <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-6 gap-3">
-            {products.map((product) => (
+          <div className="grid grid-cols-4 gap-5">
+            {portfolios.map((item) => (
               <Link
-                key={product.id}
-                to={`/products/${product.id}`}
-                className="bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow group border border-gray-100"
+                key={item.id}
+                to={`/portfolio/${item.id}`}
+                className="bg-white rounded-2xl overflow-hidden hover:shadow-xl transition-shadow group"
               >
-                {/* 상품 이미지 */}
-                <div className="relative h-[160px] bg-[#F5F5F5] flex items-center justify-center overflow-hidden">
-                  <div className="w-24 h-24 bg-gray-200 rounded-lg flex items-center justify-center">
-                    <Sofa className="w-10 h-10 text-gray-400" strokeWidth={1} />
-                  </div>
-                  {product.badge && (
-                    <span className={`absolute top-2 left-2 px-2 py-0.5 text-[10px] font-bold text-white rounded ${
-                      product.badge === 'BEST' ? 'bg-red-500' :
-                      product.badge === 'HOT' ? 'bg-orange-500' : 'bg-[#2563EB]'
-                    }`}>
-                      {product.badge}
+                <div className="h-48 bg-gray-200 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                  <div className="absolute bottom-3 left-3">
+                    <span className="px-2 py-1 bg-white/90 rounded text-xs font-medium text-gray-700">
+                      {item.style}
                     </span>
-                  )}
+                  </div>
                 </div>
-                {/* 상품 정보 */}
-                <div className="p-3">
-                  <p className="text-[11px] text-gray-400 mb-1">{product.category}</p>
-                  <h3 className="text-[13px] text-gray-700 leading-tight line-clamp-2 h-[36px] mb-2">
-                    {product.name}
+                <div className="p-4">
+                  <h3 className="font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">
+                    {item.title}
                   </h3>
-                  <div className="flex items-baseline gap-1.5">
-                    <span className="text-red-500 text-sm font-bold">{product.discount}%</span>
-                    <span className="text-[15px] font-bold text-gray-900">
-                      {product.price.toLocaleString()}
-                    </span>
-                    <span className="text-[13px] text-gray-900">원</span>
+                  <div className="flex items-center gap-3 text-sm text-gray-500">
+                    <span>{item.location}</span>
+                    <span>•</span>
+                    <span>{item.area}</span>
                   </div>
-                  <p className="text-[11px] text-gray-300 line-through">
-                    {product.originalPrice.toLocaleString()}원
-                  </p>
                 </div>
               </Link>
             ))}
@@ -282,77 +218,64 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* Special Section */}
-      <div className="bg-white py-10">
+      {/* Reviews */}
+      <div className="py-20 bg-white">
         <div className="max-w-[1200px] mx-auto px-4">
-          <div className="grid grid-cols-2 gap-5">
-            {/* 컨설팅 배너 */}
-            <div className="bg-[#F8F6F4] rounded-xl p-8 relative overflow-hidden">
-              <p className="text-[#2563EB] text-sm font-medium mb-1">맞춤 인테리어</p>
-              <h3 className="text-2xl font-bold text-gray-800 mb-2">공간 디자인 컨설팅</h3>
-              <p className="text-sm text-gray-500 mb-5 leading-relaxed">
-                전문 디자이너가 직접 방문하여<br />
-                고객님의 공간을 새롭게 꾸며드립니다
-              </p>
-              <Link
-                to="/consulting"
-                className="inline-block px-5 py-2.5 bg-[#2563EB] text-white text-sm font-medium rounded-lg hover:bg-[#1D4ED8] transition-colors"
-              >
-                상담 신청하기
-              </Link>
-              <div className="absolute right-8 bottom-6">
-                <div className="w-24 h-24 bg-white rounded-xl flex items-center justify-center shadow-sm">
-                  <Sofa className="w-12 h-12 text-gray-300" strokeWidth={1} />
-                </div>
-              </div>
+          <div className="flex items-end justify-between mb-10">
+            <div>
+              <h2 className="text-3xl font-black text-gray-900 mb-3">고객 후기</h2>
+              <p className="text-gray-500">공간나라를 선택하신 고객님들의 솔직한 후기</p>
             </div>
-
-            {/* 브랜드 파트너 */}
-            <div className="bg-[#F8F9FA] rounded-xl p-8">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="px-2 py-0.5 bg-gray-800 text-white text-[10px] rounded">PARTNER</span>
-              </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-4">프리미엄 브랜드</h3>
-              <div className="grid grid-cols-3 gap-2">
-                {['한샘', '이케아', '까사미아', 'LG전자', '삼성', '다이슨'].map((brand) => (
-                  <div
-                    key={brand}
-                    className="bg-white border border-gray-100 rounded-lg py-3 px-4 text-center text-sm text-gray-600 hover:border-[#2563EB] hover:text-[#2563EB] cursor-pointer transition-colors"
-                  >
-                    {brand}
-                  </div>
-                ))}
-              </div>
-              <Link to="/brands" className="inline-block mt-4 text-sm text-gray-400 hover:text-[#2563EB] transition-colors">
-                브랜드 전체보기 &gt;
-              </Link>
-            </div>
+            <Link
+              to="/reviews"
+              className="flex items-center gap-2 text-blue-600 font-medium hover:gap-3 transition-all"
+            >
+              전체보기 <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
 
-          {/* 서비스 혜택 */}
-          <div className="grid grid-cols-4 gap-4 mt-6">
-            {[
-              { icon: Package, title: '무료배송', desc: '5만원 이상 구매시' },
-              { icon: Armchair, title: '무료설치', desc: '대형가구 전문 설치' },
-              { icon: Sparkles, title: '최저가 보장', desc: '차액 200% 보상' },
-              { icon: Clock, title: '30일 반품', desc: '무료 반품 서비스' },
-            ].map((item, idx) => {
-              const IconComponent = item.icon
-              return (
-                <div
-                  key={idx}
-                  className="flex items-center gap-4 bg-[#F8F9FA] border border-gray-100 rounded-lg p-4"
-                >
-                  <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-                    <IconComponent className="w-5 h-5 text-[#2563EB]" strokeWidth={1.5} />
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-800 text-sm">{item.title}</p>
-                    <p className="text-xs text-gray-400">{item.desc}</p>
-                  </div>
+          <div className="grid grid-cols-3 gap-6">
+            {reviews.map((review, idx) => (
+              <div key={idx} className="bg-gray-50 rounded-2xl p-6">
+                <div className="flex items-center gap-1 mb-3">
+                  {[...Array(review.rating)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                  ))}
                 </div>
-              )
-            })}
+                <p className="text-gray-700 mb-4 leading-relaxed">"{review.content}"</p>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="font-medium text-gray-800">{review.name} 고객님</span>
+                  <span className="text-gray-400">{review.date}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* CTA Section */}
+      <div className="py-20 bg-blue-600">
+        <div className="max-w-[1200px] mx-auto px-4 text-center">
+          <h2 className="text-3xl font-black text-white mb-4">
+            지금 바로 무료 상담 받아보세요
+          </h2>
+          <p className="text-white/80 mb-8">
+            전문 상담원이 친절하게 안내해 드립니다
+          </p>
+          <div className="flex items-center justify-center gap-4">
+            <Link
+              to="/estimate"
+              className="px-8 py-4 bg-white text-blue-600 rounded-lg font-bold hover:bg-gray-100 transition-colors"
+            >
+              온라인 견적문의
+            </Link>
+            <a
+              href="tel:1577-2288"
+              className="px-8 py-4 border-2 border-white text-white rounded-lg font-bold hover:bg-white/10 transition-colors flex items-center gap-2"
+            >
+              <Phone className="w-5 h-5" />
+              1577-2288
+            </a>
           </div>
         </div>
       </div>
