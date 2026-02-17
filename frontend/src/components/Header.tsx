@@ -35,9 +35,10 @@ const Header = () => {
   ]
 
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-50">
+    <header className="bg-white sticky top-0 z-50">
       {/* Main Header */}
-      <div className="max-w-[1200px] mx-auto px-4 py-3">
+      <div className="border-b border-gray-200">
+        <div className="max-w-[1200px] mx-auto px-4 py-3">
         <div className="flex items-center justify-between gap-6">
           {/* Logo */}
           <Link to="/" className="flex items-center flex-shrink-0">
@@ -77,10 +78,11 @@ const Header = () => {
             </div>
           </Link>
         </div>
+        </div>
       </div>
 
       {/* Navigation Bar */}
-      <div className="bg-white border-t border-gray-100">
+      <div className="bg-white border-b border-gray-200">
         <div className="max-w-[1200px] mx-auto px-4">
           <div className="flex items-center h-12">
             {/* Category Button */}
