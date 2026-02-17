@@ -118,7 +118,7 @@ const HomePage = () => {
   return (
     <div>
       {/* Hero Banner - 창 형태 */}
-      <div className="bg-gray-100 py-6">
+      <div className="bg-white py-6">
         <div className="max-w-[1200px] mx-auto px-4">
           <div className="relative h-[350px] overflow-hidden shadow-lg">
             <div
@@ -187,7 +187,7 @@ const HomePage = () => {
       </div>
 
       {/* Categories + Login Box */}
-      <div className="py-6 bg-gray-100">
+      <div className="py-6 bg-white">
         <div className="max-w-[1200px] mx-auto px-4">
           <div className="flex gap-5">
             {/* Categories */}
