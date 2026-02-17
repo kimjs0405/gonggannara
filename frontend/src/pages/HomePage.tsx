@@ -37,16 +37,7 @@ const HomePage = () => {
     { name: '욕실', icon: '🚿', slug: 'bathroom' },
   ]
 
-  const products = [
-    { id: 1, name: '모던 패브릭 소파 3인용', price: 890000, discount: 15, category: '가구' },
-    { id: 2, name: '북유럽 스타일 펜던트 조명', price: 89000, discount: 20, category: '조명' },
-    { id: 3, name: '암막 커튼 세트 (4장)', price: 79000, discount: 10, category: '커튼' },
-    { id: 4, name: '원목 식탁 세트 4인용', price: 650000, discount: 25, category: '가구' },
-    { id: 5, name: 'LED 간접조명 바 세트', price: 45000, discount: 0, category: '조명' },
-    { id: 6, name: '실크 벽지 롤 (10m)', price: 35000, discount: 5, category: '벽지' },
-    { id: 7, name: '스테인리스 주방 선반', price: 129000, discount: 30, category: '주방용품' },
-    { id: 8, name: '라탄 수납 바구니 세트', price: 49000, discount: 15, category: '수납' },
-  ]
+  const products: { id: number; name: string; price: number; discount: number; category: string }[] = []
 
   const services = [
     { name: '거실 인테리어', desc: '품격있는 거실 공간' },
@@ -177,42 +168,49 @@ const HomePage = () => {
             </Link>
           </div>
 
-          <div className="grid grid-cols-4 gap-5">
-            {products.map((product) => (
-              <Link
-                key={product.id}
-                to={`/products/${product.id}`}
-                className="bg-white border rounded-lg overflow-hidden hover:shadow-lg transition-shadow group"
-              >
-                <div className="h-48 bg-gray-100 relative">
-                  {product.discount > 0 && (
-                    <span className="absolute top-2 left-2 px-2 py-1 bg-red-500 text-white text-xs font-bold rounded">
-                      {product.discount}%
-                    </span>
-                  )}
-                  <button className="absolute top-2 right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow hover:bg-blue-50 transition-colors opacity-0 group-hover:opacity-100">
-                    <ShoppingCart className="w-4 h-4 text-blue-600" />
-                  </button>
-                </div>
-                <div className="p-4">
-                  <p className="text-xs text-gray-400 mb-1">{product.category}</p>
-                  <h3 className="font-medium text-gray-800 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
-                    {product.name}
-                  </h3>
-                  <div className="flex items-center gap-2">
+          {products.length > 0 ? (
+            <div className="grid grid-cols-4 gap-5">
+              {products.map((product) => (
+                <Link
+                  key={product.id}
+                  to={`/products/${product.id}`}
+                  className="bg-white border rounded-lg overflow-hidden hover:shadow-lg transition-shadow group"
+                >
+                  <div className="h-48 bg-gray-100 relative">
                     {product.discount > 0 && (
-                      <span className="text-sm text-gray-400 line-through">
-                        {formatPrice(product.price)}
+                      <span className="absolute top-2 left-2 px-2 py-1 bg-red-500 text-white text-xs font-bold rounded">
+                        {product.discount}%
                       </span>
                     )}
-                    <span className="text-lg font-bold text-blue-600">
-                      {formatPrice(getDiscountedPrice(product.price, product.discount))}
-                    </span>
+                    <button className="absolute top-2 right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow hover:bg-blue-50 transition-colors opacity-0 group-hover:opacity-100">
+                      <ShoppingCart className="w-4 h-4 text-blue-600" />
+                    </button>
                   </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+                  <div className="p-4">
+                    <p className="text-xs text-gray-400 mb-1">{product.category}</p>
+                    <h3 className="font-medium text-gray-800 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+                      {product.name}
+                    </h3>
+                    <div className="flex items-center gap-2">
+                      {product.discount > 0 && (
+                        <span className="text-sm text-gray-400 line-through">
+                          {formatPrice(product.price)}
+                        </span>
+                      )}
+                      <span className="text-lg font-bold text-blue-600">
+                        {formatPrice(getDiscountedPrice(product.price, product.discount))}
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16 bg-gray-50 rounded-2xl">
+              <p className="text-gray-400 mb-4">등록된 상품이 없습니다</p>
+              <p className="text-sm text-gray-400">곧 새로운 상품이 등록될 예정입니다</p>
+            </div>
+          )}
         </div>
       </div>
 

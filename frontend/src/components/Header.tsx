@@ -1,10 +1,22 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { Search, Menu, ShoppingCart, User, Phone } from 'lucide-react'
 
 const Header = () => {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const checkLogin = () => {
+      const loggedIn = localStorage.getItem('userLoggedIn') === 'true'
+      setIsLoggedIn(loggedIn)
+    }
+    checkLogin()
+    window.addEventListener('storage', checkLogin)
+    return () => window.removeEventListener('storage', checkLogin)
+  }, [])
 
   const categories = [
     { name: '가구·소파·침대', slug: 'furniture' },
@@ -15,6 +27,13 @@ const Header = () => {
     { name: '수납·정리용품', slug: 'storage' },
     { name: '홈데코·소품', slug: 'deco' },
   ]
+
+  const handleCartClick = (e: React.MouseEvent) => {
+    if (!isLoggedIn) {
+      e.preventDefault()
+      navigate('/login')
+    }
+  }
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -44,17 +63,11 @@ const Header = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="인테리어 용품을 검색하세요"
-                className="w-full h-11 pl-4 pr-28 border-2 border-blue-500 rounded-full focus:outline-none focus:border-blue-600 text-sm"
+                className="w-full h-11 pl-4 pr-14 border-2 border-blue-500 rounded-full focus:outline-none focus:border-blue-600 text-sm"
               />
-              <div className="absolute right-3 flex items-center gap-2">
-                <Link to="/cart" className="flex items-center gap-1 text-sm text-gray-500 border-r pr-2 hover:text-blue-600">
-                  <span className="text-blue-600 font-bold">0</span>
-                  <span>장바구니</span>
-                </Link>
-                <button className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors">
-                  <Search className="w-4 h-4 text-white" />
-                </button>
-              </div>
+              <button className="absolute right-2 w-9 h-9 bg-blue-500 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors">
+                <Search className="w-4 h-4 text-white" />
+              </button>
             </div>
           </div>
 
@@ -138,14 +151,26 @@ const Header = () => {
                 <span>02-875-8204</span>
               </a>
               <div className="flex items-center gap-3 pl-4 border-l">
-                <Link to="/login" className="text-gray-600 hover:text-blue-600">
-                  <User className="w-5 h-5" />
-                </Link>
-                <Link to="/cart" className="text-gray-600 hover:text-blue-600 relative">
+                {isLoggedIn ? (
+                  <Link to="/mypage" className="text-gray-600 hover:text-blue-600">
+                    <User className="w-5 h-5" />
+                  </Link>
+                ) : (
+                  <Link to="/login" className="text-gray-600 hover:text-blue-600">
+                    <User className="w-5 h-5" />
+                  </Link>
+                )}
+                <Link 
+                  to={isLoggedIn ? "/cart" : "/login"} 
+                  onClick={handleCartClick}
+                  className="text-gray-600 hover:text-blue-600 relative"
+                >
                   <ShoppingCart className="w-5 h-5" />
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] rounded-full flex items-center justify-center">
-                    0
-                  </span>
+                  {isLoggedIn && (
+                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] rounded-full flex items-center justify-center">
+                      0
+                    </span>
+                  )}
                 </Link>
               </div>
             </div>

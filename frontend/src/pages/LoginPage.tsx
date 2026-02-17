@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react'
 
 const LoginPage = () => {
@@ -7,18 +7,22 @@ const LoginPage = () => {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     
-    // TODO: Supabase 로그인 연동
-    console.log('Login attempt:', { email, password })
-    
+    // 임시 로그인 처리 (나중에 Supabase 연동)
     setTimeout(() => {
       setIsLoading(false)
-      alert('로그인 기능은 Supabase 연동 후 사용 가능합니다.')
-    }, 1000)
+      // 로그인 성공 처리
+      localStorage.setItem('userLoggedIn', 'true')
+      localStorage.setItem('userEmail', email)
+      // storage 이벤트 발생시켜 다른 컴포넌트에 알림
+      window.dispatchEvent(new Event('storage'))
+      navigate('/')
+    }, 500)
   }
 
   return (
@@ -32,7 +36,7 @@ const LoginPage = () => {
             </div>
             <div className="text-left">
               <h1 className="text-2xl font-black text-blue-600">공간나라</h1>
-              <p className="text-xs text-gray-500">인테리어 전문 쇼핑몰</p>
+              <p className="text-xs text-gray-500">인테리어 & 쇼핑몰</p>
             </div>
           </Link>
         </div>
@@ -115,11 +119,9 @@ const LoginPage = () => {
           {/* Social Login */}
           <div className="space-y-3">
             <button className="w-full py-3 border border-gray-200 rounded-xl font-medium text-gray-700 hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
-              <span className="text-xl">🔵</span>
               Google로 계속하기
             </button>
             <button className="w-full py-3 bg-[#FEE500] rounded-xl font-medium text-gray-800 hover:bg-[#FDD800] transition-colors flex items-center justify-center gap-2">
-              <span className="text-xl">💬</span>
               카카오로 계속하기
             </button>
           </div>
@@ -138,4 +140,3 @@ const LoginPage = () => {
 }
 
 export default LoginPage
-

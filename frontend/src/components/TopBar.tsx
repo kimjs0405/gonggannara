@@ -1,7 +1,34 @@
 import { Phone } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 
 const TopBar = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const checkLogin = () => {
+      const loggedIn = localStorage.getItem('userLoggedIn') === 'true'
+      setIsLoggedIn(loggedIn)
+    }
+    checkLogin()
+    window.addEventListener('storage', checkLogin)
+    return () => window.removeEventListener('storage', checkLogin)
+  }, [])
+
+  const handleLogout = () => {
+    localStorage.removeItem('userLoggedIn')
+    setIsLoggedIn(false)
+    navigate('/')
+  }
+
+  const handleCartClick = (e: React.MouseEvent) => {
+    if (!isLoggedIn) {
+      e.preventDefault()
+      navigate('/login')
+    }
+  }
+
   return (
     <div className="bg-gray-900 text-white">
       <div className="max-w-[1200px] mx-auto px-4">
@@ -23,19 +50,35 @@ const TopBar = () => {
               <span>02-875-8204</span>
             </a>
             <span className="text-gray-600">|</span>
-            <Link to="/login" className="hover:text-white transition-colors">
-              로그인
-            </Link>
+            
+            {isLoggedIn ? (
+              <>
+                <Link to="/mypage" className="hover:text-white transition-colors">
+                  마이페이지
+                </Link>
+                <span className="text-gray-600">|</span>
+                <button onClick={handleLogout} className="hover:text-white transition-colors">
+                  로그아웃
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="hover:text-white transition-colors">
+                  로그인
+                </Link>
+                <span className="text-gray-600">|</span>
+                <Link to="/signup" className="hover:text-white transition-colors">
+                  회원가입
+                </Link>
+              </>
+            )}
+            
             <span className="text-gray-600">|</span>
-            <Link to="/signup" className="hover:text-white transition-colors">
-              회원가입
-            </Link>
-            <span className="text-gray-600">|</span>
-            <Link to="/mypage" className="hover:text-white transition-colors">
-              마이페이지
-            </Link>
-            <span className="text-gray-600">|</span>
-            <Link to="/cart" className="hover:text-white transition-colors">
+            <Link 
+              to="/cart" 
+              onClick={handleCartClick}
+              className="hover:text-white transition-colors"
+            >
               장바구니
             </Link>
           </div>
