@@ -41,7 +41,7 @@ const Header = () => {
         <div className="flex items-center justify-between gap-6">
           {/* Logo */}
           <Link to="/" className="flex items-center flex-shrink-0">
-            <img src="/logo.svg" alt="공간나라" className="h-12" />
+            <img src="/logo.svg" alt="공간나라" className="h-9" />
           </Link>
 
           {/* Search Bar */}
