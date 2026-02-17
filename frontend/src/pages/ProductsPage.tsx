@@ -7,20 +7,8 @@ const ProductsPage = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const category = searchParams.get('category')
 
-  const products = [
-    { id: 1, name: '모던 패브릭 3인 소파', price: 450000, originalPrice: 580000, discount: 22, image: '🛋️', badge: 'BEST', category: 'furniture' },
-    { id: 2, name: '북유럽 스타일 펜던트 조명', price: 89000, originalPrice: 120000, discount: 26, image: '💡', badge: 'HOT', category: 'lighting' },
-    { id: 3, name: '원목 6단 서랍장', price: 320000, originalPrice: 400000, discount: 20, image: '🗄️', badge: 'NEW', category: 'storage' },
-    { id: 4, name: '프리미엄 암막 커튼 세트', price: 78000, originalPrice: 98000, discount: 20, image: '🪟', category: 'curtain' },
-    { id: 5, name: '모던 라운지 체어', price: 189000, originalPrice: 250000, discount: 24, image: '🪑', category: 'furniture' },
-    { id: 6, name: '북유럽 러그 카펫', price: 65000, originalPrice: 85000, discount: 24, image: '🧶', category: 'deco' },
-    { id: 7, name: '스마트 LED 스탠드', price: 45000, originalPrice: 60000, discount: 25, image: '💡', category: 'lighting' },
-    { id: 8, name: '미니멀 원목 책상', price: 280000, originalPrice: 350000, discount: 20, image: '🖥️', category: 'furniture' },
-    { id: 9, name: '대형 벽걸이 시계', price: 55000, originalPrice: 70000, discount: 21, image: '🕰️', category: 'deco' },
-    { id: 10, name: '프리미엄 퀸 매트리스', price: 890000, originalPrice: 1200000, discount: 26, image: '🛏️', badge: 'BEST', category: 'furniture' },
-    { id: 11, name: '모던 화이트 TV 선반', price: 180000, originalPrice: 230000, discount: 22, image: '🗄️', category: 'storage' },
-    { id: 12, name: '인테리어 화분 세트', price: 35000, originalPrice: 45000, discount: 22, image: '🪴', category: 'deco' },
-  ]
+  // 상품 데이터 (관리자 페이지에서 추가)
+  const products: { id: number; name: string; price: number; originalPrice: number; discount: number; image: string; badge?: string; category: string }[] = []
 
   const filteredProducts = category 
     ? products.filter(p => p.category === category)
@@ -109,41 +97,48 @@ const ProductsPage = () => {
             </div>
 
             {/* Products Grid */}
-            <div className={`grid gap-4 ${viewMode === 'grid' ? 'grid-cols-4' : 'grid-cols-1'}`}>
-              {filteredProducts.map((product) => (
-                <Link
-                  key={product.id}
-                  to={`/products/${product.id}`}
-                  className={`bg-white rounded-xl overflow-hidden hover:shadow-lg transition-shadow group ${
-                    viewMode === 'list' ? 'flex' : ''
-                  }`}
-                >
-                  <div className={`relative bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center ${
-                    viewMode === 'list' ? 'w-40 h-40' : 'h-48'
-                  }`}>
-                    <span className={`group-hover:scale-110 transition-transform ${viewMode === 'list' ? 'text-5xl' : 'text-7xl'}`}>
-                      {product.image}
-                    </span>
-                    {product.badge && (
-                      <span className={`absolute top-2 left-2 px-2 py-1 text-[10px] font-bold text-white rounded ${
-                        product.badge === 'BEST' ? 'bg-red-500' :
-                        product.badge === 'HOT' ? 'bg-orange-500' : 'bg-blue-500'
-                      }`}>
-                        {product.badge}
+            {filteredProducts.length > 0 ? (
+              <div className={`grid gap-4 ${viewMode === 'grid' ? 'grid-cols-4' : 'grid-cols-1'}`}>
+                {filteredProducts.map((product) => (
+                  <Link
+                    key={product.id}
+                    to={`/products/${product.id}`}
+                    className={`bg-white rounded-xl overflow-hidden hover:shadow-lg transition-shadow group ${
+                      viewMode === 'list' ? 'flex' : ''
+                    }`}
+                  >
+                    <div className={`relative bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center ${
+                      viewMode === 'list' ? 'w-40 h-40' : 'h-48'
+                    }`}>
+                      <span className={`group-hover:scale-110 transition-transform ${viewMode === 'list' ? 'text-5xl' : 'text-7xl'}`}>
+                        {product.image}
                       </span>
-                    )}
-                  </div>
-                  <div className={`p-4 ${viewMode === 'list' ? 'flex-1' : ''}`}>
-                    <h3 className="text-sm text-gray-700 font-medium mb-2">{product.name}</h3>
-                    <div className="flex items-center gap-2">
-                      <span className="text-red-500 font-bold">{product.discount}%</span>
-                      <span className="text-lg font-black text-gray-900">{product.price.toLocaleString()}원</span>
+                      {product.badge && (
+                        <span className={`absolute top-2 left-2 px-2 py-1 text-[10px] font-bold text-white rounded ${
+                          product.badge === 'BEST' ? 'bg-red-500' :
+                          product.badge === 'HOT' ? 'bg-orange-500' : 'bg-blue-500'
+                        }`}>
+                          {product.badge}
+                        </span>
+                      )}
                     </div>
-                    <p className="text-xs text-gray-400 line-through">{product.originalPrice.toLocaleString()}원</p>
-                  </div>
-                </Link>
-              ))}
-            </div>
+                    <div className={`p-4 ${viewMode === 'list' ? 'flex-1' : ''}`}>
+                      <h3 className="text-sm text-gray-700 font-medium mb-2">{product.name}</h3>
+                      <div className="flex items-center gap-2">
+                        <span className="text-red-500 font-bold">{product.discount}%</span>
+                        <span className="text-lg font-black text-gray-900">{product.price.toLocaleString()}원</span>
+                      </div>
+                      <p className="text-xs text-gray-400 line-through">{product.originalPrice.toLocaleString()}원</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <div className="bg-white rounded-xl p-16 text-center">
+                <p className="text-gray-400 text-lg mb-2">등록된 상품이 없습니다</p>
+                <p className="text-sm text-gray-400">곧 새로운 상품이 등록될 예정입니다</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -152,4 +147,3 @@ const ProductsPage = () => {
 }
 
 export default ProductsPage
-
