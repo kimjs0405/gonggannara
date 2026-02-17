@@ -280,14 +280,14 @@ const HomePage = () => {
                     <Link
                       key={idx}
                       to={`/products?category=${cat.slug}`}
-                      className="flex flex-col items-center gap-1 py-2 hover:text-blue-600 transition-colors group"
+                      className="flex flex-col items-center gap-1.5 py-2 hover:text-blue-600 transition-colors group"
                     >
-                      <div className={`relative w-11 h-11 md:w-12 md:h-12 rounded-xl flex items-center justify-center border-2 transition-all ${
+                      <div className={`relative w-14 h-14 md:w-16 md:h-16 rounded-xl flex items-center justify-center border-2 transition-all ${
                         cat.isNew 
                           ? 'border-red-400 bg-red-50 group-hover:border-red-500 group-hover:bg-red-100' 
                           : 'border-gray-200 bg-gray-50 group-hover:border-blue-400 group-hover:bg-blue-50'
                       }`}>
-                        <IconComponent className={`w-5 h-5 ${
+                        <IconComponent className={`w-6 h-6 md:w-7 md:h-7 ${
                           cat.isNew ? 'text-red-500' : 'text-gray-600 group-hover:text-blue-600'
                         }`} />
                         {cat.isNew && (
@@ -296,7 +296,7 @@ const HomePage = () => {
                           </span>
                         )}
                       </div>
-                      <span className={`text-[9px] md:text-[11px] font-medium text-center leading-tight ${
+                      <span className={`text-[10px] md:text-xs font-medium text-center leading-tight ${
                         cat.isNew ? 'text-red-500' : 'text-gray-700 group-hover:text-blue-600'
                       }`}>
                         {cat.name}
