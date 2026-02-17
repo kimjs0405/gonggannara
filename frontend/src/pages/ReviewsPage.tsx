@@ -1,6 +1,5 @@
 import { Star, ThumbsUp } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import SubVisual from '../components/SubVisual'
 
 const ReviewsPage = () => {
   const reviews = [
@@ -73,16 +72,15 @@ const ReviewsPage = () => {
   }
 
   return (
-    <div>
-      <SubVisual
-        title="고객 후기"
-        subtitle="공간나라를 선택해주신 고객님들의 솔직한 후기입니다"
-        breadcrumb={[{ name: '고객후기' }]}
-        bgColor="from-amber-500 to-orange-600"
-      />
-      
-      <div className="py-8 md:py-16">
-        <div className="max-w-[1200px] mx-auto px-4">
+    <div className="py-8 md:py-16">
+      <div className="max-w-[1200px] mx-auto px-4">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-2xl md:text-4xl font-black text-gray-900 mb-4">고객 후기</h1>
+          <p className="text-gray-500 text-sm md:text-lg">
+            공간나라를 선택해주신 고객님들의 솔직한 후기입니다
+          </p>
+        </div>
 
         {/* Stats */}
         <div className="bg-gray-50 rounded-2xl p-8 mb-12">
@@ -164,7 +162,6 @@ const ReviewsPage = () => {
           >
             무료 견적받기
           </Link>
-        </div>
         </div>
       </div>
     </div>
