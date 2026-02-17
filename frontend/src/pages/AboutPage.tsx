@@ -123,9 +123,9 @@ const AboutPage = () => {
               지도 영역
             </div>
             <div className="space-y-2 text-sm text-gray-600">
-              <p><strong>주소:</strong> 서울특별시 강남구 테헤란로 123</p>
-              <p><strong>지하철:</strong> 2호선 역삼역 3번출구 도보 5분</p>
-              <p><strong>주차:</strong> 건물 지하주차장 이용 (2시간 무료)</p>
+              <p><strong>주소:</strong> 서울특별시 관악구 신림동 257-13 1층 대원빌딩</p>
+              <p><strong>지하철:</strong> 2호선 신림역 도보 10분</p>
+              <p><strong>주차:</strong> 건물 앞 주차 가능</p>
             </div>
           </div>
 
@@ -137,7 +137,7 @@ const AboutPage = () => {
             </p>
             <div className="flex items-center gap-3 mb-6">
               <Phone className="w-6 h-6" />
-              <span className="text-3xl font-black">1577-2288</span>
+              <span className="text-3xl font-black">02-875-8204</span>
             </div>
             <Link
               to="/estimate"

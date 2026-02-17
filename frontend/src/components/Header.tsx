@@ -55,7 +55,7 @@ const Header = () => {
           {/* Contact Info */}
           <div className="flex-shrink-0 text-right">
             <p className="text-xs text-gray-500">무료 상담전화</p>
-            <p className="text-2xl font-black text-blue-600 tracking-tight">1577-2288</p>
+            <p className="text-2xl font-black text-blue-600 tracking-tight">02-875-8204</p>
             <p className="text-[11px] text-gray-400">평일 09:00 ~ 18:00</p>
           </div>
 
@@ -126,11 +126,11 @@ const Header = () => {
             {/* Right - Contact */}
             <div className="flex items-center ml-auto gap-4">
               <a 
-                href="tel:1577-2288" 
+                href="tel:02-875-8204" 
                 className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg text-sm text-gray-700 hover:bg-gray-200 transition-colors"
               >
                 <Phone className="w-4 h-4 text-blue-600" />
-                <span className="font-medium">1577-2288</span>
+                <span className="font-medium">02-875-8204</span>
               </a>
               <Link 
                 to="/estimate" 

@@ -49,18 +49,18 @@ const Footer = () => {
               </div>
             </Link>
             <div className="space-y-1.5 text-sm text-gray-400 mb-6">
-              <p>상호: 공간나라 인테리어</p>
-              <p>대표: 김대표</p>
-              <p>사업자등록번호: 123-45-67890</p>
+              <p>상호: 개성종합네트웍스</p>
+              <p>대표: 김준서</p>
+              <p>사업자등록번호: 289-70-00760</p>
               <p className="flex items-center gap-1">
                 <MapPin className="w-3 h-3" />
-                서울특별시 강남구 테헤란로 123
+                서울특별시 관악구 신림동 257-13 1층 대원빌딩
               </p>
             </div>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-blue-400" />
-                <span className="text-2xl font-black text-blue-400">1577-2288</span>
+                <span className="text-2xl font-black text-blue-400">02-875-8204</span>
               </div>
               <p className="text-xs text-gray-500">평일 09:00 ~ 18:00 (주말 상담 가능)</p>
               <div className="flex items-center gap-2 text-sm text-gray-400">

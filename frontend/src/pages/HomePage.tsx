@@ -135,11 +135,11 @@ const HomePage = () => {
               ))}
             </div>
             <a
-              href="tel:1577-2288"
+              href="tel:02-875-8204"
               className="flex items-center gap-3 px-6 py-3 bg-white rounded-lg text-blue-600 font-bold hover:bg-gray-100 transition-colors"
             >
               <Phone className="w-5 h-5" />
-              <span>1577-2288</span>
+              <span>02-875-8204</span>
             </a>
           </div>
         </div>
@@ -270,11 +270,11 @@ const HomePage = () => {
               온라인 견적문의
             </Link>
             <a
-              href="tel:1577-2288"
+              href="tel:02-875-8204"
               className="px-8 py-4 border-2 border-white text-white rounded-lg font-bold hover:bg-white/10 transition-colors flex items-center gap-2"
             >
               <Phone className="w-5 h-5" />
-              1577-2288
+              02-875-8204
             </a>
           </div>
         </div>

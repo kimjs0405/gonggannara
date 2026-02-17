@@ -16,11 +16,11 @@ const TopBar = () => {
           {/* Right side */}
           <div className="flex items-center gap-4 text-gray-300">
             <a 
-              href="tel:1577-2288" 
+              href="tel:02-875-8204" 
               className="flex items-center gap-1 hover:text-white transition-colors"
             >
               <Phone size={12} />
-              <span>1577-2288</span>
+              <span>02-875-8204</span>
             </a>
             <span className="text-gray-600">|</span>
             <Link 

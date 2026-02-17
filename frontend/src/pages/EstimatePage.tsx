@@ -194,7 +194,7 @@ const EstimatePage = () => {
               <h3 className="font-bold text-lg mb-4">전화 상담</h3>
               <div className="flex items-center gap-3 mb-3">
                 <Phone className="w-6 h-6" />
-                <span className="text-2xl font-black">1577-2288</span>
+                <span className="text-2xl font-black">02-875-8204</span>
               </div>
               <p className="text-sm text-blue-200">평일 09:00 ~ 18:00</p>
               <p className="text-sm text-blue-200">주말/공휴일 상담 가능</p>
@@ -205,7 +205,7 @@ const EstimatePage = () => {
               <div className="space-y-3 text-sm text-gray-600">
                 <div className="flex items-start gap-2">
                   <MapPin className="w-4 h-4 mt-0.5 text-blue-600" />
-                  <span>서울특별시 강남구 테헤란로 123</span>
+                  <span>서울특별시 관악구 신림동 257-13 1층 대원빌딩</span>
                 </div>
                 <div className="flex items-start gap-2">
                   <Mail className="w-4 h-4 mt-0.5 text-blue-600" />
