@@ -1,5 +1,6 @@
 import { Award, Users, Clock, Shield, Phone } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import SubVisual from '../components/SubVisual'
 
 const AboutPage = () => {
   const strengths = [
@@ -35,16 +36,16 @@ const AboutPage = () => {
   ]
 
   return (
-    <div className="py-16">
-      <div className="max-w-[1200px] mx-auto px-4">
-        {/* Hero */}
-        <div className="text-center mb-20">
-          <h1 className="text-4xl font-black text-gray-900 mb-4">회사소개</h1>
-          <p className="text-gray-500 text-lg max-w-2xl mx-auto">
-            20년간 고객의 공간을 아름답게 만들어온 공간나라입니다.<br />
-            정직한 견적과 책임 시공으로 신뢰를 쌓아왔습니다.
-          </p>
-        </div>
+    <div>
+      <SubVisual
+        title="회사소개"
+        subtitle="20년간 고객의 공간을 아름답게 만들어온 공간나라입니다"
+        breadcrumb={[{ name: '회사소개' }]}
+        bgColor="from-slate-700 to-gray-800"
+      />
+      
+      <div className="py-8 md:py-16">
+        <div className="max-w-[1200px] mx-auto px-4">
 
         {/* Vision */}
         <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-3xl p-12 text-white mb-20">
@@ -146,6 +147,7 @@ const AboutPage = () => {
               온라인 견적문의
             </Link>
           </div>
+        </div>
         </div>
       </div>
     </div>

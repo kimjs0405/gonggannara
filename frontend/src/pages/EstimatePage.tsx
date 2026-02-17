@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Phone, Mail, MapPin, CheckCircle } from 'lucide-react'
+import SubVisual from '../components/SubVisual'
 
 const EstimatePage = () => {
   const [formData, setFormData] = useState({
@@ -42,12 +43,19 @@ const EstimatePage = () => {
   }
 
   return (
-    <div className="py-16">
-      <div className="max-w-[1200px] mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-black text-gray-900 mb-4">무료 견적문의</h1>
-          <p className="text-gray-500 text-lg">
+    <div>
+      <SubVisual
+        title="무료 견적문의"
+        subtitle="전문 상담사가 맞춤형 견적을 제공해드립니다"
+        breadcrumb={[{ name: '견적문의' }]}
+        bgColor="from-emerald-600 to-teal-700"
+      />
+      
+      <div className="py-8 md:py-16">
+        <div className="max-w-[1200px] mx-auto px-4">
+          {/* Header */}
+          <div className="text-center mb-8 md:mb-12">
+            <p className="text-gray-500 text-sm md:text-lg">
             상담 신청을 남겨주시면 전문 상담사가 친절하게 안내해 드립니다
           </p>
         </div>

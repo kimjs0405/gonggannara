@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { Grid, List, ChevronDown } from 'lucide-react'
+import SubVisual from '../components/SubVisual'
 
 const ProductsPage = () => {
   const [searchParams] = useSearchParams()
@@ -24,14 +25,16 @@ const ProductsPage = () => {
   ]
 
   return (
-    <div className="bg-gray-50 min-h-screen py-4 md:py-8">
-      <div className="max-w-[1200px] mx-auto px-4">
-        {/* Breadcrumb - Hidden on mobile */}
-        <div className="hidden md:block text-sm text-gray-500 mb-6">
-          <Link to="/" className="hover:text-blue-600">홈</Link>
-          <span className="mx-2">/</span>
-          <span className="text-gray-800 font-medium">전체 상품</span>
-        </div>
+    <div className="bg-gray-50 min-h-screen">
+      <SubVisual
+        title="전체 상품"
+        subtitle="공간나라의 다양한 인테리어 상품을 만나보세요"
+        breadcrumb={[{ name: '전체 상품' }]}
+        bgColor="from-blue-600 to-indigo-700"
+      />
+      
+      <div className="py-4 md:py-8">
+        <div className="max-w-[1200px] mx-auto px-4">
 
         {/* Mobile Category Filter */}
         <div className="md:hidden mb-4">
@@ -159,6 +162,7 @@ const ProductsPage = () => {
               </div>
             )}
           </div>
+        </div>
         </div>
       </div>
     </div>

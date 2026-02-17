@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import SubVisual from '../components/SubVisual'
 
 const PortfolioPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('전체')
@@ -26,15 +27,16 @@ const PortfolioPage = () => {
     : portfolios.filter(p => p.category === selectedCategory)
 
   return (
-    <div className="py-16">
-      <div className="max-w-[1200px] mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-black text-gray-900 mb-4">포트폴리오</h1>
-          <p className="text-gray-500 text-lg">
-            공간나라가 만들어온 다양한 공간들을 확인해보세요
-          </p>
-        </div>
+    <div>
+      <SubVisual
+        title="포트폴리오"
+        subtitle="공간나라가 만들어온 다양한 공간들을 확인해보세요"
+        breadcrumb={[{ name: '포트폴리오' }]}
+        bgColor="from-violet-600 to-purple-700"
+      />
+      
+      <div className="py-8 md:py-16">
+        <div className="max-w-[1200px] mx-auto px-4">
 
         {/* Filter */}
         <div className="flex items-center justify-center gap-2 mb-10">
@@ -97,6 +99,7 @@ const PortfolioPage = () => {
           >
             무료 견적받기
           </Link>
+        </div>
         </div>
       </div>
     </div>
