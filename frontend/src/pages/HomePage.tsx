@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, Phone, Star, ArrowRight, ShoppingCart } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
@@ -10,7 +10,6 @@ const HomePage = () => {
   const [loginForm, setLoginForm] = useState({ email: '', password: '' })
   const [loginError, setLoginError] = useState('')
   const [isLoggingIn, setIsLoggingIn] = useState(false)
-  const navigate = useNavigate()
 
   const banners = [
     {
