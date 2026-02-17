@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Search, Menu, ShoppingCart, User, Phone } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
@@ -7,7 +7,6 @@ const Header = () => {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const navigate = useNavigate()
 
   useEffect(() => {
     // 초기 세션 확인
@@ -18,7 +17,7 @@ const Header = () => {
     checkSession()
 
     // 인증 상태 변경 감지
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setIsLoggedIn(!!session)
     })
 
@@ -34,13 +33,6 @@ const Header = () => {
     { name: '수납·정리용품', slug: 'storage' },
     { name: '홈데코·소품', slug: 'deco' },
   ]
-
-  const handleCartClick = (e: React.MouseEvent) => {
-    if (!isLoggedIn) {
-      e.preventDefault()
-      navigate('/login')
-    }
-  }
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -169,7 +161,6 @@ const Header = () => {
                 )}
                 <Link 
                   to={isLoggedIn ? "/cart" : "/login"} 
-                  onClick={handleCartClick}
                   className="text-gray-600 hover:text-blue-600 relative"
                 >
                   <ShoppingCart className="w-5 h-5" />

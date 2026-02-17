@@ -19,7 +19,7 @@ const TopBar = () => {
     checkSession()
 
     // 인증 상태 변경 감지
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setIsLoggedIn(!!session)
       if (session) {
         localStorage.setItem('userLoggedIn', 'true')
@@ -38,13 +38,6 @@ const TopBar = () => {
     localStorage.removeItem('userId')
     setIsLoggedIn(false)
     navigate('/')
-  }
-
-  const handleCartClick = (e: React.MouseEvent) => {
-    if (!isLoggedIn) {
-      e.preventDefault()
-      navigate('/login')
-    }
   }
 
   return (
@@ -93,8 +86,7 @@ const TopBar = () => {
             
             <span className="text-gray-600">|</span>
             <Link 
-              to="/cart" 
-              onClick={handleCartClick}
+              to={isLoggedIn ? "/cart" : "/login"} 
               className="hover:text-white transition-colors"
             >
               장바구니
