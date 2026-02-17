@@ -1,9 +1,16 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, Phone, Star, ArrowRight, ShoppingCart } from 'lucide-react'
+import { supabase } from '../lib/supabase'
 
 const HomePage = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [userEmail, setUserEmail] = useState('')
+  const [loginForm, setLoginForm] = useState({ email: '', password: '' })
+  const [loginError, setLoginError] = useState('')
+  const [isLoggingIn, setIsLoggingIn] = useState(false)
+  const navigate = useNavigate()
 
   const banners = [
     {
@@ -33,8 +40,6 @@ const HomePage = () => {
     { name: '벽지', icon: '🧱', slug: 'wallpaper' },
     { name: '주방용품', icon: '🍳', slug: 'kitchen' },
     { name: '수납', icon: '📦', slug: 'storage' },
-    { name: '홈데코', icon: '🎨', slug: 'deco' },
-    { name: '욕실', icon: '🚿', slug: 'bathroom' },
   ]
 
   const products: { id: number; name: string; price: number; discount: number; category: string }[] = []
@@ -59,6 +64,50 @@ const HomePage = () => {
     return () => clearInterval(timer)
   }, [])
 
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session) {
+        setIsLoggedIn(true)
+        setUserEmail(session.user.email || '')
+      }
+    }
+    checkSession()
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsLoggedIn(!!session)
+      setUserEmail(session?.user.email || '')
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoginError('')
+    setIsLoggingIn(true)
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email: loginForm.email,
+      password: loginForm.password,
+    })
+
+    if (error) {
+      if (error.message.includes('Invalid login credentials')) {
+        setLoginError('이메일 또는 비밀번호가 올바르지 않습니다.')
+      } else {
+        setLoginError(error.message)
+      }
+    }
+    setIsLoggingIn(false)
+  }
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    setIsLoggedIn(false)
+    setUserEmail('')
+  }
+
   const formatPrice = (price: number) => {
     return price.toLocaleString() + '원'
   }
@@ -70,7 +119,7 @@ const HomePage = () => {
   return (
     <div>
       {/* Hero Banner */}
-      <div className="relative h-[400px] overflow-hidden">
+      <div className="relative h-[350px] overflow-hidden">
         <div
           className="flex transition-transform duration-700 ease-in-out h-full"
           style={{ transform: `translateX(-${currentSlide * 100}%)` }}
@@ -134,20 +183,120 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* Categories */}
-      <div className="py-8 bg-gray-50">
+      {/* Categories + Login Box */}
+      <div className="py-6 bg-gray-100">
         <div className="max-w-[1200px] mx-auto px-4">
-          <div className="grid grid-cols-8 gap-4">
-            {categories.map((cat, idx) => (
-              <Link
-                key={idx}
-                to={`/products?category=${cat.slug}`}
-                className="flex flex-col items-center gap-2 p-4 bg-white rounded-xl hover:shadow-md transition-shadow"
-              >
-                <span className="text-3xl">{cat.icon}</span>
-                <span className="text-sm font-medium text-gray-700">{cat.name}</span>
-              </Link>
-            ))}
+          <div className="flex gap-5">
+            {/* Categories */}
+            <div className="flex-1 bg-white rounded-lg p-5">
+              <h3 className="font-bold text-gray-800 mb-4">카테고리</h3>
+              <div className="grid grid-cols-6 gap-3">
+                {categories.map((cat, idx) => (
+                  <Link
+                    key={idx}
+                    to={`/products?category=${cat.slug}`}
+                    className="flex flex-col items-center gap-2 p-3 bg-gray-50 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                  >
+                    <span className="text-2xl">{cat.icon}</span>
+                    <span className="text-xs font-medium">{cat.name}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Login Box */}
+            <div className="w-[280px] bg-white rounded-lg p-5">
+              {isLoggedIn ? (
+                /* 로그인된 상태 */
+                <div>
+                  <h3 className="font-bold text-gray-800 mb-3">마이페이지</h3>
+                  <p className="text-sm text-gray-600 mb-4">
+                    <span className="font-medium text-blue-600">{userEmail}</span>님<br />
+                    환영합니다!
+                  </p>
+                  <div className="space-y-2">
+                    <Link
+                      to="/mypage"
+                      className="block w-full py-2 text-center bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                    >
+                      마이페이지
+                    </Link>
+                    <Link
+                      to="/cart"
+                      className="block w-full py-2 text-center bg-gray-100 text-gray-700 text-sm rounded hover:bg-gray-200"
+                    >
+                      장바구니
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full py-2 text-center border border-gray-300 text-gray-600 text-sm rounded hover:bg-gray-50"
+                    >
+                      로그아웃
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                /* 로그인 폼 */
+                <div>
+                  <h3 className="font-bold text-gray-800 mb-3">회원 로그인</h3>
+                  <form onSubmit={handleLogin}>
+                    <div className="space-y-2 mb-3">
+                      <input
+                        type="email"
+                        placeholder="이메일"
+                        value={loginForm.email}
+                        onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-500"
+                        required
+                      />
+                      <input
+                        type="password"
+                        placeholder="비밀번호"
+                        value={loginForm.password}
+                        onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-500"
+                        required
+                      />
+                    </div>
+                    {loginError && (
+                      <p className="text-xs text-red-500 mb-2">{loginError}</p>
+                    )}
+                    <button
+                      type="submit"
+                      disabled={isLoggingIn}
+                      className="w-full py-2 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700 disabled:bg-blue-400"
+                    >
+                      {isLoggingIn ? '로그인 중...' : '로그인'}
+                    </button>
+                  </form>
+                  <div className="flex items-center justify-between mt-3 text-xs text-gray-500">
+                    <label className="flex items-center gap-1 cursor-pointer">
+                      <input type="checkbox" className="rounded" />
+                      <span>로그인 유지</span>
+                    </label>
+                    <Link to="/forgot-password" className="hover:text-blue-600">ID/PW 찾기</Link>
+                  </div>
+                  <div className="border-t mt-4 pt-4">
+                    <p className="text-xs text-gray-500 mb-2 text-center">간편 로그인</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button className="flex items-center justify-center gap-1 py-2 border border-gray-200 rounded text-xs hover:bg-gray-50">
+                        <span className="w-4 h-4 bg-[#03C75A] rounded-sm flex items-center justify-center text-white text-[10px] font-bold">N</span>
+                        네이버
+                      </button>
+                      <button className="flex items-center justify-center gap-1 py-2 border border-gray-200 rounded text-xs hover:bg-gray-50">
+                        <span className="w-4 h-4 bg-[#FEE500] rounded-sm flex items-center justify-center text-[10px]">💬</span>
+                        카카오
+                      </button>
+                    </div>
+                  </div>
+                  <div className="mt-4 text-center">
+                    <Link to="/signup" className="text-xs text-blue-600 hover:underline">
+                      아직 회원이 아니세요? <span className="font-medium">회원가입</span>
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
