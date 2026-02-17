@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { 
   Plus, 
   Edit2, 
@@ -7,7 +7,10 @@ import {
   ExternalLink,
   GripVertical,
   Eye,
-  EyeOff
+  EyeOff,
+  Upload,
+  X,
+  Loader2
 } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 
@@ -27,6 +30,9 @@ const BannersPage = () => {
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [editingBanner, setEditingBanner] = useState<Banner | null>(null)
+  const [uploading, setUploading] = useState(false)
+  const [uploadError, setUploadError] = useState('')
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const [formData, setFormData] = useState({
     title: '',
     subtitle: '',
@@ -127,6 +133,67 @@ const BannersPage = () => {
       link_url: '',
       is_active: true,
     })
+    setUploadError('')
+  }
+
+  // 이미지 업로드 핸들러
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // 파일 타입 검증
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+    if (!allowedTypes.includes(file.type)) {
+      setUploadError('JPG, PNG, WebP, GIF 이미지만 업로드 가능합니다.')
+      return
+    }
+
+    // 파일 크기 검증 (10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      setUploadError('이미지 크기는 10MB 이하여야 합니다.')
+      return
+    }
+
+    setUploading(true)
+    setUploadError('')
+
+    try {
+      // 파일명 생성 (고유한 이름)
+      const fileExt = file.name.split('.').pop()
+      const fileName = `banner_${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`
+
+      // Supabase Storage에 업로드
+      const { error: uploadError } = await supabase.storage
+        .from('banners')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false,
+        })
+
+      if (uploadError) {
+        throw uploadError
+      }
+
+      // 공개 URL 가져오기
+      const { data: urlData } = supabase.storage
+        .from('banners')
+        .getPublicUrl(fileName)
+
+      setFormData({ ...formData, image_url: urlData.publicUrl })
+    } catch (err: any) {
+      console.error('업로드 오류:', err)
+      setUploadError(err.message || '이미지 업로드에 실패했습니다.')
+    } finally {
+      setUploading(false)
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+    }
+  }
+
+  // 이미지 삭제 (URL 초기화)
+  const handleRemoveImage = () => {
+    setFormData({ ...formData, image_url: '' })
   }
 
   const toggleActive = async (banner: Banner) => {
@@ -342,27 +409,72 @@ const BannersPage = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">이미지 URL</label>
-                <input
-                  type="url"
-                  value={formData.image_url}
-                  onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
-                  placeholder="https://example.com/image.jpg"
-                  required
-                />
-                {formData.image_url && (
-                  <div className="mt-2 h-32 bg-gray-100 rounded-lg overflow-hidden">
-                    <img 
-                      src={formData.image_url} 
-                      alt="Preview" 
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).style.display = 'none'
-                      }}
-                    />
+                <label className="block text-sm font-medium text-gray-700 mb-1">배너 이미지</label>
+                
+                {/* 이미지 미리보기 또는 업로드 영역 */}
+                {formData.image_url ? (
+                  <div className="relative">
+                    <div className="h-40 bg-gray-100 rounded-lg overflow-hidden">
+                      <img 
+                        src={formData.image_url} 
+                        alt="Preview" 
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect fill="%23f3f4f6" width="100" height="100"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%239ca3af" font-size="12">이미지 로드 실패</text></svg>'
+                        }}
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleRemoveImage}
+                      className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <div 
+                    onClick={() => fileInputRef.current?.click()}
+                    className="h-40 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-colors"
+                  >
+                    {uploading ? (
+                      <>
+                        <Loader2 className="w-8 h-8 text-blue-500 animate-spin mb-2" />
+                        <span className="text-sm text-gray-500">업로드 중...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-8 h-8 text-gray-400 mb-2" />
+                        <span className="text-sm text-gray-500">클릭하여 이미지 업로드</span>
+                        <span className="text-xs text-gray-400 mt-1">JPG, PNG, WebP, GIF (최대 10MB)</span>
+                      </>
+                    )}
                   </div>
                 )}
+                
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/gif"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                />
+
+                {uploadError && (
+                  <p className="mt-2 text-sm text-red-500">{uploadError}</p>
+                )}
+
+                {/* URL 직접 입력 옵션 */}
+                <div className="mt-3">
+                  <p className="text-xs text-gray-400 mb-1">또는 이미지 URL 직접 입력:</p>
+                  <input
+                    type="url"
+                    value={formData.image_url}
+                    onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-500"
+                    placeholder="https://example.com/image.jpg"
+                  />
+                </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">링크 URL (선택)</label>
