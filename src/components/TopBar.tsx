@@ -1,0 +1,50 @@
+import { User, Headphones, HelpCircle } from 'lucide-react'
+
+const TopBar = () => {
+  return (
+    <div className="bg-white border-b border-gray-200">
+      <div className="max-w-[1200px] mx-auto px-4">
+        <div className="flex items-center justify-between h-9 text-xs">
+          {/* Left side - Announcement */}
+          <div className="flex items-center gap-2">
+            <span className="text-gray-700">
+              <span className="font-bold text-blue-600">공간나라</span>는{' '}
+              <span className="text-blue-600 font-medium">인테리어 전문 기업</span> 입니다
+            </span>
+            <span className="inline-flex items-center justify-center w-5 h-5 bg-gray-200 rounded-full text-[10px] text-gray-600 cursor-pointer hover:bg-gray-300">
+              GO
+            </span>
+          </div>
+
+          {/* Right side */}
+          <div className="flex items-center gap-3 text-gray-600">
+            <a href="#" className="hover:text-blue-600 transition-colors">
+              로그인
+            </a>
+            <span className="text-gray-300">|</span>
+            <a href="#" className="hover:text-blue-600 transition-colors">
+              회원가입
+            </a>
+            <span className="text-gray-300">|</span>
+            <a href="#" className="flex items-center gap-1 hover:text-blue-600 transition-colors">
+              마이페이지 <span className="text-[10px]">▼</span>
+            </a>
+            <span className="text-gray-300">|</span>
+            <a href="#" className="flex items-center gap-1 hover:text-blue-600 transition-colors">
+              <Headphones size={12} />
+              고객센터
+            </a>
+            <span className="text-gray-300">|</span>
+            <a href="#" className="flex items-center gap-1 text-blue-600 hover:text-blue-700 transition-colors">
+              <HelpCircle size={12} />
+              자주하는 질문
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default TopBar
+
