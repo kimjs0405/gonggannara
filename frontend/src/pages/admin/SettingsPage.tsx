@@ -21,7 +21,7 @@ const SettingsPage = () => {
     storeDescription: '당신의 공간을 더 특별하게',
     businessNumber: '123-45-67890',
     ceoName: '홍길동',
-    email: 'contact@gonggan.com',
+    email: 'GongganWord@gmail.com',
     phone: '02-1234-5678',
     address: '서울시 강남구 테헤란로 123',
     businessHours: '평일 09:00 - 18:00',

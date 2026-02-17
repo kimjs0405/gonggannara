@@ -209,7 +209,7 @@ const EstimatePage = () => {
                 </div>
                 <div className="flex items-start gap-2">
                   <Mail className="w-4 h-4 mt-0.5 text-blue-600" />
-                  <span>info@gonggannara.co.kr</span>
+                  <span>GongganWord@gmail.com</span>
                 </div>
               </div>
             </div>

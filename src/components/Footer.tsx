@@ -50,7 +50,7 @@ const Footer = () => {
               <p className="text-xs text-gray-500">평일 09:00 ~ 18:00 (점심 12:00 ~ 13:00)</p>
               <div className="flex items-center gap-2 text-sm text-gray-400">
                 <Mail className="w-4 h-4" />
-                <span>cs@gonggannara.co.kr</span>
+                <span>GongganWord@gmail.com</span>
               </div>
             </div>
           </div>
