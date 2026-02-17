@@ -120,7 +120,7 @@ const HomePage = () => {
       {/* Hero Banner - 창 형태 */}
       <div className="bg-gray-100 py-6">
         <div className="max-w-[1200px] mx-auto px-4">
-          <div className="relative h-[350px] overflow-hidden rounded-2xl shadow-lg">
+          <div className="relative h-[350px] overflow-hidden shadow-lg">
             <div
               className="flex transition-transform duration-700 ease-in-out h-full"
               style={{ transform: `translateX(-${currentSlide * 100}%)` }}
