@@ -239,15 +239,15 @@ const HomePage = () => {
         <div className="max-w-[1200px] mx-auto px-4">
           <div className="flex flex-col md:flex-row gap-4 md:gap-5">
             {/* Quick Category Icons */}
-            <div className="flex-1 bg-white border border-gray-200 p-4 md:p-5">
-              <div className="flex items-center overflow-x-auto scrollbar-hide gap-1 md:gap-0 md:justify-between">
+            <div className="flex-1">
+              <div className="flex items-center overflow-x-auto scrollbar-hide gap-3 md:gap-0 justify-start md:justify-evenly">
                 {quickCategories.map((cat, idx) => {
                   const IconComponent = cat.icon
                   return (
                     <Link
                       key={idx}
                       to={`/products?category=${cat.slug}`}
-                      className="flex flex-col items-center gap-1.5 min-w-[60px] md:min-w-[70px] px-1 py-1 hover:text-blue-600 transition-colors group"
+                      className="flex flex-col items-center gap-1.5 min-w-[65px] md:min-w-0 py-2 hover:text-blue-600 transition-colors group"
                     >
                       <div className={`relative w-11 h-11 md:w-14 md:h-14 rounded-xl flex items-center justify-center border-2 transition-all ${
                         cat.isNew 
