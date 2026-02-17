@@ -40,18 +40,8 @@ const Header = () => {
       <div className="max-w-[1200px] mx-auto px-4 py-3">
         <div className="flex items-center justify-between gap-6">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 flex-shrink-0">
-            <div className="flex items-center">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center shadow-md">
-                <span className="text-white font-black text-xl">G</span>
-              </div>
-              <div className="ml-2">
-                <h1 className="text-2xl font-black tracking-tight">
-                  <span className="text-blue-600">공간나라</span>
-                </h1>
-                <p className="text-[10px] text-gray-500 -mt-1">인테리어 & 쇼핑몰</p>
-              </div>
-            </div>
+          <Link to="/" className="flex items-center flex-shrink-0">
+            <img src="/logo.svg" alt="공간나라" className="h-12" />
           </Link>
 
           {/* Search Bar */}

@@ -40,15 +40,8 @@ const AdminLoginPage = () => {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-3">
-            <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
-              <span className="text-white font-black text-2xl">G</span>
-            </div>
-            <div className="text-left">
-              <h1 className="text-2xl font-black text-white">공간나라</h1>
-              <p className="text-xs text-gray-400">Admin System</p>
-            </div>
-          </div>
+          <img src="/logo.svg" alt="공간나라" className="h-14 mx-auto brightness-0 invert" />
+          <p className="text-xs text-gray-400 mt-2">Admin System</p>
         </div>
 
         {/* Login Box */}

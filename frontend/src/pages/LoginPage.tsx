@@ -54,14 +54,8 @@ const LoginPage = () => {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-2">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
-              <span className="text-white font-black text-2xl">G</span>
-            </div>
-            <div className="text-left">
-              <h1 className="text-2xl font-black text-blue-600">공간나라</h1>
-              <p className="text-xs text-gray-500">인테리어 & 쇼핑몰</p>
-            </div>
+          <Link to="/">
+            <img src="/logo.svg" alt="공간나라" className="h-14 mx-auto" />
           </Link>
         </div>
 

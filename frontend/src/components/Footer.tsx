@@ -39,14 +39,8 @@ const Footer = () => {
         <div className="grid grid-cols-5 gap-8">
           {/* Company Info */}
           <div className="col-span-2">
-            <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center">
-                <span className="text-white font-black text-lg">G</span>
-              </div>
-              <div>
-                <h3 className="text-lg font-black">공간나라</h3>
-                <p className="text-[10px] text-gray-400">인테리어 & 쇼핑몰</p>
-              </div>
+            <Link to="/" className="mb-4 inline-block">
+              <img src="/logo.svg" alt="공간나라" className="h-10 brightness-0 invert" />
             </Link>
             <div className="space-y-1 text-sm text-gray-400 mb-5">
               <p>상호: 개성종합네트웍스</p>
