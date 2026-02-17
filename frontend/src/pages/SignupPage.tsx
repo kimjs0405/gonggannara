@@ -51,6 +51,23 @@ const SignupPage = () => {
     setError('')
   }
 
+  const handleSearchAddress = () => {
+    // @ts-expect-error daum postcode API
+    new window.daum.Postcode({
+      oncomplete: function(data: { zonecode: string; address: string; buildingName: string }) {
+        const fullAddress = data.buildingName 
+          ? `${data.address} (${data.buildingName})`
+          : data.address
+        
+        setFormData(prev => ({
+          ...prev,
+          zipcode: data.zonecode,
+          address: fullAddress,
+        }))
+      }
+    }).open()
+  }
+
   const handleStep1Next = () => {
     if (!agreements.terms || !agreements.privacy) {
       setError('필수 약관에 동의해주세요.')
@@ -631,12 +648,13 @@ const SignupPage = () => {
                             value={formData.zipcode}
                             onChange={handleChange}
                             placeholder="우편번호"
-                            className="w-32 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                            className="w-32 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 bg-gray-50"
                             readOnly
                           />
                           <button
                             type="button"
-                            className="px-4 py-2 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50"
+                            onClick={handleSearchAddress}
+                            className="px-4 py-2 bg-gray-600 text-white rounded text-sm hover:bg-gray-700"
                           >
                             우편번호 검색
                           </button>
@@ -646,8 +664,9 @@ const SignupPage = () => {
                           name="address"
                           value={formData.address}
                           onChange={handleChange}
-                          placeholder="기본주소"
-                          className="w-full max-w-lg px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                          placeholder="우편번호 검색 후 자동입력됩니다"
+                          className="w-full max-w-lg px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 bg-gray-50"
+                          readOnly
                         />
                         <input
                           type="text"
