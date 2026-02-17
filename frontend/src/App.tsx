@@ -1,6 +1,10 @@
 import { Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout'
 import HomePage from './pages/HomePage'
+import ProductsPage from './pages/ProductsPage'
+import ProductDetailPage from './pages/ProductDetailPage'
+import CartPage from './pages/CartPage'
+import LoginPage from './pages/LoginPage'
 import EstimatePage from './pages/EstimatePage'
 import PortfolioPage from './pages/PortfolioPage'
 import ReviewsPage from './pages/ReviewsPage'
@@ -20,6 +24,12 @@ function App() {
       {/* 메인 사이트 라우트 */}
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
+        {/* 쇼핑몰 */}
+        <Route path="products" element={<ProductsPage />} />
+        <Route path="products/:id" element={<ProductDetailPage />} />
+        <Route path="cart" element={<CartPage />} />
+        <Route path="login" element={<LoginPage />} />
+        {/* 인테리어 */}
         <Route path="estimate" element={<EstimatePage />} />
         <Route path="portfolio" element={<PortfolioPage />} />
         <Route path="portfolio/:id" element={<PortfolioPage />} />

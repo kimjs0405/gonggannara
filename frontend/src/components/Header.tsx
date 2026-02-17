@@ -1,19 +1,19 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Search, Menu, Phone } from 'lucide-react'
+import { Search, Menu, ShoppingCart, User, Phone } from 'lucide-react'
 
 const Header = () => {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
 
   const categories = [
-    { name: '거실 인테리어', slug: 'living' },
-    { name: '주방 인테리어', slug: 'kitchen' },
-    { name: '침실 인테리어', slug: 'bedroom' },
-    { name: '욕실 인테리어', slug: 'bathroom' },
-    { name: '사무실 인테리어', slug: 'office' },
-    { name: '상업공간 인테리어', slug: 'commercial' },
-    { name: '리모델링', slug: 'remodeling' },
+    { name: '가구·소파·침대', slug: 'furniture' },
+    { name: '조명·인테리어등', slug: 'lighting' },
+    { name: '커튼·블라인드', slug: 'curtain' },
+    { name: '벽지·바닥재', slug: 'wallpaper' },
+    { name: '주방·욕실용품', slug: 'kitchen' },
+    { name: '수납·정리용품', slug: 'storage' },
+    { name: '홈데코·소품', slug: 'deco' },
   ]
 
   return (
@@ -30,8 +30,8 @@ const Header = () => {
               <div className="ml-2">
                 <h1 className="text-2xl font-black tracking-tight">
                   <span className="text-blue-600">공간나라</span>
-                  <span className="text-gray-700 text-lg font-bold">인테리어</span>
                 </h1>
+                <p className="text-[10px] text-gray-500 -mt-1">인테리어 & 쇼핑몰</p>
               </div>
             </div>
           </Link>
@@ -43,30 +43,35 @@ const Header = () => {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="어떤 공간을 꾸미고 싶으세요?"
-                className="w-full h-11 pl-4 pr-14 border-2 border-blue-500 rounded-full focus:outline-none focus:border-blue-600 text-sm"
+                placeholder="인테리어 용품을 검색하세요"
+                className="w-full h-11 pl-4 pr-28 border-2 border-blue-500 rounded-full focus:outline-none focus:border-blue-600 text-sm"
               />
-              <button className="absolute right-2 w-9 h-9 bg-blue-500 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors">
-                <Search className="w-4 h-4 text-white" />
-              </button>
+              <div className="absolute right-3 flex items-center gap-2">
+                <Link to="/cart" className="flex items-center gap-1 text-sm text-gray-500 border-r pr-2 hover:text-blue-600">
+                  <span className="text-blue-600 font-bold">0</span>
+                  <span>장바구니</span>
+                </Link>
+                <button className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors">
+                  <Search className="w-4 h-4 text-white" />
+                </button>
+              </div>
             </div>
           </div>
 
           {/* Contact Info */}
           <div className="flex-shrink-0 text-right">
-            <p className="text-xs text-gray-500">무료 상담전화</p>
-            <p className="text-2xl font-black text-blue-600 tracking-tight">02-875-8204</p>
-            <p className="text-[11px] text-gray-400">평일 09:00 ~ 18:00</p>
+            <p className="text-xs text-gray-500">상담전화</p>
+            <p className="text-xl font-black text-blue-600 tracking-tight">02-875-8204</p>
+            <p className="text-[10px] text-gray-400">평일 09:00 ~ 18:00</p>
           </div>
 
           {/* CTA Button */}
           <Link
             to="/estimate"
-            className="flex-shrink-0 bg-blue-600 text-white px-5 py-3 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+            className="flex-shrink-0 bg-blue-600 text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
           >
-            <div className="text-center flex items-center gap-2">
-              <Phone className="w-4 h-4" />
-              <span className="font-bold">무료 견적상담</span>
+            <div className="text-center">
+              <p className="font-bold">무료 견적상담</p>
             </div>
           </Link>
         </div>
@@ -84,7 +89,7 @@ const Header = () => {
                 className="flex items-center gap-2 px-5 h-12 bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors"
               >
                 <Menu className="w-5 h-5" />
-                <span>전체 서비스</span>
+                <span>전체카테고리</span>
               </button>
 
               {isCategoryOpen && (
@@ -95,7 +100,7 @@ const Header = () => {
                   {categories.map((category, index) => (
                     <Link
                       key={index}
-                      to={`/services/${category.slug}`}
+                      to={`/products?category=${category.slug}`}
                       className="flex items-center gap-3 px-5 py-3 text-white hover:bg-blue-700 transition-colors border-t border-blue-500"
                     >
                       <span className="text-sm">{category.name}</span>
@@ -106,7 +111,7 @@ const Header = () => {
             </div>
 
             {/* Main Menu */}
-            <nav className="flex items-center ml-6 gap-2">
+            <nav className="flex items-center ml-2 gap-1">
               {[
                 { name: '견적문의', path: '/estimate' },
                 { name: '포트폴리오', path: '/portfolio' },
@@ -116,28 +121,33 @@ const Header = () => {
                 <Link
                   key={item.name}
                   to={item.path}
-                  className="px-5 py-3 font-medium text-gray-700 hover:text-blue-600 transition-colors"
+                  className="px-4 py-3 font-medium text-gray-700 hover:text-blue-600 transition-colors"
                 >
                   {item.name}
                 </Link>
               ))}
             </nav>
 
-            {/* Right - Contact */}
+            {/* Right Menu */}
             <div className="flex items-center ml-auto gap-4">
               <a 
                 href="tel:02-875-8204" 
-                className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg text-sm text-gray-700 hover:bg-gray-200 transition-colors"
+                className="flex items-center gap-1 text-sm text-gray-600 hover:text-blue-600"
               >
-                <Phone className="w-4 h-4 text-blue-600" />
-                <span className="font-medium">02-875-8204</span>
+                <Phone className="w-4 h-4" />
+                <span>02-875-8204</span>
               </a>
-              <Link 
-                to="/estimate" 
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
-              >
-                빠른 상담신청
-              </Link>
+              <div className="flex items-center gap-3 pl-4 border-l">
+                <Link to="/login" className="text-gray-600 hover:text-blue-600">
+                  <User className="w-5 h-5" />
+                </Link>
+                <Link to="/cart" className="text-gray-600 hover:text-blue-600 relative">
+                  <ShoppingCart className="w-5 h-5" />
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] rounded-full flex items-center justify-center">
+                    0
+                  </span>
+                </Link>
+              </div>
             </div>
           </div>
         </div>

@@ -1,42 +1,42 @@
-import { Phone, MessageCircle } from 'lucide-react'
+import { Phone } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 const TopBar = () => {
   return (
     <div className="bg-gray-900 text-white">
       <div className="max-w-[1200px] mx-auto px-4">
-        <div className="flex items-center justify-between h-9 text-xs">
+        <div className="flex items-center justify-between h-8 text-xs">
           {/* Left side */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <span className="text-gray-300">
-              <span className="font-bold text-white">공간나라</span> - 20년 전통 인테리어 전문 기업
+              <span className="font-bold text-white">공간나라</span> - 인테리어 용품 쇼핑몰 & 시공 전문
             </span>
           </div>
 
           {/* Right side */}
-          <div className="flex items-center gap-4 text-gray-300">
+          <div className="flex items-center gap-3 text-gray-300">
             <a 
               href="tel:02-875-8204" 
               className="flex items-center gap-1 hover:text-white transition-colors"
             >
-              <Phone size={12} />
+              <Phone size={11} />
               <span>02-875-8204</span>
             </a>
             <span className="text-gray-600">|</span>
-            <Link 
-              to="/estimate" 
-              className="flex items-center gap-1 hover:text-white transition-colors"
-            >
-              <MessageCircle size={12} />
-              <span>빠른 상담</span>
+            <Link to="/login" className="hover:text-white transition-colors">
+              로그인
             </Link>
             <span className="text-gray-600">|</span>
-            <Link to="/faq" className="hover:text-white transition-colors">
-              자주 묻는 질문
+            <Link to="/signup" className="hover:text-white transition-colors">
+              회원가입
             </Link>
             <span className="text-gray-600">|</span>
-            <Link to="/location" className="hover:text-white transition-colors">
-              오시는 길
+            <Link to="/mypage" className="hover:text-white transition-colors">
+              마이페이지
+            </Link>
+            <span className="text-gray-600">|</span>
+            <Link to="/cart" className="hover:text-white transition-colors">
+              장바구니
             </Link>
           </div>
         </div>
