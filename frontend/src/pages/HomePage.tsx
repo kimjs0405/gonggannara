@@ -117,68 +117,72 @@ const HomePage = () => {
 
   return (
     <div>
-      {/* Hero Banner */}
-      <div className="relative h-[350px] overflow-hidden">
-        <div
-          className="flex transition-transform duration-700 ease-in-out h-full"
-          style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-        >
-          {banners.map((banner) => (
+      {/* Hero Banner - 창 형태 */}
+      <div className="bg-gray-100 py-6">
+        <div className="max-w-[1200px] mx-auto px-4">
+          <div className="relative h-[350px] overflow-hidden rounded-2xl shadow-lg">
             <div
-              key={banner.id}
-              className={`min-w-full h-full ${banner.bg} flex items-center`}
+              className="flex transition-transform duration-700 ease-in-out h-full"
+              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
             >
-              <div className="max-w-[1200px] mx-auto px-4 w-full">
-                <div className="max-w-xl">
-                  <h1 className="text-4xl font-black text-white leading-tight whitespace-pre-line mb-3">
-                    {banner.title}
-                  </h1>
-                  <p className="text-lg text-white/80 mb-6">{banner.subtitle}</p>
-                  <div className="flex gap-3">
-                    <Link
-                      to="/products"
-                      className="px-6 py-3 bg-white text-gray-900 rounded-lg font-bold hover:bg-gray-100 transition-colors"
-                    >
-                      쇼핑하기
-                    </Link>
-                    <Link
-                      to="/estimate"
-                      className="px-6 py-3 border-2 border-white text-white rounded-lg font-bold hover:bg-white/10 transition-colors"
-                    >
-                      인테리어 상담
-                    </Link>
+              {banners.map((banner) => (
+                <div
+                  key={banner.id}
+                  className={`min-w-full h-full ${banner.bg} flex items-center`}
+                >
+                  <div className="max-w-[1200px] mx-auto px-8 w-full">
+                    <div className="max-w-xl">
+                      <h1 className="text-4xl font-black text-white leading-tight whitespace-pre-line mb-3">
+                        {banner.title}
+                      </h1>
+                      <p className="text-lg text-white/80 mb-6">{banner.subtitle}</p>
+                      <div className="flex gap-3">
+                        <Link
+                          to="/products"
+                          className="px-6 py-3 bg-white text-gray-900 rounded-lg font-bold hover:bg-gray-100 transition-colors"
+                        >
+                          쇼핑하기
+                        </Link>
+                        <Link
+                          to="/estimate"
+                          className="px-6 py-3 border-2 border-white text-white rounded-lg font-bold hover:bg-white/10 transition-colors"
+                        >
+                          인테리어 상담
+                        </Link>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
 
-        {/* Navigation */}
-        <button
-          onClick={() => setCurrentSlide((prev) => (prev - 1 + banners.length) % banners.length)}
-          className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 backdrop-blur rounded-full flex items-center justify-center hover:bg-white/30 transition-colors"
-        >
-          <ChevronLeft className="w-5 h-5 text-white" />
-        </button>
-        <button
-          onClick={() => setCurrentSlide((prev) => (prev + 1) % banners.length)}
-          className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 backdrop-blur rounded-full flex items-center justify-center hover:bg-white/30 transition-colors"
-        >
-          <ChevronRight className="w-5 h-5 text-white" />
-        </button>
-
-        {/* Dots */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-          {banners.map((_, idx) => (
+            {/* Navigation */}
             <button
-              key={idx}
-              onClick={() => setCurrentSlide(idx)}
-              className={`w-2.5 h-2.5 rounded-full transition-colors ${
-                currentSlide === idx ? 'bg-white' : 'bg-white/40'
-              }`}
-            />
-          ))}
+              onClick={() => setCurrentSlide((prev) => (prev - 1 + banners.length) % banners.length)}
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 backdrop-blur rounded-full flex items-center justify-center hover:bg-white/30 transition-colors"
+            >
+              <ChevronLeft className="w-5 h-5 text-white" />
+            </button>
+            <button
+              onClick={() => setCurrentSlide((prev) => (prev + 1) % banners.length)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 backdrop-blur rounded-full flex items-center justify-center hover:bg-white/30 transition-colors"
+            >
+              <ChevronRight className="w-5 h-5 text-white" />
+            </button>
+
+            {/* Dots */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+              {banners.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentSlide(idx)}
+                  className={`w-2.5 h-2.5 rounded-full transition-colors ${
+                    currentSlide === idx ? 'bg-white' : 'bg-white/40'
+                  }`}
+                />
+            ))}
+            </div>
+          </div>
         </div>
       </div>
 
