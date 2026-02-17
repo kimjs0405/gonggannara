@@ -237,6 +237,7 @@ const EstimatePage = () => {
             </div>
           </div>
         </div>
+        </div>
       </div>
     </div>
   )
