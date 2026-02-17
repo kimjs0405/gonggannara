@@ -240,21 +240,22 @@ const HomePage = () => {
           <div className="flex flex-col md:flex-row gap-4 md:gap-5">
             {/* Quick Category Icons */}
             <div className="flex-1">
-              <div className="flex items-center overflow-x-auto scrollbar-hide gap-3 md:gap-0 justify-start md:justify-evenly">
+              {/* 모바일: 5개씩 그리드 / PC: 12개 한줄 */}
+              <div className="grid grid-cols-5 md:grid-cols-12 gap-2 md:gap-1">
                 {quickCategories.map((cat, idx) => {
                   const IconComponent = cat.icon
                   return (
                     <Link
                       key={idx}
                       to={`/products?category=${cat.slug}`}
-                      className="flex flex-col items-center gap-1.5 min-w-[65px] md:min-w-0 py-2 hover:text-blue-600 transition-colors group"
+                      className="flex flex-col items-center gap-1 py-2 hover:text-blue-600 transition-colors group"
                     >
-                      <div className={`relative w-11 h-11 md:w-14 md:h-14 rounded-xl flex items-center justify-center border-2 transition-all ${
+                      <div className={`relative w-11 h-11 md:w-12 md:h-12 rounded-xl flex items-center justify-center border-2 transition-all ${
                         cat.isNew 
                           ? 'border-red-400 bg-red-50 group-hover:border-red-500 group-hover:bg-red-100' 
                           : 'border-gray-200 bg-gray-50 group-hover:border-blue-400 group-hover:bg-blue-50'
                       }`}>
-                        <IconComponent className={`w-5 h-5 md:w-6 md:h-6 ${
+                        <IconComponent className={`w-5 h-5 ${
                           cat.isNew ? 'text-red-500' : 'text-gray-600 group-hover:text-blue-600'
                         }`} />
                         {cat.isNew && (
@@ -263,7 +264,7 @@ const HomePage = () => {
                           </span>
                         )}
                       </div>
-                      <span className={`text-[10px] md:text-xs font-medium whitespace-nowrap ${
+                      <span className={`text-[9px] md:text-[11px] font-medium text-center leading-tight ${
                         cat.isNew ? 'text-red-500' : 'text-gray-700 group-hover:text-blue-600'
                       }`}>
                         {cat.name}
