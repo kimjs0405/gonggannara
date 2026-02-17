@@ -22,6 +22,11 @@ import DashboardPage from './pages/admin/DashboardPage'
 import AdminProductsPage from './pages/admin/ProductsPage'
 import AdminOrdersPage from './pages/admin/OrdersPage'
 import AdminUsersPage from './pages/admin/UsersPage'
+import AnalyticsPage from './pages/admin/AnalyticsPage'
+import PromotionsPage from './pages/admin/PromotionsPage'
+import BannersPage from './pages/admin/BannersPage'
+import AdminReviewsPage from './pages/admin/ReviewsPage'
+import SettingsPage from './pages/admin/SettingsPage'
 
 function App() {
   return (
@@ -59,6 +64,11 @@ function App() {
         <Route path="products" element={<AdminProductsPage />} />
         <Route path="orders" element={<AdminOrdersPage />} />
         <Route path="users" element={<AdminUsersPage />} />
+        <Route path="analytics" element={<AnalyticsPage />} />
+        <Route path="promotions" element={<PromotionsPage />} />
+        <Route path="banners" element={<BannersPage />} />
+        <Route path="reviews" element={<AdminReviewsPage />} />
+        <Route path="settings" element={<SettingsPage />} />
       </Route>
     </Routes>
   )
