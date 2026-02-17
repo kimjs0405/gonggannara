@@ -79,14 +79,6 @@ const HomePage = () => {
     { name: '신상품', icon: Sparkles, slug: 'new', isNew: true },
   ]
 
-  const categories = [
-    { name: '가구', icon: '🛋️', slug: 'furniture' },
-    { name: '조명', icon: '💡', slug: 'lighting' },
-    { name: '커튼', icon: '🪟', slug: 'curtain' },
-    { name: '벽지', icon: '🧱', slug: 'wallpaper' },
-    { name: '주방용품', icon: '🍳', slug: 'kitchen' },
-    { name: '수납', icon: '📦', slug: 'storage' },
-  ]
 
   const products: { id: number; name: string; price: number; discount: number; category: string }[] = []
 
@@ -242,62 +234,43 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* Quick Category Icons Bar */}
-      <div className="bg-white border-y border-gray-200">
-        <div className="max-w-[1200px] mx-auto px-4">
-          <div className="flex items-center overflow-x-auto scrollbar-hide py-4 gap-2 md:gap-0 md:justify-between">
-            {quickCategories.map((cat, idx) => {
-              const IconComponent = cat.icon
-              return (
-                <Link
-                  key={idx}
-                  to={`/products?category=${cat.slug}`}
-                  className="flex flex-col items-center gap-2 min-w-[70px] md:min-w-[80px] px-2 py-2 hover:text-blue-600 transition-colors group"
-                >
-                  <div className={`relative w-14 h-14 md:w-16 md:h-16 rounded-xl flex items-center justify-center border-2 transition-all ${
-                    cat.isNew 
-                      ? 'border-red-400 bg-red-50 group-hover:border-red-500 group-hover:bg-red-100' 
-                      : 'border-gray-200 bg-gray-50 group-hover:border-blue-400 group-hover:bg-blue-50'
-                  }`}>
-                    <IconComponent className={`w-6 h-6 md:w-7 md:h-7 ${
-                      cat.isNew ? 'text-red-500' : 'text-gray-600 group-hover:text-blue-600'
-                    }`} />
-                    {cat.isNew && (
-                      <span className="absolute -top-1.5 -right-1.5 px-1.5 py-0.5 bg-red-500 text-white text-[8px] font-bold rounded">
-                        NEW
-                      </span>
-                    )}
-                  </div>
-                  <span className={`text-[11px] md:text-xs font-medium whitespace-nowrap ${
-                    cat.isNew ? 'text-red-500' : 'text-gray-700 group-hover:text-blue-600'
-                  }`}>
-                    {cat.name}
-                  </span>
-                </Link>
-              )
-            })}
-          </div>
-        </div>
-      </div>
-
-      {/* Categories + Login Box */}
+      {/* Quick Categories + Login Box */}
       <div className="py-4 md:py-6 bg-white">
         <div className="max-w-[1200px] mx-auto px-4">
           <div className="flex flex-col md:flex-row gap-4 md:gap-5">
-            {/* Categories */}
+            {/* Quick Category Icons */}
             <div className="flex-1 bg-white border border-gray-200 p-4 md:p-5">
-              <h3 className="font-bold text-gray-800 mb-3 md:mb-4 text-sm md:text-base">카테고리</h3>
-              <div className="grid grid-cols-3 md:grid-cols-6 gap-2 md:gap-3">
-                {categories.map((cat, idx) => (
-                  <Link
-                    key={idx}
-                    to={`/products?category=${cat.slug}`}
-                    className="flex flex-col items-center gap-1.5 md:gap-2 p-2 md:p-3 bg-gray-50 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-colors"
-                  >
-                    <span className="text-xl md:text-2xl">{cat.icon}</span>
-                    <span className="text-[10px] md:text-xs font-medium">{cat.name}</span>
-                  </Link>
-                ))}
+              <div className="flex items-center overflow-x-auto scrollbar-hide gap-1 md:gap-0 md:justify-between">
+                {quickCategories.map((cat, idx) => {
+                  const IconComponent = cat.icon
+                  return (
+                    <Link
+                      key={idx}
+                      to={`/products?category=${cat.slug}`}
+                      className="flex flex-col items-center gap-1.5 min-w-[60px] md:min-w-[70px] px-1 py-1 hover:text-blue-600 transition-colors group"
+                    >
+                      <div className={`relative w-11 h-11 md:w-14 md:h-14 rounded-xl flex items-center justify-center border-2 transition-all ${
+                        cat.isNew 
+                          ? 'border-red-400 bg-red-50 group-hover:border-red-500 group-hover:bg-red-100' 
+                          : 'border-gray-200 bg-gray-50 group-hover:border-blue-400 group-hover:bg-blue-50'
+                      }`}>
+                        <IconComponent className={`w-5 h-5 md:w-6 md:h-6 ${
+                          cat.isNew ? 'text-red-500' : 'text-gray-600 group-hover:text-blue-600'
+                        }`} />
+                        {cat.isNew && (
+                          <span className="absolute -top-1.5 -right-1.5 px-1 py-0.5 bg-red-500 text-white text-[7px] font-bold rounded">
+                            NEW
+                          </span>
+                        )}
+                      </div>
+                      <span className={`text-[10px] md:text-xs font-medium whitespace-nowrap ${
+                        cat.isNew ? 'text-red-500' : 'text-gray-700 group-hover:text-blue-600'
+                      }`}>
+                        {cat.name}
+                      </span>
+                    </Link>
+                  )
+                })}
               </div>
             </div>
 
