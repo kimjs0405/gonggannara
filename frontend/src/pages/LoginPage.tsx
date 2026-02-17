@@ -50,18 +50,18 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8 md:py-12 px-4">
       <div className="w-full max-w-md">
         {/* Logo */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6 md:mb-8">
           <Link to="/">
-            <img src="/logo.svg" alt="공간나라" className="h-14 mx-auto" />
+            <img src="/logo.svg" alt="공간나라" className="h-10 md:h-14 mx-auto" />
           </Link>
         </div>
 
         {/* Login Form */}
-        <div className="bg-white rounded-2xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">로그인</h2>
+        <div className="bg-white rounded-xl md:rounded-2xl shadow-lg p-6 md:p-8">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-800 text-center mb-5 md:mb-6">로그인</h2>
 
           {error && (
             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">

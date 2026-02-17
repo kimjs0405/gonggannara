@@ -163,31 +163,31 @@ const CheckoutPage = () => {
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <div className="bg-white border-b">
-        <div className="max-w-[1000px] mx-auto px-4 py-6">
-          <h1 className="text-2xl font-bold text-gray-800">주문/결제</h1>
+        <div className="max-w-[1000px] mx-auto px-4 py-4 md:py-6">
+          <h1 className="text-xl md:text-2xl font-bold text-gray-800">주문/결제</h1>
         </div>
       </div>
 
-      <div className="max-w-[1000px] mx-auto px-4 py-8">
-        <div className="flex gap-8">
+      <div className="max-w-[1000px] mx-auto px-4 py-4 md:py-8">
+        <div className="flex flex-col md:flex-row gap-4 md:gap-8">
           {/* Left: Order Form */}
-          <div className="flex-1 space-y-6">
+          <div className="flex-1 space-y-4 md:space-y-6">
             {/* 주문 상품 */}
             <div className="bg-white rounded-lg">
-              <div className="p-4 border-b">
-                <h2 className="font-bold text-gray-800">주문 상품 ({items.length}개)</h2>
+              <div className="p-3 md:p-4 border-b">
+                <h2 className="font-bold text-gray-800 text-sm md:text-base">주문 상품 ({items.length}개)</h2>
               </div>
-              <div className="p-4 space-y-4">
+              <div className="p-3 md:p-4 space-y-3 md:space-y-4">
                 {items.map((item) => (
-                  <div key={item.id} className="flex items-center gap-4">
-                    <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
-                      <span className="text-3xl">{item.image}</span>
+                  <div key={item.id} className="flex items-center gap-3 md:gap-4">
+                    <div className="w-14 h-14 md:w-16 md:h-16 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <span className="text-2xl md:text-3xl">{item.image}</span>
                     </div>
-                    <div className="flex-1">
-                      <p className="font-medium text-gray-800">{item.name}</p>
-                      <p className="text-sm text-gray-500">수량: {item.quantity}개</p>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-gray-800 text-sm md:text-base truncate">{item.name}</p>
+                      <p className="text-xs md:text-sm text-gray-500">수량: {item.quantity}개</p>
                     </div>
-                    <p className="font-bold text-gray-800">
+                    <p className="font-bold text-gray-800 text-sm md:text-base flex-shrink-0">
                       {(item.price * item.quantity).toLocaleString()}원
                     </p>
                   </div>
@@ -197,138 +197,133 @@ const CheckoutPage = () => {
 
             {/* 배송 정보 */}
             <div className="bg-white rounded-lg">
-              <div className="p-4 border-b">
-                <h2 className="font-bold text-gray-800">배송 정보</h2>
+              <div className="p-3 md:p-4 border-b">
+                <h2 className="font-bold text-gray-800 text-sm md:text-base">배송 정보</h2>
               </div>
-              <div className="p-4">
-                <table className="w-full">
-                  <tbody>
-                    <tr className="border-t">
-                      <th className="py-3 px-3 bg-gray-50 text-left text-sm font-medium text-gray-700 w-28">
-                        받는분 <span className="text-red-500">*</span>
-                      </th>
-                      <td className="py-3 px-3">
-                        <input
-                          type="text"
-                          name="name"
-                          value={orderInfo.name}
-                          onChange={handleChange}
-                          className="w-48 px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-500"
-                          required
-                        />
-                      </td>
-                    </tr>
-                    <tr className="border-t">
-                      <th className="py-3 px-3 bg-gray-50 text-left text-sm font-medium text-gray-700">
-                        연락처 <span className="text-red-500">*</span>
-                      </th>
-                      <td className="py-3 px-3">
-                        <div className="flex items-center gap-1">
-                          <select
-                            name="phone1"
-                            value={orderInfo.phone1}
-                            onChange={handleChange}
-                            className="w-20 px-2 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-500"
-                          >
-                            <option value="010">010</option>
-                            <option value="011">011</option>
-                            <option value="016">016</option>
-                            <option value="017">017</option>
-                          </select>
-                          <span className="text-gray-400">-</span>
-                          <input
-                            type="text"
-                            name="phone2"
-                            value={orderInfo.phone2}
-                            onChange={handleChange}
-                            maxLength={4}
-                            className="w-20 px-2 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-500"
-                            required
-                          />
-                          <span className="text-gray-400">-</span>
-                          <input
-                            type="text"
-                            name="phone3"
-                            value={orderInfo.phone3}
-                            onChange={handleChange}
-                            maxLength={4}
-                            className="w-20 px-2 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-500"
-                            required
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <tr className="border-t">
-                      <th className="py-3 px-3 bg-gray-50 text-left text-sm font-medium text-gray-700 align-top">
-                        주소 <span className="text-red-500">*</span>
-                      </th>
-                      <td className="py-3 px-3 space-y-2">
-                        <div className="flex items-center gap-2">
-                          <input
-                            type="text"
-                            name="zipcode"
-                            value={orderInfo.zipcode}
-                            placeholder="우편번호"
-                            className="w-28 px-2 py-2 border border-gray-300 rounded text-sm bg-gray-50"
-                            readOnly
-                          />
-                          <button
-                            type="button"
-                            onClick={handleSearchAddress}
-                            className="px-3 py-2 bg-gray-600 text-white rounded text-sm hover:bg-gray-700"
-                          >
-                            주소검색
-                          </button>
-                        </div>
-                        <input
-                          type="text"
-                          name="address"
-                          value={orderInfo.address}
-                          placeholder="기본주소"
-                          className="w-full px-2 py-2 border border-gray-300 rounded text-sm bg-gray-50"
-                          readOnly
-                        />
-                        <input
-                          type="text"
-                          name="addressDetail"
-                          value={orderInfo.addressDetail}
-                          onChange={handleChange}
-                          placeholder="상세주소를 입력하세요"
-                          className="w-full px-2 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-500"
-                        />
-                      </td>
-                    </tr>
-                    <tr className="border-t border-b">
-                      <th className="py-3 px-3 bg-gray-50 text-left text-sm font-medium text-gray-700">
-                        배송메모
-                      </th>
-                      <td className="py-3 px-3">
-                        <select
-                          name="memo"
-                          value={orderInfo.memo}
-                          onChange={handleChange}
-                          className="w-full px-2 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-500"
-                        >
-                          <option value="">배송메모를 선택하세요</option>
-                          <option value="문 앞에 놓아주세요">문 앞에 놓아주세요</option>
-                          <option value="경비실에 맡겨주세요">경비실에 맡겨주세요</option>
-                          <option value="배송 전 연락 바랍니다">배송 전 연락 바랍니다</option>
-                          <option value="부재시 문 앞에 놓아주세요">부재시 문 앞에 놓아주세요</option>
-                        </select>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div className="p-3 md:p-4 space-y-4">
+                {/* 받는분 */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    받는분 <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={orderInfo.name}
+                    onChange={handleChange}
+                    className="w-full md:w-48 px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500"
+                    required
+                  />
+                </div>
+
+                {/* 연락처 */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    연락처 <span className="text-red-500">*</span>
+                  </label>
+                  <div className="flex items-center gap-1">
+                    <select
+                      name="phone1"
+                      value={orderInfo.phone1}
+                      onChange={handleChange}
+                      className="w-20 px-2 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500"
+                    >
+                      <option value="010">010</option>
+                      <option value="011">011</option>
+                      <option value="016">016</option>
+                      <option value="017">017</option>
+                    </select>
+                    <span className="text-gray-400">-</span>
+                    <input
+                      type="text"
+                      name="phone2"
+                      value={orderInfo.phone2}
+                      onChange={handleChange}
+                      maxLength={4}
+                      className="flex-1 md:w-20 md:flex-none px-2 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500"
+                      required
+                    />
+                    <span className="text-gray-400">-</span>
+                    <input
+                      type="text"
+                      name="phone3"
+                      value={orderInfo.phone3}
+                      onChange={handleChange}
+                      maxLength={4}
+                      className="flex-1 md:w-20 md:flex-none px-2 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* 주소 */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    주소 <span className="text-red-500">*</span>
+                  </label>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        name="zipcode"
+                        value={orderInfo.zipcode}
+                        placeholder="우편번호"
+                        className="w-24 md:w-28 px-2 py-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50"
+                        readOnly
+                      />
+                      <button
+                        type="button"
+                        onClick={handleSearchAddress}
+                        className="px-3 py-2.5 bg-gray-600 text-white rounded-lg text-sm hover:bg-gray-700"
+                      >
+                        주소검색
+                      </button>
+                    </div>
+                    <input
+                      type="text"
+                      name="address"
+                      value={orderInfo.address}
+                      placeholder="기본주소"
+                      className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50"
+                      readOnly
+                    />
+                    <input
+                      type="text"
+                      name="addressDetail"
+                      value={orderInfo.addressDetail}
+                      onChange={handleChange}
+                      placeholder="상세주소를 입력하세요"
+                      className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                </div>
+
+                {/* 배송메모 */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">배송메모</label>
+                  <select
+                    name="memo"
+                    value={orderInfo.memo}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500"
+                  >
+                    <option value="">배송메모를 선택하세요</option>
+                    <option value="문 앞에 놓아주세요">문 앞에 놓아주세요</option>
+                    <option value="경비실에 맡겨주세요">경비실에 맡겨주세요</option>
+                    <option value="배송 전 연락 바랍니다">배송 전 연락 바랍니다</option>
+                    <option value="부재시 문 앞에 놓아주세요">부재시 문 앞에 놓아주세요</option>
+                  </select>
+                </div>
               </div>
             </div>
 
             {/* 결제 수단 */}
             <div className="bg-white rounded-lg">
-              <div className="p-4 border-b">
-                <h2 className="font-bold text-gray-800">결제 수단</h2>
+              <div className="p-3 md:p-4 border-b">
+                <h2 className="font-bold text-gray-800 text-sm md:text-base">결제 수단</h2>
               </div>
-              <div className="p-4">
-                <div className="flex gap-3">
+              <div className="p-3 md:p-4">
+                <div className="flex gap-2 md:gap-3">
                   {[
                     { id: 'card', label: '신용/체크카드' },
                     { id: 'virtual', label: '가상계좌' },
@@ -336,7 +331,7 @@ const CheckoutPage = () => {
                     <button
                       key={method.id}
                       onClick={() => setPaymentMethod(method.id)}
-                      className={`flex-1 py-3 border rounded-lg text-sm font-medium transition-colors ${
+                      className={`flex-1 py-2.5 md:py-3 border rounded-lg text-xs md:text-sm font-medium transition-colors ${
                         paymentMethod === method.id
                           ? 'border-blue-600 bg-blue-50 text-blue-600'
                           : 'border-gray-300 text-gray-600 hover:border-gray-400'
@@ -346,7 +341,7 @@ const CheckoutPage = () => {
                     </button>
                   ))}
                 </div>
-                <p className="text-xs text-gray-400 mt-3">
+                <p className="text-[10px] md:text-xs text-gray-400 mt-2 md:mt-3">
                   * 결제는 토스페이먼츠를 통해 안전하게 처리됩니다.
                 </p>
               </div>
@@ -354,11 +349,11 @@ const CheckoutPage = () => {
           </div>
 
           {/* Right: Order Summary */}
-          <div className="w-80 flex-shrink-0">
-            <div className="bg-white rounded-lg p-6 sticky top-24">
-              <h3 className="font-bold text-gray-800 mb-4">결제 금액</h3>
+          <div className="md:w-80 flex-shrink-0">
+            <div className="bg-white rounded-lg p-4 md:p-6 md:sticky md:top-24">
+              <h3 className="font-bold text-gray-800 mb-3 md:mb-4 text-sm md:text-base">결제 금액</h3>
               
-              <div className="space-y-3 text-sm">
+              <div className="space-y-2 md:space-y-3 text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-500">상품금액</span>
                   <span className="text-gray-800">{subtotal.toLocaleString()}원</span>
@@ -371,22 +366,22 @@ const CheckoutPage = () => {
                 </div>
               </div>
 
-              <div className="border-t mt-4 pt-4">
+              <div className="border-t mt-3 md:mt-4 pt-3 md:pt-4">
                 <div className="flex justify-between items-center">
-                  <span className="font-bold text-gray-800">총 결제금액</span>
-                  <span className="text-2xl font-black text-blue-600">{total.toLocaleString()}원</span>
+                  <span className="font-bold text-gray-800 text-sm md:text-base">총 결제금액</span>
+                  <span className="text-xl md:text-2xl font-black text-blue-600">{total.toLocaleString()}원</span>
                 </div>
               </div>
 
-              <div className="mt-6">
+              <div className="mt-4 md:mt-6">
                 <label className="flex items-start gap-2 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={agreeTerms}
                     onChange={(e) => setAgreeTerms(e.target.checked)}
-                    className="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    className="mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
-                  <span className="text-xs text-gray-600">
+                  <span className="text-[11px] md:text-xs text-gray-600">
                     주문 내용을 확인하였으며, 결제 진행에 동의합니다.
                     <Link to="/terms" className="text-blue-600 hover:underline ml-1">(약관보기)</Link>
                   </span>
@@ -396,14 +391,14 @@ const CheckoutPage = () => {
               <button
                 onClick={handlePayment}
                 disabled={isProcessing || !agreeTerms}
-                className="w-full mt-4 py-4 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+                className="w-full mt-3 md:mt-4 py-3 md:py-4 bg-blue-600 text-white rounded-lg font-bold text-sm md:text-base hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
               >
                 {isProcessing ? '처리중...' : `${total.toLocaleString()}원 결제하기`}
               </button>
 
               <Link
                 to="/cart"
-                className="block text-center text-sm text-gray-500 hover:text-blue-600 mt-4"
+                className="block text-center text-xs md:text-sm text-gray-500 hover:text-blue-600 mt-3 md:mt-4"
               >
                 장바구니로 돌아가기
               </Link>

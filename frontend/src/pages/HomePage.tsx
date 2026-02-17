@@ -149,9 +149,9 @@ const HomePage = () => {
   return (
     <div>
       {/* Hero Banner - 창 형태 */}
-      <div className="bg-white py-6">
+      <div className="bg-white py-3 md:py-6">
         <div className="max-w-[1200px] mx-auto px-4">
-          <div className="relative h-[350px] overflow-hidden border border-gray-200">
+          <div className="relative h-[200px] md:h-[350px] overflow-hidden border border-gray-200">
             <div
               className="flex transition-transform duration-700 ease-in-out h-full"
               style={{ transform: `translateX(-${currentSlide * 100}%)` }}
@@ -170,22 +170,22 @@ const HomePage = () => {
                           : 'linear-gradient(to right, #78350f, #b45309)'
                   }}
                 >
-                  <div className="max-w-[1200px] mx-auto pl-20 pr-8 w-full">
+                  <div className="max-w-[1200px] mx-auto px-4 md:pl-20 md:pr-8 w-full">
                     <div className="max-w-xl">
-                      <h1 className="text-4xl font-black text-white leading-tight whitespace-pre-line mb-3">
+                      <h1 className="text-xl md:text-4xl font-black text-white leading-tight whitespace-pre-line mb-2 md:mb-3">
                         {banner.title}
                       </h1>
-                      <p className="text-lg text-white/80 mb-6">{banner.subtitle}</p>
-                      <div className="flex gap-3">
+                      <p className="text-sm md:text-lg text-white/80 mb-3 md:mb-6">{banner.subtitle}</p>
+                      <div className="flex gap-2 md:gap-3">
                         <Link
                           to={banner.link_url || '/products'}
-                          className="px-6 py-3 bg-white text-gray-900 rounded-lg font-bold hover:bg-gray-100 transition-colors"
+                          className="px-3 md:px-6 py-2 md:py-3 bg-white text-gray-900 rounded-lg text-sm md:text-base font-bold hover:bg-gray-100 transition-colors"
                         >
                           자세히 보기
                         </Link>
                         <Link
                           to="/estimate"
-                          className="px-6 py-3 border-2 border-white text-white rounded-lg font-bold hover:bg-white/10 transition-colors"
+                          className="hidden md:block px-6 py-3 border-2 border-white text-white rounded-lg font-bold hover:bg-white/10 transition-colors"
                         >
                           인테리어 상담
                         </Link>
@@ -196,27 +196,27 @@ const HomePage = () => {
               ))}
             </div>
 
-            {/* Navigation */}
+            {/* Navigation - Desktop only */}
             <button
               onClick={() => setCurrentSlide((prev) => (prev - 1 + banners.length) % banners.length)}
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 backdrop-blur rounded-full flex items-center justify-center hover:bg-white/30 transition-colors"
+              className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 backdrop-blur rounded-full items-center justify-center hover:bg-white/30 transition-colors"
             >
               <ChevronLeft className="w-5 h-5 text-white" />
             </button>
             <button
               onClick={() => setCurrentSlide((prev) => (prev + 1) % banners.length)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 backdrop-blur rounded-full flex items-center justify-center hover:bg-white/30 transition-colors"
+              className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 backdrop-blur rounded-full items-center justify-center hover:bg-white/30 transition-colors"
             >
               <ChevronRight className="w-5 h-5 text-white" />
             </button>
 
             {/* Dots */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+            <div className="absolute bottom-2 md:bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 md:gap-2">
               {banners.map((_, idx) => (
                 <button
                   key={idx}
                   onClick={() => setCurrentSlide(idx)}
-                  className={`w-2.5 h-2.5 rounded-full transition-colors ${
+                  className={`w-2 h-2 md:w-2.5 md:h-2.5 rounded-full transition-colors ${
                     currentSlide === idx ? 'bg-white' : 'bg-white/40'
                   }`}
                 />
@@ -227,28 +227,28 @@ const HomePage = () => {
       </div>
 
       {/* Categories + Login Box */}
-      <div className="py-6 bg-white">
+      <div className="py-4 md:py-6 bg-white">
         <div className="max-w-[1200px] mx-auto px-4">
-          <div className="flex gap-5">
+          <div className="flex flex-col md:flex-row gap-4 md:gap-5">
             {/* Categories */}
-            <div className="flex-1 bg-white border border-gray-200 p-5">
-              <h3 className="font-bold text-gray-800 mb-4">카테고리</h3>
-              <div className="grid grid-cols-6 gap-3">
+            <div className="flex-1 bg-white border border-gray-200 p-4 md:p-5">
+              <h3 className="font-bold text-gray-800 mb-3 md:mb-4 text-sm md:text-base">카테고리</h3>
+              <div className="grid grid-cols-3 md:grid-cols-6 gap-2 md:gap-3">
                 {categories.map((cat, idx) => (
                   <Link
                     key={idx}
                     to={`/products?category=${cat.slug}`}
-                    className="flex flex-col items-center gap-2 p-3 bg-gray-50 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                    className="flex flex-col items-center gap-1.5 md:gap-2 p-2 md:p-3 bg-gray-50 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-colors"
                   >
-                    <span className="text-2xl">{cat.icon}</span>
-                    <span className="text-xs font-medium">{cat.name}</span>
+                    <span className="text-xl md:text-2xl">{cat.icon}</span>
+                    <span className="text-[10px] md:text-xs font-medium">{cat.name}</span>
                   </Link>
                 ))}
               </div>
             </div>
 
-            {/* Login Box */}
-            <div className="w-[280px] bg-white border border-gray-200 p-5">
+            {/* Login Box - Desktop only */}
+            <div className="hidden md:block w-[280px] bg-white border border-gray-200 p-5">
               {isLoggedIn ? (
                 /* 로그인된 상태 */
                 <div>
@@ -345,51 +345,51 @@ const HomePage = () => {
       </div>
 
       {/* Products */}
-      <div className="py-12 bg-white">
+      <div className="py-8 md:py-12 bg-white">
         <div className="max-w-[1200px] mx-auto px-4">
-          <div className="flex items-end justify-between mb-8">
+          <div className="flex items-end justify-between mb-4 md:mb-8">
             <div>
-              <h2 className="text-2xl font-black text-gray-900 mb-1">인기 상품</h2>
-              <p className="text-gray-500">공간나라에서 가장 많이 찾는 상품</p>
+              <h2 className="text-lg md:text-2xl font-black text-gray-900 mb-0.5 md:mb-1">인기 상품</h2>
+              <p className="text-xs md:text-base text-gray-500">공간나라에서 가장 많이 찾는 상품</p>
             </div>
             <Link
               to="/products"
-              className="flex items-center gap-1 text-blue-600 font-medium hover:gap-2 transition-all"
+              className="flex items-center gap-1 text-sm md:text-base text-blue-600 font-medium hover:gap-2 transition-all"
             >
               전체보기 <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
           {products.length > 0 ? (
-            <div className="grid grid-cols-4 gap-5">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
               {products.map((product) => (
                 <Link
                   key={product.id}
                   to={`/products/${product.id}`}
                   className="bg-white border rounded-lg overflow-hidden hover:shadow-lg transition-shadow group"
                 >
-                  <div className="h-48 bg-gray-100 relative">
+                  <div className="h-32 md:h-48 bg-gray-100 relative">
                     {product.discount > 0 && (
-                      <span className="absolute top-2 left-2 px-2 py-1 bg-red-500 text-white text-xs font-bold rounded">
+                      <span className="absolute top-2 left-2 px-1.5 md:px-2 py-0.5 md:py-1 bg-red-500 text-white text-[10px] md:text-xs font-bold rounded">
                         {product.discount}%
                       </span>
                     )}
-                    <button className="absolute top-2 right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow hover:bg-blue-50 transition-colors opacity-0 group-hover:opacity-100">
-                      <ShoppingCart className="w-4 h-4 text-blue-600" />
+                    <button className="absolute top-2 right-2 w-7 md:w-8 h-7 md:h-8 bg-white rounded-full flex items-center justify-center shadow hover:bg-blue-50 transition-colors opacity-0 group-hover:opacity-100">
+                      <ShoppingCart className="w-3.5 md:w-4 h-3.5 md:h-4 text-blue-600" />
                     </button>
                   </div>
-                  <div className="p-4">
-                    <p className="text-xs text-gray-400 mb-1">{product.category}</p>
-                    <h3 className="font-medium text-gray-800 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+                  <div className="p-3 md:p-4">
+                    <p className="text-[10px] md:text-xs text-gray-400 mb-0.5 md:mb-1">{product.category}</p>
+                    <h3 className="text-sm md:text-base font-medium text-gray-800 mb-1 md:mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
                       {product.name}
                     </h3>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1 md:gap-2">
                       {product.discount > 0 && (
-                        <span className="text-sm text-gray-400 line-through">
+                        <span className="text-xs md:text-sm text-gray-400 line-through">
                           {formatPrice(product.price)}
                         </span>
                       )}
-                      <span className="text-lg font-bold text-blue-600">
+                      <span className="text-sm md:text-lg font-bold text-blue-600">
                         {formatPrice(getDiscountedPrice(product.price, product.discount))}
                       </span>
                     </div>
@@ -398,85 +398,85 @@ const HomePage = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-16 bg-gray-50 rounded-2xl">
-              <p className="text-gray-400 mb-4">등록된 상품이 없습니다</p>
-              <p className="text-sm text-gray-400">곧 새로운 상품이 등록될 예정입니다</p>
+            <div className="text-center py-10 md:py-16 bg-gray-50 rounded-xl md:rounded-2xl">
+              <p className="text-gray-400 mb-2 md:mb-4 text-sm md:text-base">등록된 상품이 없습니다</p>
+              <p className="text-xs md:text-sm text-gray-400">곧 새로운 상품이 등록될 예정입니다</p>
             </div>
           )}
         </div>
       </div>
 
       {/* Interior Services */}
-      <div className="py-12 bg-gray-900 text-white">
+      <div className="py-8 md:py-12 bg-gray-900 text-white">
         <div className="max-w-[1200px] mx-auto px-4">
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-0 mb-5 md:mb-8">
             <div>
-              <h2 className="text-2xl font-black mb-1">인테리어 시공 서비스</h2>
-              <p className="text-gray-400">전문가가 직접 시공해드립니다</p>
+              <h2 className="text-lg md:text-2xl font-black mb-0.5 md:mb-1">인테리어 시공 서비스</h2>
+              <p className="text-xs md:text-base text-gray-400">전문가가 직접 시공해드립니다</p>
             </div>
             <Link
               to="/estimate"
-              className="px-6 py-3 bg-blue-600 rounded-lg font-bold hover:bg-blue-700 transition-colors"
+              className="self-start md:self-auto px-4 md:px-6 py-2 md:py-3 bg-blue-600 rounded-lg text-sm md:text-base font-bold hover:bg-blue-700 transition-colors"
             >
               무료 견적받기
             </Link>
           </div>
 
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
             {services.map((service, idx) => (
               <Link
                 key={idx}
                 to="/portfolio"
-                className="bg-gray-800 rounded-xl p-6 hover:bg-gray-700 transition-colors"
+                className="bg-gray-800 rounded-lg md:rounded-xl p-4 md:p-6 hover:bg-gray-700 transition-colors"
               >
-                <h3 className="font-bold text-lg mb-1">{service.name}</h3>
-                <p className="text-sm text-gray-400">{service.desc}</p>
+                <h3 className="font-bold text-sm md:text-lg mb-0.5 md:mb-1">{service.name}</h3>
+                <p className="text-xs md:text-sm text-gray-400">{service.desc}</p>
               </Link>
             ))}
           </div>
 
-          <div className="mt-8 flex items-center justify-center gap-8 py-6 border-t border-gray-800">
-            <div className="flex items-center gap-2">
-              <Phone className="w-5 h-5 text-blue-400" />
-              <span className="text-xl font-bold">02-875-8204</span>
-            </div>
-            <span className="text-gray-500">|</span>
-            <span className="text-gray-400">평일 09:00 ~ 18:00 상담 가능</span>
+          <div className="mt-5 md:mt-8 flex flex-col md:flex-row items-center justify-center gap-2 md:gap-8 py-4 md:py-6 border-t border-gray-800">
+            <a href="tel:02-875-8204" className="flex items-center gap-2">
+              <Phone className="w-4 md:w-5 h-4 md:h-5 text-blue-400" />
+              <span className="text-lg md:text-xl font-bold">02-875-8204</span>
+            </a>
+            <span className="hidden md:inline text-gray-500">|</span>
+            <span className="text-xs md:text-base text-gray-400">평일 09:00 ~ 18:00 상담 가능</span>
           </div>
         </div>
       </div>
 
       {/* Reviews */}
-      <div className="py-12 bg-white">
+      <div className="py-8 md:py-12 bg-white">
         <div className="max-w-[1200px] mx-auto px-4">
-          <div className="flex items-end justify-between mb-8">
+          <div className="flex items-end justify-between mb-4 md:mb-8">
             <div>
-              <h2 className="text-2xl font-black text-gray-900 mb-1">고객 후기</h2>
-              <p className="text-gray-500">공간나라 고객님들의 솔직한 후기</p>
+              <h2 className="text-lg md:text-2xl font-black text-gray-900 mb-0.5 md:mb-1">고객 후기</h2>
+              <p className="text-xs md:text-base text-gray-500">공간나라 고객님들의 솔직한 후기</p>
             </div>
             <Link
               to="/reviews"
-              className="flex items-center gap-1 text-blue-600 font-medium hover:gap-2 transition-all"
+              className="flex items-center gap-1 text-sm md:text-base text-blue-600 font-medium hover:gap-2 transition-all"
             >
               전체보기 <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-5">
             {reviews.map((review, idx) => (
-              <div key={idx} className="bg-gray-50 rounded-xl p-5">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded">
+              <div key={idx} className="bg-gray-50 rounded-lg md:rounded-xl p-4 md:p-5">
+                <div className="flex items-center justify-between mb-2 md:mb-3">
+                  <span className="px-2 py-0.5 md:py-1 bg-blue-100 text-blue-700 text-[10px] md:text-xs font-medium rounded">
                     {review.type}
                   </span>
                   <div className="flex items-center gap-0.5">
                     {[...Array(review.rating)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                      <Star key={i} className="w-3 md:w-4 h-3 md:h-4 fill-yellow-400 text-yellow-400" />
                     ))}
                   </div>
                 </div>
-                <p className="text-gray-700 mb-3">"{review.content}"</p>
-                <p className="text-sm text-gray-500">{review.name} 고객님</p>
+                <p className="text-sm md:text-base text-gray-700 mb-2 md:mb-3">"{review.content}"</p>
+                <p className="text-xs md:text-sm text-gray-500">{review.name} 고객님</p>
               </div>
             ))}
           </div>
@@ -484,22 +484,22 @@ const HomePage = () => {
       </div>
 
       {/* CTA */}
-      <div className="py-10 bg-blue-600">
+      <div className="py-8 md:py-10 bg-blue-600">
         <div className="max-w-[1200px] mx-auto px-4 text-center">
-          <h2 className="text-2xl font-black text-white mb-2">
+          <h2 className="text-lg md:text-2xl font-black text-white mb-1 md:mb-2">
             인테리어 고민, 공간나라에서 해결하세요
           </h2>
-          <p className="text-blue-200 mb-6">상품 구매부터 시공까지 원스톱 서비스</p>
-          <div className="flex items-center justify-center gap-4">
+          <p className="text-xs md:text-base text-blue-200 mb-4 md:mb-6">상품 구매부터 시공까지 원스톱 서비스</p>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4">
             <Link
               to="/products"
-              className="px-6 py-3 bg-white text-blue-600 rounded-lg font-bold hover:bg-gray-100 transition-colors"
+              className="w-full md:w-auto px-6 py-2.5 md:py-3 bg-white text-blue-600 rounded-lg text-sm md:text-base font-bold hover:bg-gray-100 transition-colors"
             >
               쇼핑하러 가기
             </Link>
             <a
               href="tel:02-875-8204"
-              className="px-6 py-3 border-2 border-white text-white rounded-lg font-bold hover:bg-white/10 transition-colors flex items-center gap-2"
+              className="w-full md:w-auto px-6 py-2.5 md:py-3 border-2 border-white text-white rounded-lg text-sm md:text-base font-bold hover:bg-white/10 transition-colors flex items-center justify-center gap-2"
             >
               <Phone className="w-4 h-4" />
               02-875-8204
