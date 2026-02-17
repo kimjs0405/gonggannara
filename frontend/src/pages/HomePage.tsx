@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronLeft, ChevronRight, Phone, Star, ArrowRight, ShoppingCart } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Phone, Star, ArrowRight, ShoppingCart, Sofa, Lamp, Blinds, Wallpaper, Package, UtensilsCrossed, Bath, Flower2, PaintBucket, Wrench, SprayCan, Sparkles } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
 interface Banner {
@@ -62,6 +62,22 @@ const HomePage = () => {
     }
     fetchBanners()
   }, [])
+
+  // 아이콘 바로가기 카테고리
+  const quickCategories = [
+    { name: '가구', icon: Sofa, slug: 'furniture' },
+    { name: '조명', icon: Lamp, slug: 'lighting' },
+    { name: '커튼/블라인드', icon: Blinds, slug: 'curtain' },
+    { name: '벽지/시트지', icon: Wallpaper, slug: 'wallpaper' },
+    { name: '수납/정리', icon: Package, slug: 'storage' },
+    { name: '주방용품', icon: UtensilsCrossed, slug: 'kitchen' },
+    { name: '욕실용품', icon: Bath, slug: 'bathroom' },
+    { name: '인테리어소품', icon: Flower2, slug: 'decor' },
+    { name: '페인트', icon: PaintBucket, slug: 'paint' },
+    { name: 'DIY용품', icon: Wrench, slug: 'diy' },
+    { name: '청소용품', icon: SprayCan, slug: 'cleaning' },
+    { name: '신상품', icon: Sparkles, slug: 'new', isNew: true },
+  ]
 
   const categories = [
     { name: '가구', icon: '🛋️', slug: 'furniture' },
@@ -222,6 +238,44 @@ const HomePage = () => {
                 />
             ))}
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Category Icons Bar */}
+      <div className="bg-white border-y border-gray-200">
+        <div className="max-w-[1200px] mx-auto px-4">
+          <div className="flex items-center overflow-x-auto scrollbar-hide py-4 gap-2 md:gap-0 md:justify-between">
+            {quickCategories.map((cat, idx) => {
+              const IconComponent = cat.icon
+              return (
+                <Link
+                  key={idx}
+                  to={`/products?category=${cat.slug}`}
+                  className="flex flex-col items-center gap-2 min-w-[70px] md:min-w-[80px] px-2 py-2 hover:text-blue-600 transition-colors group"
+                >
+                  <div className={`relative w-14 h-14 md:w-16 md:h-16 rounded-xl flex items-center justify-center border-2 transition-all ${
+                    cat.isNew 
+                      ? 'border-red-400 bg-red-50 group-hover:border-red-500 group-hover:bg-red-100' 
+                      : 'border-gray-200 bg-gray-50 group-hover:border-blue-400 group-hover:bg-blue-50'
+                  }`}>
+                    <IconComponent className={`w-6 h-6 md:w-7 md:h-7 ${
+                      cat.isNew ? 'text-red-500' : 'text-gray-600 group-hover:text-blue-600'
+                    }`} />
+                    {cat.isNew && (
+                      <span className="absolute -top-1.5 -right-1.5 px-1.5 py-0.5 bg-red-500 text-white text-[8px] font-bold rounded">
+                        NEW
+                      </span>
+                    )}
+                  </div>
+                  <span className={`text-[11px] md:text-xs font-medium whitespace-nowrap ${
+                    cat.isNew ? 'text-red-500' : 'text-gray-700 group-hover:text-blue-600'
+                  }`}>
+                    {cat.name}
+                  </span>
+                </Link>
+              )
+            })}
           </div>
         </div>
       </div>
