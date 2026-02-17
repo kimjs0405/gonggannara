@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { Trash2, Minus, Plus } from 'lucide-react'
+import { supabase } from '../lib/supabase'
 
 interface CartItem {
   id: number
@@ -11,13 +12,24 @@ interface CartItem {
 }
 
 const CartPage = () => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    { id: 1, name: '모던 패브릭 3인 소파', price: 450000, quantity: 1, image: '🛋️' },
-    { id: 2, name: '북유럽 스타일 펜던트 조명', price: 89000, quantity: 2, image: '💡' },
-    { id: 3, name: '프리미엄 암막 커튼 세트', price: 78000, quantity: 1, image: '🪟' },
-  ])
+  const [cartItems, setCartItems] = useState<CartItem[]>([])
+  const [selectedItems, setSelectedItems] = useState<number[]>([])
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const navigate = useNavigate()
 
-  const [selectedItems, setSelectedItems] = useState<number[]>(cartItems.map(item => item.id))
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        navigate('/login')
+        return
+      }
+      setIsLoggedIn(true)
+      // 실제로는 Supabase에서 장바구니 데이터를 가져옴
+      // 현재는 빈 배열
+    }
+    checkAuth()
+  }, [navigate])
 
   const handleQuantityChange = (id: number, delta: number) => {
     setCartItems(items =>
@@ -50,10 +62,21 @@ const CartPage = () => {
     }
   }
 
+  const handleOrder = () => {
+    if (selectedItems.length === 0) return
+    // 선택한 상품 정보를 결제 페이지로 전달
+    const orderItems = cartItems.filter(item => selectedItems.includes(item.id))
+    navigate('/checkout', { state: { items: orderItems } })
+  }
+
   const selectedCartItems = cartItems.filter(item => selectedItems.includes(item.id))
   const subtotal = selectedCartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const shipping = subtotal >= 50000 ? 0 : 3000
   const total = subtotal + shipping
+
+  if (!isLoggedIn) {
+    return null
+  }
 
   return (
     <div className="bg-gray-50 min-h-screen py-8">
@@ -68,9 +91,10 @@ const CartPage = () => {
               <div className="flex items-center gap-4 px-6 py-4 border-b bg-gray-50">
                 <input
                   type="checkbox"
-                  checked={selectedItems.length === cartItems.length}
+                  checked={cartItems.length > 0 && selectedItems.length === cartItems.length}
                   onChange={toggleSelectAll}
                   className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  disabled={cartItems.length === 0}
                 />
                 <span className="font-medium text-gray-700">
                   전체선택 ({selectedItems.length}/{cartItems.length})
@@ -159,7 +183,7 @@ const CartPage = () => {
                     {shipping === 0 ? '무료' : `${shipping.toLocaleString()}원`}
                   </span>
                 </div>
-                {shipping > 0 && (
+                {shipping > 0 && subtotal > 0 && (
                   <p className="text-xs text-gray-400">
                     {(50000 - subtotal).toLocaleString()}원 더 구매하면 무료배송!
                   </p>
@@ -174,6 +198,7 @@ const CartPage = () => {
               </div>
 
               <button
+                onClick={handleOrder}
                 disabled={selectedItems.length === 0}
                 className="w-full py-4 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
               >
@@ -195,4 +220,3 @@ const CartPage = () => {
 }
 
 export default CartPage
-
