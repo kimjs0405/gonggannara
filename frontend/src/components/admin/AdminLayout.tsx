@@ -1,4 +1,4 @@
-import { Link, Outlet, useLocation } from 'react-router-dom'
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { 
   LayoutDashboard, 
   Package, 
@@ -15,11 +15,27 @@ import {
   Search,
   Menu
 } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const AdminLayout = () => {
   const location = useLocation()
+  const navigate = useNavigate()
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+
+  // 로그인 체크
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem('adminLoggedIn')
+    if (!isLoggedIn) {
+      navigate('/admin/login')
+    }
+  }, [navigate])
+
+  // 로그아웃
+  const handleLogout = () => {
+    localStorage.removeItem('adminLoggedIn')
+    localStorage.removeItem('adminLoginTime')
+    navigate('/admin/login')
+  }
 
   const menuItems = [
     { 
@@ -152,7 +168,7 @@ const AdminLayout = () => {
             {!isSidebarCollapsed && (
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate">관리자</p>
-                <p className="text-[11px] text-gray-400 truncate">admin@gonggannara.co.kr</p>
+                <p className="text-[11px] text-gray-400 truncate">gonggan8204</p>
               </div>
             )}
           </div>
@@ -187,9 +203,15 @@ const AdminLayout = () => {
             </button>
             <div className="w-px h-6 bg-gray-200" />
             <Link to="/" className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
-              <LogOut className="w-4 h-4" />
-              <span>쇼핑몰 보기</span>
+              쇼핑몰 보기
             </Link>
+            <button 
+              onClick={handleLogout}
+              className="flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>로그아웃</span>
+            </button>
           </div>
         </header>
 
@@ -203,4 +225,3 @@ const AdminLayout = () => {
 }
 
 export default AdminLayout
-

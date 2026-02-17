@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage'
 
 // Admin
 import AdminLayout from './components/admin/AdminLayout'
+import AdminLoginPage from './pages/admin/AdminLoginPage'
 import DashboardPage from './pages/admin/DashboardPage'
 import AdminProductsPage from './pages/admin/ProductsPage'
 import AdminOrdersPage from './pages/admin/OrdersPage'
@@ -24,6 +25,9 @@ function App() {
         <Route path="cart" element={<CartPage />} />
         <Route path="login" element={<LoginPage />} />
       </Route>
+
+      {/* 관리자 로그인 (레이아웃 없음) */}
+      <Route path="/admin/login" element={<AdminLoginPage />} />
 
       {/* 관리자 라우트 */}
       <Route path="/admin" element={<AdminLayout />}>
