@@ -120,7 +120,7 @@ const HomePage = () => {
       {/* Hero Banner - 창 형태 */}
       <div className="bg-white py-6">
         <div className="max-w-[1200px] mx-auto px-4">
-          <div className="relative h-[350px] overflow-hidden shadow-lg">
+          <div className="relative h-[350px] overflow-hidden border border-gray-200">
             <div
               className="flex transition-transform duration-700 ease-in-out h-full"
               style={{ transform: `translateX(-${currentSlide * 100}%)` }}
@@ -191,7 +191,7 @@ const HomePage = () => {
         <div className="max-w-[1200px] mx-auto px-4">
           <div className="flex gap-5">
             {/* Categories */}
-            <div className="flex-1 bg-white rounded-lg p-5">
+            <div className="flex-1 bg-white border border-gray-200 p-5">
               <h3 className="font-bold text-gray-800 mb-4">카테고리</h3>
               <div className="grid grid-cols-6 gap-3">
                 {categories.map((cat, idx) => (
@@ -208,7 +208,7 @@ const HomePage = () => {
             </div>
 
             {/* Login Box */}
-            <div className="w-[280px] bg-white rounded-lg p-5">
+            <div className="w-[280px] bg-white border border-gray-200 p-5">
               {isLoggedIn ? (
                 /* 로그인된 상태 */
                 <div>
