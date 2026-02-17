@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Search, Menu, ShoppingCart, User, Phone } from 'lucide-react'
+import { supabase } from '../lib/supabase'
 
 const Header = () => {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false)
@@ -9,13 +10,19 @@ const Header = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const checkLogin = () => {
-      const loggedIn = localStorage.getItem('userLoggedIn') === 'true'
-      setIsLoggedIn(loggedIn)
+    // 초기 세션 확인
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      setIsLoggedIn(!!session)
     }
-    checkLogin()
-    window.addEventListener('storage', checkLogin)
-    return () => window.removeEventListener('storage', checkLogin)
+    checkSession()
+
+    // 인증 상태 변경 감지
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setIsLoggedIn(!!session)
+    })
+
+    return () => subscription.unsubscribe()
   }, [])
 
   const categories = [

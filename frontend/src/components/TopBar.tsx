@@ -1,23 +1,41 @@
 import { Phone } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { supabase } from '../lib/supabase'
 
 const TopBar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
-    const checkLogin = () => {
-      const loggedIn = localStorage.getItem('userLoggedIn') === 'true'
-      setIsLoggedIn(loggedIn)
+    // 초기 세션 확인
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      setIsLoggedIn(!!session)
+      if (session) {
+        localStorage.setItem('userLoggedIn', 'true')
+      }
     }
-    checkLogin()
-    window.addEventListener('storage', checkLogin)
-    return () => window.removeEventListener('storage', checkLogin)
+    checkSession()
+
+    // 인증 상태 변경 감지
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setIsLoggedIn(!!session)
+      if (session) {
+        localStorage.setItem('userLoggedIn', 'true')
+      } else {
+        localStorage.removeItem('userLoggedIn')
+      }
+    })
+
+    return () => subscription.unsubscribe()
   }, [])
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
     localStorage.removeItem('userLoggedIn')
+    localStorage.removeItem('userEmail')
+    localStorage.removeItem('userId')
     setIsLoggedIn(false)
     navigate('/')
   }

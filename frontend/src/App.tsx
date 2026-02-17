@@ -5,6 +5,7 @@ import ProductsPage from './pages/ProductsPage'
 import ProductDetailPage from './pages/ProductDetailPage'
 import CartPage from './pages/CartPage'
 import LoginPage from './pages/LoginPage'
+import SignupPage from './pages/SignupPage'
 import EstimatePage from './pages/EstimatePage'
 import PortfolioPage from './pages/PortfolioPage'
 import ReviewsPage from './pages/ReviewsPage'
@@ -29,6 +30,7 @@ function App() {
         <Route path="products/:id" element={<ProductDetailPage />} />
         <Route path="cart" element={<CartPage />} />
         <Route path="login" element={<LoginPage />} />
+        <Route path="signup" element={<SignupPage />} />
         {/* 인테리어 */}
         <Route path="estimate" element={<EstimatePage />} />
         <Route path="portfolio" element={<PortfolioPage />} />
