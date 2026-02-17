@@ -3,6 +3,14 @@ import { Link } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, Phone, Star, ArrowRight, ShoppingCart } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
+interface Banner {
+  id: string
+  title: string
+  subtitle: string | null
+  image_url: string
+  link_url: string | null
+}
+
 const HomePage = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -10,27 +18,50 @@ const HomePage = () => {
   const [loginForm, setLoginForm] = useState({ email: '', password: '' })
   const [loginError, setLoginError] = useState('')
   const [isLoggingIn, setIsLoggingIn] = useState(false)
+  const [banners, setBanners] = useState<Banner[]>([])
 
-  const banners = [
+  // 기본 배너 (DB에 배너가 없을 때)
+  const defaultBanners = [
     {
-      id: 1,
+      id: 'default-1',
       title: '인테리어 용품\n특가 세일',
       subtitle: '최대 50% 할인 진행중',
-      bg: 'bg-gradient-to-r from-blue-900 to-blue-700',
+      image_url: '',
+      link_url: '/products',
     },
     {
-      id: 2,
+      id: 'default-2',
       title: '무료 인테리어\n상담 진행중',
       subtitle: '견적부터 시공까지 원스톱 서비스',
-      bg: 'bg-gradient-to-r from-slate-900 to-slate-700',
+      image_url: '',
+      link_url: '/estimate',
     },
     {
-      id: 3,
+      id: 'default-3',
       title: '신상품 입고\n가구·조명·소품',
       subtitle: '트렌디한 인테리어 아이템',
-      bg: 'bg-gradient-to-r from-amber-900 to-amber-700',
+      image_url: '',
+      link_url: '/products',
     },
   ]
+
+  // 배너 데이터 가져오기
+  useEffect(() => {
+    const fetchBanners = async () => {
+      const { data, error } = await supabase
+        .from('banners')
+        .select('*')
+        .eq('is_active', true)
+        .order('position', { ascending: true })
+
+      if (!error && data && data.length > 0) {
+        setBanners(data)
+      } else {
+        setBanners(defaultBanners)
+      }
+    }
+    fetchBanners()
+  }, [])
 
   const categories = [
     { name: '가구', icon: '🛋️', slug: 'furniture' },
@@ -125,10 +156,19 @@ const HomePage = () => {
               className="flex transition-transform duration-700 ease-in-out h-full"
               style={{ transform: `translateX(-${currentSlide * 100}%)` }}
             >
-              {banners.map((banner) => (
+              {banners.map((banner, idx) => (
                 <div
                   key={banner.id}
-                  className={`min-w-full h-full ${banner.bg} flex items-center`}
+                  className="min-w-full h-full flex items-center relative"
+                  style={{
+                    background: banner.image_url 
+                      ? `linear-gradient(to right, rgba(0,0,0,0.6), rgba(0,0,0,0.3)), url(${banner.image_url}) center/cover no-repeat`
+                      : idx % 3 === 0 
+                        ? 'linear-gradient(to right, #1e3a5f, #1d4ed8)' 
+                        : idx % 3 === 1 
+                          ? 'linear-gradient(to right, #1e293b, #475569)' 
+                          : 'linear-gradient(to right, #78350f, #b45309)'
+                  }}
                 >
                   <div className="max-w-[1200px] mx-auto px-8 w-full">
                     <div className="max-w-xl">
@@ -138,10 +178,10 @@ const HomePage = () => {
                       <p className="text-lg text-white/80 mb-6">{banner.subtitle}</p>
                       <div className="flex gap-3">
                         <Link
-                          to="/products"
+                          to={banner.link_url || '/products'}
                           className="px-6 py-3 bg-white text-gray-900 rounded-lg font-bold hover:bg-gray-100 transition-colors"
                         >
-                          쇼핑하기
+                          자세히 보기
                         </Link>
                         <Link
                           to="/estimate"
