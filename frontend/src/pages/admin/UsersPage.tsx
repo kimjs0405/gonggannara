@@ -5,8 +5,6 @@ import {
   Download,
   Eye,
   Mail,
-  ChevronLeft,
-  ChevronRight,
   User,
   Crown,
   ShoppingBag,

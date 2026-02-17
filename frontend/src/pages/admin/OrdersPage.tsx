@@ -5,9 +5,6 @@ import {
   Download,
   Eye,
   Truck,
-  ChevronLeft,
-  ChevronRight,
-  Calendar,
   Package,
   CheckCircle,
   XCircle,
@@ -310,7 +307,6 @@ const AdminOrdersPage = () => {
             <tbody className="divide-y divide-gray-100">
               {filteredOrders.map((order) => {
                 const statusInfo = getStatusInfo(order.status)
-                const StatusIcon = statusInfo.icon
                 return (
                   <tr key={order.id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-4 py-4">
