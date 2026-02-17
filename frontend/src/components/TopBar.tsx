@@ -41,7 +41,7 @@ const TopBar = () => {
   }
 
   return (
-    <div className="bg-gray-900 text-white">
+    <div className="hidden md:block bg-gray-900 text-white">
       <div className="max-w-[1200px] mx-auto px-4">
         <div className="flex items-center justify-between h-8 text-xs">
           {/* Left side */}
