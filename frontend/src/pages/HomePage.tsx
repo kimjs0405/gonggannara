@@ -170,7 +170,7 @@ const HomePage = () => {
                           : 'linear-gradient(to right, #78350f, #b45309)'
                   }}
                 >
-                  <div className="max-w-[1200px] mx-auto px-8 w-full">
+                  <div className="max-w-[1200px] mx-auto pl-20 pr-8 w-full">
                     <div className="max-w-xl">
                       <h1 className="text-4xl font-black text-white leading-tight whitespace-pre-line mb-3">
                         {banner.title}
