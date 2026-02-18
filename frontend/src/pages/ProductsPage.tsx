@@ -614,7 +614,7 @@ const ProductsPage = () => {
         </div>
 
         {/* Product List */}
-        <div className="flex-1">
+        <div className="w-full">
             {/* Sort & View Options */}
             <div className="flex items-center justify-between mb-4">
               <p className="text-xs md:text-sm text-gray-500">
@@ -754,17 +754,16 @@ const ProductsPage = () => {
                 )}
               </div>
             )}
-          </div>
         </div>
-      </div>
 
-      {/* Sort menu backdrop */}
-      {showSortMenu && (
-        <div
-          className="fixed inset-0 z-5"
-          onClick={() => setShowSortMenu(false)}
-        />
-      )}
+        {/* Sort menu backdrop */}
+        {showSortMenu && (
+          <div
+            className="fixed inset-0 z-5"
+            onClick={() => setShowSortMenu(false)}
+          />
+        )}
+      </div>
     </div>
   )
 }
