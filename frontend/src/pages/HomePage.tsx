@@ -397,7 +397,7 @@ const HomePage = () => {
       <div className="py-4 md:py-6 bg-white">
         <div className="max-w-[1200px] mx-auto px-4">
           <div className="flex flex-col md:flex-row gap-4 md:gap-5">
-            {/* Quick Category Icons + Promo Slides */}
+            {/* Quick Category Icons */}
             <div className="flex-1">
               {/* 모바일: 5개씩 그리드 / PC: 12개 한줄 */}
               <div className="grid grid-cols-5 md:grid-cols-12 gap-2 md:gap-1">
@@ -431,98 +431,6 @@ const HomePage = () => {
                     </Link>
                   )
                 })}
-              </div>
-
-            </div>
-
-            {/* 광고 슬라이드 2개 - 카테고리 밑 */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mt-4">
-              {/* 광고 슬라이드 1 */}
-              <div className="relative h-[120px] md:h-[150px] overflow-hidden border-2 border-gray-300">
-                <div 
-                  className="flex transition-transform duration-500 ease-in-out h-full"
-                  style={{ transform: `translateX(-${adSlide1 * 100}%)` }}
-                >
-                  {adSlides1.map((ad) => (
-                    <Link
-                      key={ad.id}
-                      to={ad.link}
-                      className="min-w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 transition-colors"
-                    >
-                      <div className="text-center">
-                        <div className="text-5xl md:text-6xl mb-2">{ad.image}</div>
-                        <p className="text-sm md:text-base font-bold text-gray-800">{ad.title}</p>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-                {/* 네비게이션 버튼 */}
-                <button
-                  onClick={() => setAdSlide1((prev) => (prev - 1 + adSlides1.length) % adSlides1.length)}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/80 hover:bg-white flex items-center justify-center border border-gray-300 transition-colors"
-                >
-                  <ChevronLeft className="w-4 h-4 text-gray-700" />
-                </button>
-                <button
-                  onClick={() => setAdSlide1((prev) => (prev + 1) % adSlides1.length)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/80 hover:bg-white flex items-center justify-center border border-gray-300 transition-colors"
-                >
-                  <ChevronRight className="w-4 h-4 text-gray-700" />
-                </button>
-                {/* 인디케이터 */}
-                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
-                  {adSlides1.map((_, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setAdSlide1(idx)}
-                      className={`w-2 h-2 transition-colors ${adSlide1 === idx ? 'bg-gray-800' : 'bg-gray-300'}`}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* 광고 슬라이드 2 */}
-              <div className="relative h-[120px] md:h-[150px] overflow-hidden border-2 border-gray-300">
-                <div 
-                  className="flex transition-transform duration-500 ease-in-out h-full"
-                  style={{ transform: `translateX(-${adSlide2 * 100}%)` }}
-                >
-                  {adSlides2.map((ad) => (
-                    <Link
-                      key={ad.id}
-                      to={ad.link}
-                      className="min-w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-50 to-red-50 hover:from-orange-100 hover:to-red-100 transition-colors"
-                    >
-                      <div className="text-center">
-                        <div className="text-5xl md:text-6xl mb-2">{ad.image}</div>
-                        <p className="text-sm md:text-base font-bold text-gray-800">{ad.title}</p>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-                {/* 네비게이션 버튼 */}
-                <button
-                  onClick={() => setAdSlide2((prev) => (prev - 1 + adSlides2.length) % adSlides2.length)}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/80 hover:bg-white flex items-center justify-center border border-gray-300 transition-colors"
-                >
-                  <ChevronLeft className="w-4 h-4 text-gray-700" />
-                </button>
-                <button
-                  onClick={() => setAdSlide2((prev) => (prev + 1) % adSlides2.length)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/80 hover:bg-white flex items-center justify-center border border-gray-300 transition-colors"
-                >
-                  <ChevronRight className="w-4 h-4 text-gray-700" />
-                </button>
-                {/* 인디케이터 */}
-                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
-                  {adSlides2.map((_, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setAdSlide2(idx)}
-                      className={`w-2 h-2 transition-colors ${adSlide2 === idx ? 'bg-gray-800' : 'bg-gray-300'}`}
-                    />
-                  ))}
-                </div>
               </div>
             </div>
 
@@ -620,6 +528,97 @@ const HomePage = () => {
                   </div>
                 </div>
               )}
+              </div>
+            </div>
+          </div>
+
+          {/* 광고 슬라이드 2개 - 카테고리 밑 */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mt-4">
+            {/* 광고 슬라이드 1 */}
+            <div className="relative h-[120px] md:h-[150px] overflow-hidden border-2 border-gray-300">
+              <div 
+                className="flex transition-transform duration-500 ease-in-out h-full"
+                style={{ transform: `translateX(-${adSlide1 * 100}%)` }}
+              >
+                {adSlides1.map((ad) => (
+                  <Link
+                    key={ad.id}
+                    to={ad.link}
+                    className="min-w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 transition-colors"
+                  >
+                    <div className="text-center">
+                      <div className="text-5xl md:text-6xl mb-2">{ad.image}</div>
+                      <p className="text-sm md:text-base font-bold text-gray-800">{ad.title}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+              {/* 네비게이션 버튼 */}
+              <button
+                onClick={() => setAdSlide1((prev) => (prev - 1 + adSlides1.length) % adSlides1.length)}
+                className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/80 hover:bg-white flex items-center justify-center border border-gray-300 transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4 text-gray-700" />
+              </button>
+              <button
+                onClick={() => setAdSlide1((prev) => (prev + 1) % adSlides1.length)}
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/80 hover:bg-white flex items-center justify-center border border-gray-300 transition-colors"
+              >
+                <ChevronRight className="w-4 h-4 text-gray-700" />
+              </button>
+              {/* 인디케이터 */}
+              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+                {adSlides1.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setAdSlide1(idx)}
+                    className={`w-2 h-2 transition-colors ${adSlide1 === idx ? 'bg-gray-800' : 'bg-gray-300'}`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* 광고 슬라이드 2 */}
+            <div className="relative h-[120px] md:h-[150px] overflow-hidden border-2 border-gray-300">
+              <div 
+                className="flex transition-transform duration-500 ease-in-out h-full"
+                style={{ transform: `translateX(-${adSlide2 * 100}%)` }}
+              >
+                {adSlides2.map((ad) => (
+                  <Link
+                    key={ad.id}
+                    to={ad.link}
+                    className="min-w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-50 to-red-50 hover:from-orange-100 hover:to-red-100 transition-colors"
+                  >
+                    <div className="text-center">
+                      <div className="text-5xl md:text-6xl mb-2">{ad.image}</div>
+                      <p className="text-sm md:text-base font-bold text-gray-800">{ad.title}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+              {/* 네비게이션 버튼 */}
+              <button
+                onClick={() => setAdSlide2((prev) => (prev - 1 + adSlides2.length) % adSlides2.length)}
+                className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/80 hover:bg-white flex items-center justify-center border border-gray-300 transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4 text-gray-700" />
+              </button>
+              <button
+                onClick={() => setAdSlide2((prev) => (prev + 1) % adSlides2.length)}
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/80 hover:bg-white flex items-center justify-center border border-gray-300 transition-colors"
+              >
+                <ChevronRight className="w-4 h-4 text-gray-700" />
+              </button>
+              {/* 인디케이터 */}
+              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+                {adSlides2.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setAdSlide2(idx)}
+                    className={`w-2 h-2 transition-colors ${adSlide2 === idx ? 'bg-gray-800' : 'bg-gray-300'}`}
+                  />
+                ))}
               </div>
             </div>
           </div>
