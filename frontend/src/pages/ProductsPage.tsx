@@ -354,9 +354,9 @@ const ProductsPage = () => {
           </div>
         )}
 
-        {/* Desktop: 필터와 상세 필터 조건을 같은 행에 배치 */}
-        <div className="hidden md:flex gap-6 mb-4 md:mb-6">
-          {/* Sidebar Filters - Desktop only */}
+        {/* Desktop: 필터는 왼쪽, 상세 필터와 상품 리스트는 오른쪽 */}
+        <div className="hidden md:flex gap-6">
+          {/* Sidebar Filters - 왼쪽 */}
           <div className="w-64 flex-shrink-0">
             <div className="bg-white rounded-xl p-5 shadow-sm sticky top-4">
               <div className="flex items-center justify-between mb-4">
@@ -460,8 +460,10 @@ const ProductsPage = () => {
             </div>
           </div>
 
-          {/* 상세 필터 조건 - 오른쪽 */}
-          <div className="flex-1 bg-white rounded-lg p-2 md:p-3 border border-gray-200">
+          {/* 오른쪽: 상세 필터 조건 + 상품 리스트 */}
+          <div className="flex-1">
+            {/* 상세 필터 조건 */}
+            <div className="bg-white rounded-lg p-2 md:p-3 border border-gray-200 mb-4 md:mb-6">
             <div className="flex items-center justify-between mb-1.5 md:mb-2">
               <div className="flex items-center gap-1 md:gap-1.5">
                 <Filter className="w-3 h-3 md:w-3.5 md:h-3.5 text-gray-600" />
@@ -610,11 +612,10 @@ const ProductsPage = () => {
                 ))}
               </div>
             </div>
-          </div>
-        </div>
+            </div>
 
-        {/* Product List */}
-        <div className="w-full">
+            {/* Product List */}
+            <div className="w-full">
             {/* Sort & View Options */}
             <div className="flex items-center justify-between mb-4">
               <p className="text-xs md:text-sm text-gray-500">
@@ -754,6 +755,8 @@ const ProductsPage = () => {
                 )}
               </div>
             )}
+            </div>
+          </div>
         </div>
 
         {/* Sort menu backdrop */}
