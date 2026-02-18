@@ -14,6 +14,8 @@ interface Banner {
 
 const HomePage = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [adSlide1, setAdSlide1] = useState(0)
+  const [adSlide2, setAdSlide2] = useState(0)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [userEmail, setUserEmail] = useState('')
   const [loginForm, setLoginForm] = useState({ email: '', password: '' })
@@ -195,6 +197,19 @@ const HomePage = () => {
 
   const products: { id: number; name: string; price: number; discount: number; category: string }[] = []
 
+  // 광고 슬라이드 데이터
+  const adSlides1 = [
+    { id: 1, title: '광고 1-1', image: '🎯', link: '/products' },
+    { id: 2, title: '광고 1-2', image: '📢', link: '/products' },
+    { id: 3, title: '광고 1-3', image: '✨', link: '/products' },
+  ]
+
+  const adSlides2 = [
+    { id: 1, title: '광고 2-1', image: '🔥', link: '/products' },
+    { id: 2, title: '광고 2-2', image: '💎', link: '/products' },
+    { id: 3, title: '광고 2-3', image: '🌟', link: '/products' },
+  ]
+
   // 프로모션 슬라이드 1 - 특가 할인
   const promoItems1 = [
     { id: 1, name: '모던 패브릭 소파', price: 890000, discount: 35, image: '🛋️' },
@@ -230,6 +245,20 @@ const HomePage = () => {
     }, 5000)
     return () => clearInterval(timer)
   }, [banners.length])
+
+  // 광고 슬라이드 자동 전환
+  useEffect(() => {
+    const timer1 = setInterval(() => {
+      setAdSlide1((prev) => (prev + 1) % adSlides1.length)
+    }, 4000)
+    const timer2 = setInterval(() => {
+      setAdSlide2((prev) => (prev + 1) % adSlides2.length)
+    }, 4500)
+    return () => {
+      clearInterval(timer1)
+      clearInterval(timer2)
+    }
+  }, [])
 
 
   useEffect(() => {
@@ -404,6 +433,97 @@ const HomePage = () => {
                 })}
               </div>
 
+            </div>
+
+            {/* 광고 슬라이드 2개 - 카테고리 밑 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mt-4">
+              {/* 광고 슬라이드 1 */}
+              <div className="relative h-[120px] md:h-[150px] overflow-hidden border-2 border-gray-300">
+                <div 
+                  className="flex transition-transform duration-500 ease-in-out h-full"
+                  style={{ transform: `translateX(-${adSlide1 * 100}%)` }}
+                >
+                  {adSlides1.map((ad) => (
+                    <Link
+                      key={ad.id}
+                      to={ad.link}
+                      className="min-w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 transition-colors"
+                    >
+                      <div className="text-center">
+                        <div className="text-5xl md:text-6xl mb-2">{ad.image}</div>
+                        <p className="text-sm md:text-base font-bold text-gray-800">{ad.title}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+                {/* 네비게이션 버튼 */}
+                <button
+                  onClick={() => setAdSlide1((prev) => (prev - 1 + adSlides1.length) % adSlides1.length)}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/80 hover:bg-white flex items-center justify-center border border-gray-300 transition-colors"
+                >
+                  <ChevronLeft className="w-4 h-4 text-gray-700" />
+                </button>
+                <button
+                  onClick={() => setAdSlide1((prev) => (prev + 1) % adSlides1.length)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/80 hover:bg-white flex items-center justify-center border border-gray-300 transition-colors"
+                >
+                  <ChevronRight className="w-4 h-4 text-gray-700" />
+                </button>
+                {/* 인디케이터 */}
+                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+                  {adSlides1.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setAdSlide1(idx)}
+                      className={`w-2 h-2 transition-colors ${adSlide1 === idx ? 'bg-gray-800' : 'bg-gray-300'}`}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* 광고 슬라이드 2 */}
+              <div className="relative h-[120px] md:h-[150px] overflow-hidden border-2 border-gray-300">
+                <div 
+                  className="flex transition-transform duration-500 ease-in-out h-full"
+                  style={{ transform: `translateX(-${adSlide2 * 100}%)` }}
+                >
+                  {adSlides2.map((ad) => (
+                    <Link
+                      key={ad.id}
+                      to={ad.link}
+                      className="min-w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-50 to-red-50 hover:from-orange-100 hover:to-red-100 transition-colors"
+                    >
+                      <div className="text-center">
+                        <div className="text-5xl md:text-6xl mb-2">{ad.image}</div>
+                        <p className="text-sm md:text-base font-bold text-gray-800">{ad.title}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+                {/* 네비게이션 버튼 */}
+                <button
+                  onClick={() => setAdSlide2((prev) => (prev - 1 + adSlides2.length) % adSlides2.length)}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/80 hover:bg-white flex items-center justify-center border border-gray-300 transition-colors"
+                >
+                  <ChevronLeft className="w-4 h-4 text-gray-700" />
+                </button>
+                <button
+                  onClick={() => setAdSlide2((prev) => (prev + 1) % adSlides2.length)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/80 hover:bg-white flex items-center justify-center border border-gray-300 transition-colors"
+                >
+                  <ChevronRight className="w-4 h-4 text-gray-700" />
+                </button>
+                {/* 인디케이터 */}
+                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+                  {adSlides2.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setAdSlide2(idx)}
+                      className={`w-2 h-2 transition-colors ${adSlide2 === idx ? 'bg-gray-800' : 'bg-gray-300'}`}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
 
             {/* Visitor Count & Login Box */}
