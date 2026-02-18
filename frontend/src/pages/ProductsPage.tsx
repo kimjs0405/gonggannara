@@ -246,16 +246,16 @@ const ProductsPage = () => {
         </div>
 
         {/* 상세 필터 조건 */}
-        <div className="mb-4 md:mb-6 bg-white rounded-lg p-4 border border-gray-200">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <Filter className="w-4 h-4 text-gray-600" />
-              <h3 className="text-sm md:text-base font-semibold text-gray-800">상세 필터 조건</h3>
+        <div className="mb-4 md:mb-6 bg-white rounded-lg p-3 md:p-4 border border-gray-200 max-w-4xl">
+          <div className="flex items-center justify-between mb-2 md:mb-3">
+            <div className="flex items-center gap-1.5 md:gap-2">
+              <Filter className="w-3.5 h-3.5 md:w-4 md:h-4 text-gray-600" />
+              <h3 className="text-xs md:text-sm font-semibold text-gray-800">상세 필터 조건</h3>
             </div>
             {(selectedCategory || priceRanges.length > 0 || discountFilter || badgeFilter || searchQuery) && (
               <button
                 onClick={resetFilters}
-                className="text-xs md:text-sm text-blue-600 hover:text-blue-700 font-medium"
+                className="text-[10px] md:text-xs text-blue-600 hover:text-blue-700 font-medium"
               >
                 전체 초기화
               </button>
@@ -263,18 +263,18 @@ const ProductsPage = () => {
           </div>
 
           {/* 선택된 필터 표시 */}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5 md:gap-2">
             {/* 카테고리 필터 */}
             {selectedCategory && (
-              <div className="flex items-center gap-1 px-3 py-1.5 bg-blue-50 border border-blue-200 rounded-full text-xs md:text-sm">
+              <div className="flex items-center gap-1 px-2 md:px-2.5 py-1 bg-blue-50 border border-blue-200 rounded-full text-[10px] md:text-xs">
                 <span className="text-blue-700 font-medium">
-                  카테고리: {categories.find(c => c.slug === selectedCategory)?.name || selectedCategory}
+                  {categories.find(c => c.slug === selectedCategory)?.name || selectedCategory}
                 </span>
                 <button
                   onClick={() => handleCategoryChange('')}
                   className="text-blue-600 hover:text-blue-800"
                 >
-                  <X className="w-3 h-3" />
+                  <X className="w-2.5 h-2.5 md:w-3 md:h-3" />
                 </button>
               </div>
             )}
@@ -283,76 +283,76 @@ const ProductsPage = () => {
             {priceRanges.map((range) => (
               <div
                 key={range}
-                className="flex items-center gap-1 px-3 py-1.5 bg-green-50 border border-green-200 rounded-full text-xs md:text-sm"
+                className="flex items-center gap-1 px-2 md:px-2.5 py-1 bg-green-50 border border-green-200 rounded-full text-[10px] md:text-xs"
               >
-                <span className="text-green-700 font-medium">가격: {range}</span>
+                <span className="text-green-700 font-medium">{range}</span>
                 <button
                   onClick={() => togglePriceRange(range)}
                   className="text-green-600 hover:text-green-800"
                 >
-                  <X className="w-3 h-3" />
+                  <X className="w-2.5 h-2.5 md:w-3 md:h-3" />
                 </button>
               </div>
             ))}
 
             {/* 할인율 필터 */}
             {discountFilter && (
-              <div className="flex items-center gap-1 px-3 py-1.5 bg-orange-50 border border-orange-200 rounded-full text-xs md:text-sm">
+              <div className="flex items-center gap-1 px-2 md:px-2.5 py-1 bg-orange-50 border border-orange-200 rounded-full text-[10px] md:text-xs">
                 <span className="text-orange-700 font-medium">
-                  할인율: {discountOptions.find(opt => opt.value === discountFilter)?.label}
+                  {discountOptions.find(opt => opt.value === discountFilter)?.label}
                 </span>
                 <button
                   onClick={() => setDiscountFilter('')}
                   className="text-orange-600 hover:text-orange-800"
                 >
-                  <X className="w-3 h-3" />
+                  <X className="w-2.5 h-2.5 md:w-3 md:h-3" />
                 </button>
               </div>
             )}
 
             {/* 배지 필터 */}
             {badgeFilter && (
-              <div className="flex items-center gap-1 px-3 py-1.5 bg-purple-50 border border-purple-200 rounded-full text-xs md:text-sm">
-                <span className="text-purple-700 font-medium">배지: {badgeFilter}</span>
+              <div className="flex items-center gap-1 px-2 md:px-2.5 py-1 bg-purple-50 border border-purple-200 rounded-full text-[10px] md:text-xs">
+                <span className="text-purple-700 font-medium">{badgeFilter}</span>
                 <button
                   onClick={() => setBadgeFilter('')}
                   className="text-purple-600 hover:text-purple-800"
                 >
-                  <X className="w-3 h-3" />
+                  <X className="w-2.5 h-2.5 md:w-3 md:h-3" />
                 </button>
               </div>
             )}
 
             {/* 검색어 필터 */}
             {searchQuery && (
-              <div className="flex items-center gap-1 px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-full text-xs md:text-sm">
-                <span className="text-gray-700 font-medium">검색: "{searchQuery}"</span>
+              <div className="flex items-center gap-1 px-2 md:px-2.5 py-1 bg-gray-50 border border-gray-200 rounded-full text-[10px] md:text-xs">
+                <span className="text-gray-700 font-medium">"{searchQuery}"</span>
                 <button
                   onClick={() => setSearchQuery('')}
                   className="text-gray-600 hover:text-gray-800"
                 >
-                  <X className="w-3 h-3" />
+                  <X className="w-2.5 h-2.5 md:w-3 md:h-3" />
                 </button>
               </div>
             )}
 
             {/* 필터가 없을 때 */}
             {!selectedCategory && priceRanges.length === 0 && !discountFilter && !badgeFilter && !searchQuery && (
-              <p className="text-xs md:text-sm text-gray-400">필터 조건을 선택해주세요</p>
+              <p className="text-[10px] md:text-xs text-gray-400">필터 조건을 선택해주세요</p>
             )}
           </div>
 
           {/* 빠른 필터 버튼 */}
-          <div className="mt-3 pt-3 border-t border-gray-200">
-            <div className="flex flex-wrap gap-2">
-              <span className="text-xs text-gray-500 self-center">빠른 필터:</span>
+          <div className="mt-2 md:mt-3 pt-2 md:pt-3 border-t border-gray-200">
+            <div className="flex flex-wrap gap-1.5 md:gap-2">
+              <span className="text-[10px] md:text-xs text-gray-500 self-center">빠른 필터:</span>
               
               {/* 할인율 빠른 필터 */}
               {discountOptions.map((option) => (
                 <button
                   key={option.value}
                   onClick={() => setDiscountFilter(discountFilter === option.value ? '' : option.value)}
-                  className={`px-3 py-1 rounded-full text-xs md:text-sm font-medium transition-colors ${
+                  className={`px-2 md:px-2.5 py-0.5 md:py-1 rounded-full text-[10px] md:text-xs font-medium transition-colors ${
                     discountFilter === option.value
                       ? 'bg-orange-500 text-white'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -367,7 +367,7 @@ const ProductsPage = () => {
                 <button
                   key={option.value}
                   onClick={() => setBadgeFilter(badgeFilter === option.value ? '' : option.value)}
-                  className={`px-3 py-1 rounded-full text-xs md:text-sm font-medium transition-colors ${
+                  className={`px-2 md:px-2.5 py-0.5 md:py-1 rounded-full text-[10px] md:text-xs font-medium transition-colors ${
                     badgeFilter === option.value
                       ? option.value === 'BEST' ? 'bg-red-500 text-white' :
                         option.value === 'HOT' ? 'bg-orange-500 text-white' :
@@ -384,7 +384,7 @@ const ProductsPage = () => {
                 <button
                   key={range}
                   onClick={() => togglePriceRange(range)}
-                  className={`px-3 py-1 rounded-full text-xs md:text-sm font-medium transition-colors ${
+                  className={`px-2 md:px-2.5 py-0.5 md:py-1 rounded-full text-[10px] md:text-xs font-medium transition-colors ${
                     priceRanges.includes(range)
                       ? 'bg-green-500 text-white'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
