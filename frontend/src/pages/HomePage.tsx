@@ -350,44 +350,48 @@ const HomePage = () => {
       {/* Quick Categories + Login Box */}
       <div className="py-4 md:py-6 bg-white">
         <div className="max-w-[1200px] mx-auto px-4">
-          {/* 카테고리 */}
-          <div className="grid grid-cols-5 md:grid-cols-12 gap-2 md:gap-1 mb-4">
-            {quickCategories.map((cat, idx) => {
-              const IconComponent = cat.icon
-              return (
-                <Link
-                  key={idx}
-                  to={`/products?category=${cat.slug}`}
-                  className="flex flex-col items-center gap-1.5 py-2 hover:text-blue-600 transition-colors group"
-                >
-                  <div className={`relative w-14 h-14 md:w-16 md:h-16 rounded-xl flex items-center justify-center border-2 transition-all ${
-                    cat.isNew 
-                      ? 'border-red-400 bg-red-50 group-hover:border-red-500 group-hover:bg-red-100' 
-                      : 'border-gray-200 bg-gray-50 group-hover:border-blue-400 group-hover:bg-blue-50'
-                  }`}>
-                    <IconComponent className={`w-6 h-6 md:w-7 md:h-7 ${
-                      cat.isNew ? 'text-red-500' : 'text-gray-600 group-hover:text-blue-600'
-                    }`} />
-                    {cat.isNew && (
-                      <span className="absolute -top-1.5 -right-1.5 px-1 py-0.5 bg-red-500 text-white text-[7px] font-bold rounded">
-                        NEW
-                      </span>
-                    )}
-                  </div>
-                  <span className={`text-[10px] md:text-xs font-medium text-center leading-tight ${
-                    cat.isNew ? 'text-red-500' : 'text-gray-700 group-hover:text-blue-600'
-                  }`}>
-                    {cat.name}
-                  </span>
-                </Link>
-              )
-            })}
-          </div>
-
-          {/* 광고 슬라이드 + 로그인 박스 */}
           <div className="flex flex-col md:flex-row gap-4 md:gap-5">
-            {/* 광고 슬라이드 2개 */}
-            <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+            {/* Quick Category Icons */}
+            <div className="flex-1">
+              {/* 모바일: 5개씩 그리드 / PC: 12개 한줄 */}
+              <div className="grid grid-cols-5 md:grid-cols-12 gap-2 md:gap-1">
+                {quickCategories.map((cat, idx) => {
+                  const IconComponent = cat.icon
+                  return (
+                    <Link
+                      key={idx}
+                      to={`/products?category=${cat.slug}`}
+                      className="flex flex-col items-center gap-1.5 py-2 hover:text-blue-600 transition-colors group"
+                    >
+                      <div className={`relative w-14 h-14 md:w-16 md:h-16 rounded-xl flex items-center justify-center border-2 transition-all ${
+                        cat.isNew 
+                          ? 'border-red-400 bg-red-50 group-hover:border-red-500 group-hover:bg-red-100' 
+                          : 'border-gray-200 bg-gray-50 group-hover:border-blue-400 group-hover:bg-blue-50'
+                      }`}>
+                        <IconComponent className={`w-6 h-6 md:w-7 md:h-7 ${
+                          cat.isNew ? 'text-red-500' : 'text-gray-600 group-hover:text-blue-600'
+                        }`} />
+                        {cat.isNew && (
+                          <span className="absolute -top-1.5 -right-1.5 px-1 py-0.5 bg-red-500 text-white text-[7px] font-bold rounded">
+                            NEW
+                          </span>
+                        )}
+                      </div>
+                      <span className={`text-[10px] md:text-xs font-medium text-center leading-tight ${
+                        cat.isNew ? 'text-red-500' : 'text-gray-700 group-hover:text-blue-600'
+                      }`}>
+                        {cat.name}
+                      </span>
+                    </Link>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Login Box */}
+            <div className="flex flex-col gap-4 w-full md:w-[280px]">
+              {/* Login Box - Desktop only */}
+              <div className="hidden md:block bg-white border border-gray-200 p-5">
               {/* 광고 슬라이드 1 */}
               <div className="relative h-[120px] md:h-[150px] overflow-hidden border-2 border-gray-300">
                 <div 
@@ -574,8 +578,9 @@ const HomePage = () => {
               </div>
             </div>
           </div>
-        </div>
-      </div>
+
+          {/* 광고 슬라이드 2개 - 카테고리 밑 */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mt-4">
 
       {/* 특가 상품 */}
       <div className="py-6 md:py-10 bg-white">
