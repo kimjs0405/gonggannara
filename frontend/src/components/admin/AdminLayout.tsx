@@ -148,21 +148,21 @@ const AdminLayout = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <aside className={`fixed left-0 top-0 h-full bg-gradient-to-b from-[#0F172A] to-[#1E293B] text-white transition-all duration-300 z-50 shadow-2xl ${
-        isSidebarCollapsed ? 'w-[80px]' : 'w-[280px]'
+      <aside className={`fixed left-0 top-0 h-full bg-[#1E293B] text-white transition-all duration-300 z-50 ${
+        isSidebarCollapsed ? 'w-[70px]' : 'w-[240px]'
       }`}>
         {/* Logo */}
-        <div className="h-20 flex items-center px-6 border-b border-[#334155]/50 bg-gradient-to-r from-blue-600/20 to-purple-600/20">
-          <Link to="/admin" className="flex items-center gap-3 group">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-105 transition-transform">
-              <span className="text-white font-bold text-xl">G</span>
+        <div className="h-16 flex items-center px-5 border-b border-[#334155]">
+          <Link to="/admin" className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-blue-600 flex items-center justify-center flex-shrink-0">
+              <span className="text-white font-semibold text-lg">G</span>
             </div>
             {!isSidebarCollapsed && (
-              <div className="overflow-hidden">
-                <h1 className="font-bold text-lg bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">공간나라</h1>
-                <p className="text-[10px] text-gray-400 font-medium">Admin System</p>
+              <div>
+                <h1 className="font-semibold text-base text-white">공간나라</h1>
+                <p className="text-[10px] text-gray-400">관리자 시스템</p>
               </div>
             )}
           </Link>
@@ -182,10 +182,10 @@ const AdminLayout = () => {
                     <>
                       <button
                         onClick={() => !isSidebarCollapsed && toggleSubmenu(item.path)}
-                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${
+                        className={`w-full flex items-center gap-3 px-4 py-2.5 transition-colors ${
                           active || isExpanded
-                            ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg' 
-                            : 'text-gray-300 hover:bg-[#334155]/50 hover:text-white'
+                            ? 'bg-blue-600 text-white' 
+                            : 'text-gray-300 hover:bg-[#334155] hover:text-white'
                         }`}
                       >
                         <IconComponent className="w-5 h-5 flex-shrink-0" strokeWidth={2} />
@@ -209,10 +209,10 @@ const AdminLayout = () => {
                               <Link
                                 key={subItem.path}
                                 to={subItem.path}
-                                className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 ${
+                                className={`flex items-center gap-3 px-4 py-2 transition-colors ${
                                   subActive
                                     ? 'bg-blue-600/20 text-blue-300 border-l-2 border-blue-500'
-                                    : 'text-gray-400 hover:bg-[#334155]/30 hover:text-gray-200'
+                                    : 'text-gray-400 hover:bg-[#334155] hover:text-gray-200'
                                 }`}
                               >
                                 <SubIcon className="w-4 h-4" strokeWidth={2} />
@@ -226,10 +226,10 @@ const AdminLayout = () => {
                   ) : (
                     <Link
                       to={item.path}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group relative ${
+                      className={`flex items-center gap-3 px-4 py-2.5 transition-colors ${
                         active 
-                          ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg' 
-                          : 'text-gray-300 hover:bg-[#334155]/50 hover:text-white'
+                          ? 'bg-blue-600 text-white' 
+                          : 'text-gray-300 hover:bg-[#334155] hover:text-white'
                       }`}
                     >
                       <IconComponent className="w-5 h-5 flex-shrink-0" strokeWidth={2} />
@@ -237,14 +237,11 @@ const AdminLayout = () => {
                         <>
                           <span className="text-sm font-medium flex-1">{item.title}</span>
                           {item.badge && (
-                            <span className="px-2 py-0.5 bg-red-500 text-white text-[10px] font-bold rounded-full animate-pulse">
+                            <span className="px-1.5 py-0.5 bg-red-500 text-white text-[10px] font-medium">
                               {item.badge}
                             </span>
                           )}
                         </>
-                      )}
-                      {active && (
-                        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white rounded-l-full" />
                       )}
                     </Link>
                   )}
@@ -255,10 +252,10 @@ const AdminLayout = () => {
         </nav>
 
         {/* User Info */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-[#334155]/50 bg-[#0F172A]/50 backdrop-blur-sm">
+        <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-[#334155]">
           <div className={`flex items-center gap-3 ${isSidebarCollapsed ? 'justify-center' : ''}`}>
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg ring-2 ring-white/20">
-              <UserCircle className="w-6 h-6 text-white" />
+            <div className="w-9 h-9 bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
+              <UserCircle className="w-5 h-5 text-white" />
             </div>
             {!isSidebarCollapsed && (
               <div className="flex-1 min-w-0">
@@ -271,24 +268,24 @@ const AdminLayout = () => {
       </aside>
 
       {/* Main Content */}
-      <div className={`transition-all duration-300 ${isSidebarCollapsed ? 'ml-[80px]' : 'ml-[280px]'}`}>
+      <div className={`transition-all duration-300 ${isSidebarCollapsed ? 'ml-[70px]' : 'ml-[240px]'}`}>
         {/* Top Header */}
-        <header className="h-20 bg-white/80 backdrop-blur-lg border-b border-gray-200 flex items-center justify-between px-8 sticky top-0 z-40 shadow-sm">
-          <div className="flex items-center gap-6 flex-1">
+        <header className="h-16 bg-white border-b border-gray-300 flex items-center justify-between px-6 sticky top-0 z-40">
+          <div className="flex items-center gap-4 flex-1">
             <button 
               onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-              className="p-2.5 hover:bg-gray-100 rounded-xl transition-all duration-200 hover:scale-105"
+              className="p-2 hover:bg-gray-100"
             >
               <Menu className="w-5 h-5 text-gray-600" />
             </button>
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
                 type="text"
                 placeholder="주문, 상품, 회원 검색..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-12 pl-12 pr-4 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full h-10 pl-10 pr-4 bg-white border border-gray-300 text-sm focus:outline-none focus:border-blue-600"
               />
               {searchQuery && (
                 <button
@@ -302,31 +299,19 @@ const AdminLayout = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            {/* Quick Stats */}
-            <div className="hidden lg:flex items-center gap-4 px-4 py-2 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-100">
-              <div className="flex items-center gap-2">
-                <Activity className="w-4 h-4 text-blue-600" />
-                <span className="text-xs font-medium text-gray-700">실시간</span>
-              </div>
-              <div className="w-px h-4 bg-gray-300" />
-              <div className="flex items-center gap-1">
-                <TrendingUp className="w-3 h-3 text-green-600" />
-                <span className="text-xs font-semibold text-green-700">+12.5%</span>
-              </div>
-            </div>
 
             {/* Notifications */}
             <div className="relative">
               <button 
                 onClick={() => setShowNotifications(!showNotifications)}
-                className="relative p-2.5 hover:bg-gray-100 rounded-xl transition-all duration-200 hover:scale-105"
+                className="relative p-2 hover:bg-gray-100"
               >
                 <Bell className="w-5 h-5 text-gray-600" />
                 <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full ring-2 ring-white animate-pulse" />
               </button>
               {showNotifications && (
-                <div className="absolute right-0 top-full mt-2 w-80 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden z-50">
-                  <div className="px-4 py-3 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-purple-50">
+                <div className="absolute right-0 top-full mt-2 w-80 bg-white shadow-lg border border-gray-300 overflow-hidden z-50">
+                  <div className="px-4 py-3 border-b border-gray-300 bg-gray-50">
                     <div className="flex items-center justify-between">
                       <h3 className="font-semibold text-gray-900">알림</h3>
                       <button className="text-xs text-blue-600 hover:text-blue-700 font-medium">모두 읽음</button>
@@ -355,10 +340,10 @@ const AdminLayout = () => {
             <div className="relative">
               <button 
                 onClick={() => setShowUserMenu(!showUserMenu)}
-                className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-xl transition-all duration-200"
+                className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100"
               >
-                <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-md">
-                  <UserCircle className="w-5 h-5 text-white" />
+                <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">
+                  <UserCircle className="w-4 h-4 text-white" />
                 </div>
                 <div className="hidden md:block text-left">
                   <p className="text-sm font-semibold text-gray-900">관리자</p>
@@ -367,7 +352,7 @@ const AdminLayout = () => {
                 <ChevronDown className="w-4 h-4 text-gray-400 hidden md:block" />
               </button>
               {showUserMenu && (
-                <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden z-50">
+                <div className="absolute right-0 top-full mt-2 w-56 bg-white shadow-lg border border-gray-300 overflow-hidden z-50">
                   <div className="px-4 py-3 border-b border-gray-200">
                     <p className="text-sm font-semibold text-gray-900">gonggan8204</p>
                     <p className="text-xs text-gray-500">관리자 계정</p>
@@ -389,7 +374,7 @@ const AdminLayout = () => {
                   <div className="border-t border-gray-200 p-2">
                     <button 
                       onClick={handleLogout}
-                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors w-full"
+                      className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 w-full"
                     >
                       <LogOut className="w-4 h-4" />
                       로그아웃
@@ -402,7 +387,7 @@ const AdminLayout = () => {
         </header>
 
         {/* Page Content */}
-        <main className="p-8">
+        <main className="p-6">
           <Outlet />
         </main>
       </div>

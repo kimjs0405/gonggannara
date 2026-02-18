@@ -368,7 +368,7 @@ const DashboardPage = () => {
       trend: stats.revenueChange >= 0 ? 'up' : 'down',
       icon: DollarSign,
       color: 'blue',
-      bgGradient: 'from-blue-500 to-blue-600'
+      bgColor: 'bg-blue-600'
     },
     { 
       title: '주문 건수', 
@@ -377,7 +377,7 @@ const DashboardPage = () => {
       trend: stats.ordersChange >= 0 ? 'up' : 'down',
       icon: ShoppingCart,
       color: 'green',
-      bgGradient: 'from-green-500 to-green-600'
+      bgColor: 'bg-green-600'
     },
     { 
       title: '신규 회원', 
@@ -386,7 +386,7 @@ const DashboardPage = () => {
       trend: stats.usersChange >= 0 ? 'up' : 'down',
       icon: Users,
       color: 'purple',
-      bgGradient: 'from-purple-500 to-purple-600'
+      bgColor: 'bg-purple-600'
     },
     { 
       title: '오늘 방문자', 
@@ -394,8 +394,8 @@ const DashboardPage = () => {
       change: formatChange(stats.visitorsChange), 
       trend: stats.visitorsChange >= 0 ? 'up' : 'down',
       icon: Eye,
-      color: 'pink',
-      bgGradient: 'from-pink-500 to-pink-600'
+      color: 'blue',
+      bgColor: 'bg-blue-500'
     },
     { 
       title: '총 상품', 
@@ -403,8 +403,8 @@ const DashboardPage = () => {
       change: '0%', 
       trend: 'up' as const,
       icon: Package,
-      color: 'orange',
-      bgGradient: 'from-orange-500 to-orange-600'
+      color: 'gray',
+      bgColor: 'bg-gray-600'
     },
   ]
 
@@ -444,36 +444,36 @@ const DashboardPage = () => {
       {/* Header with Filters */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">대시보드</h1>
-          <p className="text-sm text-gray-500 mt-1">실시간 비즈니스 인사이트 및 성과 분석</p>
+          <h1 className="text-2xl font-semibold text-gray-900">대시보드</h1>
+          <p className="text-sm text-gray-600 mt-1">전체 현황 및 통계</p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg p-1">
+          <div className="flex items-center gap-2 bg-white border border-gray-300 p-1">
             {['week', 'month', 'quarter', 'year'].map((range) => (
               <button
                 key={range}
                 onClick={() => setDateRange(range)}
-                className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
+                className={`px-3 py-1.5 text-sm font-medium ${
                   dateRange === range
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-gray-600 hover:bg-gray-50'
+                    ? 'bg-blue-600 text-white'
+                    : 'text-gray-700 hover:bg-gray-100'
                 }`}
               >
                 {range === 'week' ? '주간' : range === 'month' ? '월간' : range === 'quarter' ? '분기' : '연간'}
               </button>
             ))}
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+          <button className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50">
             <Filter className="w-4 h-4" />
             필터
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+          <button className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50">
             <Download className="w-4 h-4" />
             내보내기
           </button>
           <button 
             onClick={() => fetchDashboardData()}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+            className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white text-sm font-medium hover:bg-blue-700"
           >
             <RefreshCw className="w-4 h-4" />
             새로고침
@@ -497,36 +497,27 @@ const DashboardPage = () => {
               return (
                 <div 
                   key={idx} 
-                  className="group relative bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 overflow-hidden"
+                  className="bg-white border border-gray-300 p-5 hover:border-gray-400 transition-colors"
                 >
-                  <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${stat.bgGradient} opacity-10 rounded-full -mr-16 -mt-16`} />
-                  <div className="relative">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className={`w-12 h-12 bg-gradient-to-br ${stat.bgGradient} rounded-xl flex items-center justify-center shadow-lg`}>
-                        <IconComponent className="w-6 h-6 text-white" strokeWidth={2} />
-                      </div>
-                      <div className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs font-semibold ${
-                        stat.trend === 'up' 
-                          ? 'bg-green-50 text-green-700' 
-                          : 'bg-red-50 text-red-700'
-                      }`}>
-                        {stat.trend === 'up' ? (
-                          <TrendingUp className="w-3.5 h-3.5" />
-                        ) : (
-                          <TrendingDown className="w-3.5 h-3.5" />
-                        )}
-                        {stat.change}
-                      </div>
+                  <div className="flex items-start justify-between mb-3">
+                    <div className={`w-10 h-10 ${stat.bgColor} flex items-center justify-center`}>
+                      <IconComponent className="w-5 h-5 text-white" strokeWidth={2} />
                     </div>
-                    <p className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</p>
-                    <p className="text-sm text-gray-500">{stat.title}</p>
-                    <div className="mt-4 h-1 bg-gray-100 rounded-full overflow-hidden">
-                      <div 
-                        className={`h-full bg-gradient-to-r ${stat.bgGradient} rounded-full transition-all duration-500`}
-                        style={{ width: `${Math.min(Math.abs(stat.trend === 'up' ? stats.revenueChange : stats.revenueChange) * 2, 100)}%` }}
-                      />
+                    <div className={`flex items-center gap-1 px-2 py-0.5 text-xs font-medium ${
+                      stat.trend === 'up' 
+                        ? 'bg-green-100 text-green-700' 
+                        : 'bg-red-100 text-red-700'
+                    }`}>
+                      {stat.trend === 'up' ? (
+                        <TrendingUp className="w-3 h-3" />
+                      ) : (
+                        <TrendingDown className="w-3 h-3" />
+                      )}
+                      {stat.change}
                     </div>
                   </div>
+                  <p className="text-xl font-semibold text-gray-900 mb-1">{stat.value}</p>
+                  <p className="text-sm text-gray-600">{stat.title}</p>
                 </div>
               )
             })}
@@ -535,20 +526,20 @@ const DashboardPage = () => {
           {/* Charts Row */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Revenue & Orders Chart */}
-            <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-6">
+            <div className="lg:col-span-2 bg-white border border-gray-300 p-6">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900">매출 및 주문 추이</h3>
-                  <p className="text-sm text-gray-500 mt-1">기간별 매출과 주문 건수 분석</p>
+                  <h3 className="text-base font-semibold text-gray-900">매출 및 주문 추이</h3>
+                  <p className="text-xs text-gray-600 mt-0.5">기간별 매출과 주문 건수</p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 rounded-lg">
-                    <div className="w-3 h-3 bg-blue-500 rounded-full" />
-                    <span className="text-xs font-medium text-blue-700">매출</span>
+                  <div className="flex items-center gap-1.5 px-2 py-1 bg-blue-50 border border-blue-200">
+                    <div className="w-2.5 h-2.5 bg-blue-600" />
+                    <span className="text-xs text-blue-700">매출</span>
                   </div>
-                  <div className="flex items-center gap-2 px-3 py-1.5 bg-green-50 rounded-lg">
-                    <div className="w-3 h-3 bg-green-500 rounded-full" />
-                    <span className="text-xs font-medium text-green-700">주문</span>
+                  <div className="flex items-center gap-1.5 px-2 py-1 bg-green-50 border border-green-200">
+                    <div className="w-2.5 h-2.5 bg-green-600" />
+                    <span className="text-xs text-green-700">주문</span>
                   </div>
                 </div>
               </div>
@@ -556,12 +547,12 @@ const DashboardPage = () => {
                 <AreaChart data={chartData}>
                   <defs>
                     <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#3B82F6" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#2563EB" stopOpacity={0.2}/>
+                      <stop offset="95%" stopColor="#2563EB" stopOpacity={0}/>
                     </linearGradient>
                     <linearGradient id="colorOrders" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#10B981" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#10B981" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#059669" stopOpacity={0.2}/>
+                      <stop offset="95%" stopColor="#059669" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
@@ -597,8 +588,8 @@ const DashboardPage = () => {
                     yAxisId="left"
                     type="monotone" 
                     dataKey="revenue" 
-                    stroke="#3B82F6" 
-                    fillOpacity={1}
+                    stroke="#2563EB" 
+                    fillOpacity={0.2}
                     fill="url(#colorRevenue)"
                     strokeWidth={2}
                     name="매출 (원)"
@@ -607,8 +598,8 @@ const DashboardPage = () => {
                     yAxisId="right"
                     type="monotone" 
                     dataKey="orders" 
-                    stroke="#10B981" 
-                    fillOpacity={1}
+                    stroke="#059669" 
+                    fillOpacity={0.2}
                     fill="url(#colorOrders)"
                     strokeWidth={2}
                     name="주문 건수"
@@ -618,10 +609,10 @@ const DashboardPage = () => {
             </div>
 
             {/* Order Status Pie Chart */}
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
+            <div className="bg-white border border-gray-300 p-6">
               <div className="mb-6">
-                <h3 className="text-lg font-bold text-gray-900">주문 상태</h3>
-                <p className="text-sm text-gray-500 mt-1">현재 주문 상태 분포</p>
+                <h3 className="text-base font-semibold text-gray-900">주문 상태</h3>
+                <p className="text-xs text-gray-600 mt-0.5">현재 주문 상태 분포</p>
               </div>
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
@@ -659,11 +650,11 @@ const DashboardPage = () => {
           {/* Secondary Stats & Charts */}
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             {/* Visitors Chart */}
-            <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-6">
+            <div className="lg:col-span-2 bg-white border border-gray-300 p-6">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900">방문자 추이</h3>
-                  <p className="text-sm text-gray-500 mt-1">일별 방문자 수 변화</p>
+                  <h3 className="text-base font-semibold text-gray-900">방문자 추이</h3>
+                  <p className="text-xs text-gray-600 mt-0.5">일별 방문자 수</p>
                 </div>
               </div>
               <ResponsiveContainer width="100%" height={200}>
@@ -690,10 +681,10 @@ const DashboardPage = () => {
                   <Line 
                     type="monotone" 
                     dataKey="visitors" 
-                    stroke="#EC4899" 
-                    strokeWidth={3}
-                    dot={{ fill: '#EC4899', r: 4 }}
-                    activeDot={{ r: 6 }}
+                    stroke="#2563EB" 
+                    strokeWidth={2}
+                    dot={{ fill: '#2563EB', r: 3 }}
+                    activeDot={{ r: 4 }}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -701,36 +692,36 @@ const DashboardPage = () => {
 
             {/* Quick Stats Cards */}
             <div className="space-y-4">
-              <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white">
+              <div className="bg-white border border-gray-300 p-5">
                 <div className="flex items-center justify-between mb-2">
-                  <Target className="w-5 h-5 opacity-80" />
-                  <span className="text-xs font-medium opacity-80">평균 주문금액</span>
+                  <Target className="w-4 h-4 text-gray-600" />
+                  <span className="text-xs text-gray-600">평균 주문금액</span>
                 </div>
-                <p className="text-2xl font-bold">₩{formatCurrency(Math.round(quickStats.avgOrderAmount))}</p>
+                <p className="text-xl font-semibold text-gray-900">₩{formatCurrency(Math.round(quickStats.avgOrderAmount))}</p>
               </div>
-              <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-6 text-white">
+              <div className="bg-white border border-gray-300 p-5">
                 <div className="flex items-center justify-between mb-2">
-                  <Zap className="w-5 h-5 opacity-80" />
-                  <span className="text-xs font-medium opacity-80">재구매율</span>
+                  <Zap className="w-4 h-4 text-gray-600" />
+                  <span className="text-xs text-gray-600">재구매율</span>
                 </div>
-                <p className="text-2xl font-bold">{quickStats.repeatPurchaseRate.toFixed(1)}%</p>
+                <p className="text-xl font-semibold text-gray-900">{quickStats.repeatPurchaseRate.toFixed(1)}%</p>
               </div>
             </div>
 
             <div className="space-y-4">
-              <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl p-6 text-white">
+              <div className="bg-white border border-gray-300 p-5">
                 <div className="flex items-center justify-between mb-2">
-                  <AlertTriangle className="w-5 h-5 opacity-80" />
-                  <span className="text-xs font-medium opacity-80">대기 주문</span>
+                  <AlertTriangle className="w-4 h-4 text-gray-600" />
+                  <span className="text-xs text-gray-600">대기 주문</span>
                 </div>
-                <p className="text-2xl font-bold">{quickStats.pendingOrders}건</p>
+                <p className="text-xl font-semibold text-gray-900">{quickStats.pendingOrders}건</p>
               </div>
-              <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-6 text-white">
+              <div className="bg-white border border-gray-300 p-5">
                 <div className="flex items-center justify-between mb-2">
-                  <CheckCircle2 className="w-5 h-5 opacity-80" />
-                  <span className="text-xs font-medium opacity-80">완료 주문</span>
+                  <CheckCircle2 className="w-4 h-4 text-gray-600" />
+                  <span className="text-xs text-gray-600">완료 주문</span>
                 </div>
-                <p className="text-2xl font-bold">{quickStats.completedOrders}건</p>
+                <p className="text-xl font-semibold text-gray-900">{quickStats.completedOrders}건</p>
               </div>
             </div>
           </div>
@@ -738,17 +729,17 @@ const DashboardPage = () => {
           {/* Tables Row */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Recent Orders */}
-            <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200">
+            <div className="lg:col-span-2 bg-white border border-gray-300">
               <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
                 <div>
-                  <h2 className="text-lg font-bold text-gray-900">최근 주문</h2>
-                  <p className="text-sm text-gray-500 mt-0.5">최근 10건의 주문 내역</p>
+                  <h2 className="text-base font-semibold text-gray-900">최근 주문</h2>
+                  <p className="text-xs text-gray-600 mt-0.5">최근 10건의 주문 내역</p>
                 </div>
                 <button 
                   onClick={() => navigate('/admin/orders')}
-                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                  className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50"
                 >
-                  전체보기 <ArrowUpRight className="w-4 h-4" />
+                  전체보기 <ArrowUpRight className="w-3.5 h-3.5" />
                 </button>
               </div>
               <div className="overflow-x-auto">
@@ -804,11 +795,11 @@ const DashboardPage = () => {
             </div>
 
             {/* Top Products */}
-            <div className="bg-white rounded-xl border border-gray-200">
+            <div className="bg-white border border-gray-300">
               <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
                 <div>
-                  <h2 className="text-lg font-bold text-gray-900">인기 상품 TOP 10</h2>
-                  <p className="text-sm text-gray-500 mt-0.5">매출 기준 상위 상품</p>
+                  <h2 className="text-base font-semibold text-gray-900">인기 상품 TOP 10</h2>
+                  <p className="text-xs text-gray-600 mt-0.5">매출 기준 상위 상품</p>
                 </div>
                 <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
                   <MoreHorizontal className="w-4 h-4 text-gray-400" />
@@ -820,27 +811,21 @@ const DashboardPage = () => {
                 ) : (
                   <div className="space-y-4">
                     {topProducts.map((product, idx) => (
-                      <div key={product.rank} className="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold shadow-sm ${
+                      <div key={product.rank} className="flex items-center gap-3 p-3 border-b border-gray-200 last:border-0 hover:bg-gray-50">
+                        <div className={`w-8 h-8 flex items-center justify-center text-xs font-semibold ${
                           idx < 3 
-                            ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white' 
-                            : 'bg-gray-100 text-gray-600'
+                            ? 'bg-blue-600 text-white' 
+                            : 'bg-gray-200 text-gray-700'
                         }`}>
                           {idx + 1}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-semibold text-gray-900 truncate">{product.name}</p>
+                          <p className="text-sm font-medium text-gray-900 truncate">{product.name}</p>
                           <div className="flex items-center gap-2 mt-1">
-                            <p className="text-xs text-gray-500">{product.sales}개 판매</p>
-                            <span className="text-xs text-gray-300">•</span>
-                            <p className="text-xs font-medium text-gray-700">₩{formatCurrency(product.revenue)}</p>
+                            <p className="text-xs text-gray-600">{product.sales}개 판매</p>
+                            <span className="text-xs text-gray-400">•</span>
+                            <p className="text-xs text-gray-700">₩{formatCurrency(product.revenue)}</p>
                           </div>
-                        </div>
-                        <div className="w-16 h-1 bg-gray-100 rounded-full overflow-hidden">
-                          <div 
-                            className="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full"
-                            style={{ width: `${(product.revenue / (topProducts[0]?.revenue || 1)) * 100}%` }}
-                          />
                         </div>
                       </div>
                     ))}
