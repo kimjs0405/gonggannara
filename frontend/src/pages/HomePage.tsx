@@ -546,28 +546,28 @@ const HomePage = () => {
               </div>
             </div>
 
-            {/* Visitor Count & Login Box - Desktop only */}
-            <div className="hidden md:flex flex-col gap-4 w-[280px]">
-              {/* 방문자 수 카드 */}
+            {/* Visitor Count & Login Box */}
+            <div className="flex flex-col gap-4 w-full md:w-[280px]">
+              {/* 방문자 수 카드 - 모바일/데스크톱 모두 표시 */}
               {visitorCount !== null && (
                 <div className="bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-200 rounded-lg p-4">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-xs text-gray-600 mb-1">오늘 방문자</p>
-                      <p className="text-2xl font-black text-gray-900">
+                      <p className="text-xl md:text-2xl font-black text-gray-900">
                         {visitorCount.toLocaleString()}
-                        <span className="text-sm font-normal text-gray-500 ml-1">명</span>
+                        <span className="text-xs md:text-sm font-normal text-gray-500 ml-1">명</span>
                       </p>
                     </div>
-                    <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                      <span className="text-2xl">👥</span>
+                    <div className="w-10 h-10 md:w-12 md:h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                      <span className="text-xl md:text-2xl">👥</span>
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* Login Box */}
-              <div className="bg-white border border-gray-200 p-5">
+              {/* Login Box - Desktop only */}
+              <div className="hidden md:block bg-white border border-gray-200 p-5">
               {isLoggedIn ? (
                 /* 로그인된 상태 */
                 <div>
