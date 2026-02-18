@@ -11,6 +11,17 @@ interface Banner {
   link_url: string | null
 }
 
+interface PromotionCard {
+  id: string
+  title: string
+  subtitle: string | null
+  image_url: string | null
+  link_url: string | null
+  background_color: string
+  position: number
+  is_active: boolean
+}
+
 const HomePage = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [promoSlide1, setPromoSlide1] = useState(0)
@@ -21,6 +32,7 @@ const HomePage = () => {
   const [loginError, setLoginError] = useState('')
   const [isLoggingIn, setIsLoggingIn] = useState(false)
   const [banners, setBanners] = useState<Banner[]>([])
+  const [promotionCards, setPromotionCards] = useState<PromotionCard[]>([])
 
   // 기본 배너 (DB에 배너가 없을 때)
   const defaultBanners = [
@@ -63,6 +75,22 @@ const HomePage = () => {
       }
     }
     fetchBanners()
+  }, [])
+
+  // 프로모션 카드 데이터 가져오기
+  useEffect(() => {
+    const fetchPromotionCards = async () => {
+      const { data, error } = await supabase
+        .from('promotion_cards')
+        .select('*')
+        .eq('is_active', true)
+        .order('position', { ascending: true })
+
+      if (!error && data) {
+        setPromotionCards(data)
+      }
+    }
+    fetchPromotionCards()
   }, [])
 
   // 아이콘 바로가기 카테고리
@@ -544,6 +572,48 @@ const HomePage = () => {
           </div>
         </div>
       </div>
+
+      {/* Promotion Cards */}
+      {promotionCards.length > 0 && (
+        <div className="py-6 md:py-8 bg-white">
+          <div className="max-w-[1200px] mx-auto px-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+              {promotionCards.map((card) => (
+                <Link
+                  key={card.id}
+                  to={card.link_url || '#'}
+                  className={`bg-gradient-to-br ${card.background_color} rounded-xl p-6 md:p-8 border border-gray-200 relative overflow-hidden hover:shadow-lg transition-all group`}
+                >
+                  <div className="flex flex-col md:flex-row items-start md:items-center justify-between h-full">
+                    <div className="flex-1 mb-4 md:mb-0">
+                      <h3 className="text-xl md:text-2xl font-black text-gray-900 mb-2 md:mb-3 tracking-tight">
+                        {card.title}
+                      </h3>
+                      {card.subtitle && (
+                        <p className="text-sm md:text-base text-gray-700 leading-relaxed">
+                          {card.subtitle}
+                        </p>
+                      )}
+                    </div>
+                    {card.image_url && (
+                      <div className="w-full md:w-32 h-32 md:h-32 flex items-center justify-center flex-shrink-0">
+                        <img 
+                          src={card.image_url} 
+                          alt={card.title}
+                          className="max-w-full max-h-full object-contain"
+                        />
+                      </div>
+                    )}
+                  </div>
+                  <div className="absolute bottom-4 right-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <div className="text-6xl md:text-8xl">🎁</div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Products */}
       <div className="py-8 md:py-12 bg-white">

@@ -25,6 +25,7 @@ import AdminUsersPage from './pages/admin/UsersPage'
 import AnalyticsPage from './pages/admin/AnalyticsPage'
 import PromotionsPage from './pages/admin/PromotionsPage'
 import BannersPage from './pages/admin/BannersPage'
+import PromotionCardsPage from './pages/admin/PromotionCardsPage'
 import AdminReviewsPage from './pages/admin/ReviewsPage'
 import SettingsPage from './pages/admin/SettingsPage'
 
@@ -67,6 +68,7 @@ function App() {
         <Route path="analytics" element={<AnalyticsPage />} />
         <Route path="promotions" element={<PromotionsPage />} />
         <Route path="banners" element={<BannersPage />} />
+        <Route path="promotion-cards" element={<PromotionCardsPage />} />
         <Route path="reviews" element={<AdminReviewsPage />} />
         <Route path="settings" element={<SettingsPage />} />
       </Route>

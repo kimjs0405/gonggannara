@@ -77,6 +77,7 @@ const AdminLayout = () => {
       submenu: [
         { title: '쿠폰 관리', path: '/admin/coupons' },
         { title: '이벤트 관리', path: '/admin/events' },
+        { title: '프로모션 카드', path: '/admin/promotion-cards' },
       ]
     },
     { 
