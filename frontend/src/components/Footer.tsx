@@ -128,7 +128,7 @@ const Footer = () => {
                 <span className="mx-2">|</span>
                 <span>TEL : 02-875-8204</span>
                 <span className="mx-2">|</span>
-                <span>FAX : 02-6343-8090</span>
+                <span>FAX : 02-6434-8090</span>
                 <span className="mx-2">|</span>
                 <span>이메일 : GongganWord@gmail.com</span>
               </p>
