@@ -19,6 +19,12 @@ CREATE TABLE IF NOT EXISTS visitor_stats (
 -- 방문자 통계: 모든 사용자 읽기 가능
 ALTER TABLE visitor_stats ENABLE ROW LEVEL SECURITY;
 
+-- 기존 정책 삭제 (이미 존재하는 경우)
+DROP POLICY IF EXISTS "Visitor stats are viewable by everyone" ON visitor_stats;
+DROP POLICY IF EXISTS "Allow everyone to insert visitor stats" ON visitor_stats;
+DROP POLICY IF EXISTS "Allow everyone to update visitor stats" ON visitor_stats;
+DROP POLICY IF EXISTS "Allow service_role to manage visitor_stats" ON visitor_stats;
+
 -- 모든 사용자 읽기 가능
 CREATE POLICY "Visitor stats are viewable by everyone" ON visitor_stats 
   FOR SELECT USING (true);
