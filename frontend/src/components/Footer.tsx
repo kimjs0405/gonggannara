@@ -1,4 +1,4 @@
-import { Phone, Mail, MapPin, Download, Upload, CreditCard, FileText, Users, HelpCircle, Truck, Shield } from 'lucide-react'
+import { Mail, MapPin, Download, Upload, CreditCard, FileText, Users, HelpCircle, Truck, Shield } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 const Footer = () => {
