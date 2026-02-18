@@ -8,7 +8,8 @@ import {
   Package,
   DollarSign,
   ArrowUpRight,
-  MoreHorizontal
+  MoreHorizontal,
+  Eye
 } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 
@@ -43,10 +44,12 @@ const DashboardPage = () => {
     totalOrders: 0,
     newUsers: 0,
     totalProducts: 0,
+    todayVisitors: 0,
     revenueChange: 0,
     ordersChange: 0,
     usersChange: 0,
     productsChange: 0,
+    visitorsChange: 0,
   })
   const [recentOrders, setRecentOrders] = useState<Order[]>([])
   const [topProducts, setTopProducts] = useState<TopProduct[]>([])
@@ -182,22 +185,40 @@ const DashboardPage = () => {
         .eq('visit_date', todayDate)
         .single()
 
+      // 어제 방문자 수 가져오기 (변화율 계산용)
+      const yesterday = new Date(now)
+      yesterday.setDate(yesterday.getDate() - 1)
+      const yesterdayDate = yesterday.toISOString().split('T')[0]
+      const { data: yesterdayVisitorStats } = await supabase
+        .from('visitor_stats')
+        .select('visitor_count')
+        .eq('visit_date', yesterdayDate)
+        .single()
+
+      const todayVisitors = todayVisitorStats?.visitor_count || 0
+      const yesterdayVisitors = yesterdayVisitorStats?.visitor_count || 0
+      const visitorsChange = yesterdayVisitors > 0
+        ? ((todayVisitors - yesterdayVisitors) / yesterdayVisitors) * 100
+        : (todayVisitors > 0 ? 100 : 0)
+
       setStats({
         totalRevenue,
         totalOrders: totalOrdersCount,
         newUsers: usersThisMonth || 0,
         totalProducts: totalProducts || 0,
+        todayVisitors,
         revenueChange,
         ordersChange,
         usersChange,
         productsChange: 0, // 상품 변화율은 추적하지 않음
+        visitorsChange,
       })
 
       setQuickStats({
         avgOrderAmount,
         cartConversionRate: 0, // 장바구니 전환율은 별도 추적 필요
         repeatPurchaseRate,
-        todayVisitors: todayVisitorStats?.visitor_count || 0,
+        todayVisitors,
       })
     } catch (error) {
       console.error('Error fetching dashboard data:', error)
@@ -247,6 +268,14 @@ const DashboardPage = () => {
       color: 'purple'
     },
     { 
+      title: '오늘 방문자', 
+      value: stats.todayVisitors.toLocaleString(), 
+      change: formatChange(stats.visitorsChange), 
+      trend: stats.visitorsChange >= 0 ? 'up' : 'down',
+      icon: Eye,
+      color: 'pink'
+    },
+    { 
       title: '총 상품', 
       value: stats.totalProducts.toLocaleString(), 
       change: '0%', 
@@ -284,6 +313,7 @@ const DashboardPage = () => {
       green: 'bg-green-500',
       purple: 'bg-purple-500',
       orange: 'bg-orange-500',
+      pink: 'bg-pink-500',
     }
     return colors[color as keyof typeof colors]
   }
@@ -301,7 +331,7 @@ const DashboardPage = () => {
       ) : (
         <>
           {/* Stats Grid */}
-          <div className="grid grid-cols-4 gap-5 mb-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 mb-6">
             {statsData.map((stat, idx) => {
               const IconComponent = stat.icon
               return (
