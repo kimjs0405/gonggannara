@@ -37,11 +37,55 @@ const AnalyticsPage = () => {
   const fetchAnalytics = async () => {
     setLoading(true)
 
-    // 주문 데이터 가져오기
+    const now = new Date()
+    let periodStart: Date
+    let periodEnd: Date = now
+    let previousPeriodStart: Date
+    let previousPeriodEnd: Date
+
+    // 기간 설정
+    switch (period) {
+      case 'week':
+        periodStart = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
+        previousPeriodStart = new Date(periodStart.getTime() - 7 * 24 * 60 * 60 * 1000)
+        previousPeriodEnd = periodStart
+        break
+      case 'month':
+        periodStart = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
+        previousPeriodStart = new Date(periodStart.getTime() - 30 * 24 * 60 * 60 * 1000)
+        previousPeriodEnd = periodStart
+        break
+      case 'quarter':
+        periodStart = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000)
+        previousPeriodStart = new Date(periodStart.getTime() - 90 * 24 * 60 * 60 * 1000)
+        previousPeriodEnd = periodStart
+        break
+      case 'year':
+        periodStart = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000)
+        previousPeriodStart = new Date(periodStart.getTime() - 365 * 24 * 60 * 60 * 1000)
+        previousPeriodEnd = periodStart
+        break
+      default:
+        periodStart = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
+        previousPeriodStart = new Date(periodStart.getTime() - 30 * 24 * 60 * 60 * 1000)
+        previousPeriodEnd = periodStart
+    }
+
+    // 현재 기간 주문 데이터
     const { data: orders } = await supabase
       .from('orders')
       .select('*')
       .neq('status', 'cancelled')
+      .gte('created_at', periodStart.toISOString())
+      .lte('created_at', periodEnd.toISOString())
+
+    // 이전 기간 주문 데이터
+    const { data: previousOrders } = await supabase
+      .from('orders')
+      .select('*')
+      .neq('status', 'cancelled')
+      .gte('created_at', previousPeriodStart.toISOString())
+      .lt('created_at', previousPeriodEnd.toISOString())
 
     // 회원 수
     const { count: userCount } = await supabase
@@ -57,15 +101,31 @@ const AnalyticsPage = () => {
       const totalRevenue = orders.reduce((sum, o) => sum + o.total_amount, 0)
       const totalOrders = orders.length
 
-      // 일별 통계 계산
-      const last30Days = [...Array(30)].map((_, i) => {
-        const date = new Date()
-        date.setDate(date.getDate() - i)
-        return date.toISOString().split('T')[0]
-      }).reverse()
+      // 이전 기간 매출 및 주문 수
+      const previousRevenue = previousOrders?.reduce((sum, o) => sum + o.total_amount, 0) || 0
+      const previousOrdersCount = previousOrders?.length || 0
 
-      const dailyData = last30Days.map(date => {
-        const dayOrders = orders.filter(o => o.created_at.split('T')[0] === date)
+      // 변화율 계산
+      const revenueChange = previousRevenue > 0
+        ? ((totalRevenue - previousRevenue) / previousRevenue) * 100
+        : (totalRevenue > 0 ? 100 : 0)
+      const ordersChange = previousOrdersCount > 0
+        ? ((totalOrders - previousOrdersCount) / previousOrdersCount) * 100
+        : (totalOrders > 0 ? 100 : 0)
+
+      // 일별 통계 계산
+      const days = period === 'week' ? 7 : period === 'month' ? 30 : period === 'quarter' ? 90 : 365
+      const dailyData = [...Array(days)].map((_, i) => {
+        const date = new Date(periodStart)
+        date.setDate(date.getDate() + i)
+        return date.toISOString().split('T')[0]
+      })
+
+      const dailyStatsData = dailyData.map(date => {
+        const dayOrders = orders.filter(o => {
+          const orderDate = o.created_at.split('T')[0]
+          return orderDate === date
+        })
         return {
           date,
           revenue: dayOrders.reduce((sum, o) => sum + o.total_amount, 0),
@@ -73,14 +133,14 @@ const AnalyticsPage = () => {
         }
       })
 
-      setDailyStats(dailyData)
+      setDailyStats(dailyStatsData)
       setStats({
         totalRevenue,
         totalOrders,
         totalUsers: userCount || 0,
         totalProducts: productCount || 0,
-        revenueChange: 12.5, // 임시 값
-        ordersChange: 8.3, // 임시 값
+        revenueChange,
+        ordersChange,
       })
     }
 
@@ -160,7 +220,7 @@ const AnalyticsPage = () => {
                   stats.revenueChange >= 0 ? 'text-green-600' : 'text-red-600'
                 }`}>
                   {stats.revenueChange >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-                  {Math.abs(stats.revenueChange)}%
+                  {stats.revenueChange >= 0 ? '+' : ''}{stats.revenueChange.toFixed(1)}%
                 </span>
               </div>
               <p className="text-sm text-gray-500 mb-1">총 매출</p>
@@ -176,7 +236,7 @@ const AnalyticsPage = () => {
                   stats.ordersChange >= 0 ? 'text-green-600' : 'text-red-600'
                 }`}>
                   {stats.ordersChange >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-                  {Math.abs(stats.ordersChange)}%
+                  {stats.ordersChange >= 0 ? '+' : ''}{stats.ordersChange.toFixed(1)}%
                 </span>
               </div>
               <p className="text-sm text-gray-500 mb-1">총 주문</p>

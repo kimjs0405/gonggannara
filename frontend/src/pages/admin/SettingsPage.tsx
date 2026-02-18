@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { 
   Store, 
   Bell, 
@@ -11,19 +11,21 @@ import {
   MapPin,
   Clock
 } from 'lucide-react'
+import { supabase } from '../../lib/supabase'
 
 const SettingsPage = () => {
   const [activeTab, setActiveTab] = useState('store')
   const [saved, setSaved] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   const [storeSettings, setStoreSettings] = useState({
     storeName: '공간나라',
     storeDescription: '당신의 공간을 더 특별하게',
-    businessNumber: '123-45-67890',
-    ceoName: '홍길동',
+    businessNumber: '',
+    ceoName: '',
     email: 'GongganWord@gmail.com',
-    phone: '02-1234-5678',
-    address: '서울시 강남구 테헤란로 123',
+    phone: '',
+    address: '',
     businessHours: '평일 09:00 - 18:00',
   })
 
@@ -42,10 +44,97 @@ const SettingsPage = () => {
     marketingEmail: false,
   })
 
-  const handleSave = () => {
-    // 실제로는 Supabase에 저장
-    setSaved(true)
-    setTimeout(() => setSaved(false), 3000)
+  useEffect(() => {
+    fetchSettings()
+  }, [])
+
+  const fetchSettings = async () => {
+    setLoading(true)
+    try {
+      // Store settings
+      const { data: storeData } = await supabase
+        .from('settings')
+        .select('value')
+        .eq('key', 'store')
+        .single()
+
+      if (storeData?.value) {
+        setStoreSettings(storeData.value as typeof storeSettings)
+      }
+
+      // Shipping settings
+      const { data: shippingData } = await supabase
+        .from('settings')
+        .select('value')
+        .eq('key', 'shipping')
+        .single()
+
+      if (shippingData?.value) {
+        setShippingSettings(shippingData.value as typeof shippingSettings)
+      }
+
+      // Notification settings
+      const { data: notificationData } = await supabase
+        .from('settings')
+        .select('value')
+        .eq('key', 'notification')
+        .single()
+
+      if (notificationData?.value) {
+        setNotificationSettings(notificationData.value as typeof notificationSettings)
+      }
+    } catch (error) {
+      console.error('Error fetching settings:', error)
+    }
+    setLoading(false)
+  }
+
+  const handleSave = async () => {
+    try {
+      // Store settings 저장
+      const { error: storeError } = await supabase
+        .from('settings')
+        .upsert({
+          key: 'store',
+          value: storeSettings,
+          updated_at: new Date().toISOString(),
+        }, {
+          onConflict: 'key'
+        })
+
+      // Shipping settings 저장
+      const { error: shippingError } = await supabase
+        .from('settings')
+        .upsert({
+          key: 'shipping',
+          value: shippingSettings,
+          updated_at: new Date().toISOString(),
+        }, {
+          onConflict: 'key'
+        })
+
+      // Notification settings 저장
+      const { error: notificationError } = await supabase
+        .from('settings')
+        .upsert({
+          key: 'notification',
+          value: notificationSettings,
+          updated_at: new Date().toISOString(),
+        }, {
+          onConflict: 'key'
+        })
+
+      if (storeError || shippingError || notificationError) {
+        alert('설정 저장 중 오류가 발생했습니다.')
+        console.error('Error saving settings:', { storeError, shippingError, notificationError })
+      } else {
+        setSaved(true)
+        setTimeout(() => setSaved(false), 3000)
+      }
+    } catch (error) {
+      console.error('Error saving settings:', error)
+      alert('설정 저장 중 오류가 발생했습니다.')
+    }
   }
 
   const tabs = [
@@ -79,7 +168,10 @@ const SettingsPage = () => {
         </div>
       )}
 
-      <div className="flex gap-6">
+      {loading ? (
+        <div className="text-center py-20 text-gray-500">로딩 중...</div>
+      ) : (
+        <div className="flex gap-6">
         {/* Sidebar Tabs */}
         <div className="w-56 flex-shrink-0">
           <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
@@ -425,6 +517,7 @@ const SettingsPage = () => {
           )}
         </div>
       </div>
+      )}
     </div>
   )
 }
