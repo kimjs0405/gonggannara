@@ -18,8 +18,18 @@ CREATE TABLE IF NOT EXISTS visitor_stats (
 
 -- 방문자 통계: 모든 사용자 읽기 가능
 ALTER TABLE visitor_stats ENABLE ROW LEVEL SECURITY;
+
+-- 모든 사용자 읽기 가능
 CREATE POLICY "Visitor stats are viewable by everyone" ON visitor_stats 
   FOR SELECT USING (true);
+
+-- 모든 사용자 INSERT 가능 (방문자 추적용)
+CREATE POLICY "Allow everyone to insert visitor stats" ON visitor_stats
+  FOR INSERT WITH CHECK (true);
+
+-- 모든 사용자 UPDATE 가능 (방문자 카운트 증가용)
+CREATE POLICY "Allow everyone to update visitor stats" ON visitor_stats
+  FOR UPDATE USING (true) WITH CHECK (true);
 
 -- service_role은 모든 작업 가능
 CREATE POLICY "Allow service_role to manage visitor_stats" ON visitor_stats

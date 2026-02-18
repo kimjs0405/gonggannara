@@ -106,56 +106,97 @@ const HomePage = () => {
           const todayDate = new Date().toISOString().split('T')[0]
           
           // 오늘 날짜의 레코드 확인
-          const { data: existing } = await supabase
+          const { data: existing, error: selectError } = await supabase
             .from('visitor_stats')
             .select('id, visitor_count')
             .eq('visit_date', todayDate)
-            .single()
+            .maybeSingle()
+
+          if (selectError) {
+            console.error('Error fetching visitor stats:', selectError)
+          }
 
           if (existing) {
             // 레코드가 있으면 카운트 증가
-            const { error } = await supabase
+            const { data: updated, error: updateError } = await supabase
               .from('visitor_stats')
               .update({ 
                 visitor_count: existing.visitor_count + 1,
                 updated_at: new Date().toISOString()
               })
               .eq('id', existing.id)
+              .select('visitor_count')
+              .single()
             
-            if (!error) {
+            if (updateError) {
+              console.error('Error updating visitor count:', updateError)
+            } else if (updated) {
               localStorage.setItem('lastVisitDate', today)
-              setVisitorCount(existing.visitor_count + 1)
+              setVisitorCount(updated.visitor_count)
             }
           } else {
             // 레코드가 없으면 새로 생성
-            const { data, error } = await supabase
+            const { data: inserted, error: insertError } = await supabase
               .from('visitor_stats')
               .insert([{
                 visit_date: todayDate,
                 visitor_count: 1
               }])
-              .select()
+              .select('visitor_count')
               .single()
             
-            if (!error && data) {
+            if (insertError) {
+              console.error('Error inserting visitor stats:', insertError)
+              // INSERT 실패 시에도 기존 카운트는 표시
+              const { data: todayStats } = await supabase
+                .from('visitor_stats')
+                .select('visitor_count')
+                .eq('visit_date', todayDate)
+                .maybeSingle()
+              
+              if (todayStats) {
+                setVisitorCount(todayStats.visitor_count)
+              }
+            } else if (inserted) {
               localStorage.setItem('lastVisitDate', today)
-              setVisitorCount(1)
+              setVisitorCount(inserted.visitor_count)
             }
           }
         } catch (error) {
           console.error('Error tracking visitor:', error)
+          // 에러 발생 시에도 기존 카운트는 표시
+          try {
+            const todayDate = new Date().toISOString().split('T')[0]
+            const { data: todayStats } = await supabase
+              .from('visitor_stats')
+              .select('visitor_count')
+              .eq('visit_date', todayDate)
+              .maybeSingle()
+            
+            if (todayStats) {
+              setVisitorCount(todayStats.visitor_count)
+            }
+          } catch (e) {
+            console.error('Error fetching visitor count:', e)
+          }
         }
       } else {
         // 이미 오늘 방문했으면 기존 카운트만 가져오기
-        const todayDate = new Date().toISOString().split('T')[0]
-        const { data: todayStats } = await supabase
-          .from('visitor_stats')
-          .select('visitor_count')
-          .eq('visit_date', todayDate)
-          .single()
+        try {
+          const todayDate = new Date().toISOString().split('T')[0]
+          const { data: todayStats, error } = await supabase
+            .from('visitor_stats')
+            .select('visitor_count')
+            .eq('visit_date', todayDate)
+            .maybeSingle()
 
-        if (todayStats) {
-          setVisitorCount(todayStats.visitor_count)
+          if (error) {
+            console.error('Error fetching visitor count:', error)
+          } else if (todayStats) {
+            setVisitorCount(todayStats.visitor_count)
+          }
+        } catch (error) {
+          console.error('Error fetching visitor count:', error)
         }
       }
     }
