@@ -33,6 +33,7 @@ const HomePage = () => {
   const [isLoggingIn, setIsLoggingIn] = useState(false)
   const [banners, setBanners] = useState<Banner[]>([])
   const [promotionCards, setPromotionCards] = useState<PromotionCard[]>([])
+  const [visitorCount, setVisitorCount] = useState<number | null>(null)
 
   // 기본 배너 (DB에 배너가 없을 때)
   const defaultBanners = [
@@ -91,6 +92,75 @@ const HomePage = () => {
       }
     }
     fetchPromotionCards()
+  }, [])
+
+  // 방문자 수 추적 및 표시
+  useEffect(() => {
+    const trackVisitor = async () => {
+      const today = new Date().toDateString()
+      const lastVisitDate = localStorage.getItem('lastVisitDate')
+      
+      // 오늘 첫 방문인 경우에만 카운트 증가
+      if (lastVisitDate !== today) {
+        try {
+          const todayDate = new Date().toISOString().split('T')[0]
+          
+          // 오늘 날짜의 레코드 확인
+          const { data: existing } = await supabase
+            .from('visitor_stats')
+            .select('id, visitor_count')
+            .eq('visit_date', todayDate)
+            .single()
+
+          if (existing) {
+            // 레코드가 있으면 카운트 증가
+            const { error } = await supabase
+              .from('visitor_stats')
+              .update({ 
+                visitor_count: existing.visitor_count + 1,
+                updated_at: new Date().toISOString()
+              })
+              .eq('id', existing.id)
+            
+            if (!error) {
+              localStorage.setItem('lastVisitDate', today)
+              setVisitorCount(existing.visitor_count + 1)
+            }
+          } else {
+            // 레코드가 없으면 새로 생성
+            const { data, error } = await supabase
+              .from('visitor_stats')
+              .insert([{
+                visit_date: todayDate,
+                visitor_count: 1
+              }])
+              .select()
+              .single()
+            
+            if (!error && data) {
+              localStorage.setItem('lastVisitDate', today)
+              setVisitorCount(1)
+            }
+          }
+        } catch (error) {
+          console.error('Error tracking visitor:', error)
+        }
+      } else {
+        // 이미 오늘 방문했으면 기존 카운트만 가져오기
+        const todayDate = new Date().toISOString().split('T')[0]
+        const { data: todayStats } = await supabase
+          .from('visitor_stats')
+          .select('visitor_count')
+          .eq('visit_date', todayDate)
+          .single()
+
+        if (todayStats) {
+          setVisitorCount(todayStats.visitor_count)
+        }
+      }
+    }
+
+    trackVisitor()
   }, [])
 
   // 아이콘 바로가기 카테고리
@@ -476,8 +546,28 @@ const HomePage = () => {
               </div>
             </div>
 
-            {/* Login Box - Desktop only */}
-            <div className="hidden md:block w-[280px] bg-white border border-gray-200 p-5">
+            {/* Visitor Count & Login Box - Desktop only */}
+            <div className="hidden md:flex flex-col gap-4 w-[280px]">
+              {/* 방문자 수 카드 */}
+              {visitorCount !== null && (
+                <div className="bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-200 rounded-lg p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs text-gray-600 mb-1">오늘 방문자</p>
+                      <p className="text-2xl font-black text-gray-900">
+                        {visitorCount.toLocaleString()}
+                        <span className="text-sm font-normal text-gray-500 ml-1">명</span>
+                      </p>
+                    </div>
+                    <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                      <span className="text-2xl">👥</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Login Box */}
+              <div className="bg-white border border-gray-200 p-5">
               {isLoggedIn ? (
                 /* 로그인된 상태 */
                 <div>
@@ -568,6 +658,7 @@ const HomePage = () => {
                   </div>
                 </div>
               )}
+              </div>
             </div>
           </div>
         </div>

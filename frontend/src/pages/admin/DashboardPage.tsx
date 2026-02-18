@@ -54,6 +54,7 @@ const DashboardPage = () => {
     avgOrderAmount: 0,
     cartConversionRate: 0,
     repeatPurchaseRate: 0,
+    todayVisitors: 0,
   })
 
   useEffect(() => {
@@ -173,6 +174,14 @@ const DashboardPage = () => {
       const repeatUsers = Array.from(userOrderCounts.values()).filter(count => count >= 2).length
       const repeatPurchaseRate = userIds.size > 0 ? (repeatUsers / userIds.size) * 100 : 0
 
+      // 오늘 방문자 수 가져오기
+      const todayDate = new Date().toISOString().split('T')[0]
+      const { data: todayVisitorStats } = await supabase
+        .from('visitor_stats')
+        .select('visitor_count')
+        .eq('visit_date', todayDate)
+        .single()
+
       setStats({
         totalRevenue,
         totalOrders: totalOrdersCount,
@@ -188,6 +197,7 @@ const DashboardPage = () => {
         avgOrderAmount,
         cartConversionRate: 0, // 장바구니 전환율은 별도 추적 필요
         repeatPurchaseRate,
+        todayVisitors: todayVisitorStats?.visitor_count || 0,
       })
     } catch (error) {
       console.error('Error fetching dashboard data:', error)
@@ -418,7 +428,20 @@ const DashboardPage = () => {
           </div>
 
           {/* Quick Stats Row */}
-          <div className="grid grid-cols-3 gap-5 mt-6">
+          <div className="grid grid-cols-4 gap-5 mt-6">
+            <div className="bg-white rounded-xl border border-gray-100 p-5">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-sm text-gray-500">오늘 방문자</span>
+                <Users className="w-4 h-4 text-gray-400" />
+              </div>
+              <p className="text-xl font-bold text-gray-800">{quickStats.todayVisitors.toLocaleString()}명</p>
+              <div className="mt-2 h-1 bg-gray-100 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-green-500 rounded-full" 
+                  style={{ width: `${Math.min((quickStats.todayVisitors / 1000) * 10, 100)}%` }} 
+                />
+              </div>
+            </div>
             <div className="bg-white rounded-xl border border-gray-100 p-5">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-sm text-gray-500">평균 주문금액</span>
