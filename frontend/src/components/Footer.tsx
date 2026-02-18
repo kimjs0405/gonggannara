@@ -1,4 +1,4 @@
-import { Mail, MapPin, Download, Upload, CreditCard, FileText, Users, HelpCircle, Truck, Shield } from 'lucide-react'
+import { Mail, MapPin, Download, Upload, CreditCard, FileText } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 const Footer = () => {
@@ -93,35 +93,6 @@ const Footer = () => {
                   <FileText className="w-3.5 h-3.5" />
                   영수증 출력
                 </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 약속 배너 */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white">
-        <div className="max-w-[1200px] mx-auto px-4 py-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-base md:text-lg font-bold">
-              공간나라는 고객과의 약속을 지킵니다.
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-3 md:gap-6 text-xs md:text-sm">
-              <div className="flex items-center gap-1.5">
-                <Shield className="w-4 h-4" />
-                <span>품질 보장</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Users className="w-4 h-4" />
-                <span>고객 우선</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Truck className="w-4 h-4" />
-                <span>빠른 배송</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <HelpCircle className="w-4 h-4" />
-                <span>A/S 보장</span>
               </div>
             </div>
           </div>
