@@ -10,8 +10,7 @@ import {
   EyeOff,
   Upload,
   X,
-  Loader2,
-  Palette
+  Loader2
 } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 
