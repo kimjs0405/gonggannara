@@ -582,7 +582,7 @@ const HomePage = () => {
                 <Link
                   key={card.id}
                   to={card.link_url || '#'}
-                  className={`bg-gradient-to-br ${card.background_color} rounded-2xl p-8 md:p-10 border border-gray-200/50 relative overflow-hidden hover:shadow-xl transition-all group h-[200px] md:h-[240px]`}
+                  className={`bg-gradient-to-br ${card.background_color} rounded-2xl p-8 md:p-10 border border-gray-200/50 relative overflow-hidden transition-all group h-[200px] md:h-[240px]`}
                 >
                   <div className="flex items-center justify-between h-full gap-6 md:gap-8">
                     {/* 텍스트 영역 - 왼쪽 */}
