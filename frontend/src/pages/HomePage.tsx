@@ -11,28 +11,15 @@ interface Banner {
   link_url: string | null
 }
 
-interface PromotionCard {
-  id: string
-  title: string
-  subtitle: string | null
-  image_url: string | null
-  link_url: string | null
-  background_color: string
-  position: number
-  is_active: boolean
-}
 
 const HomePage = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
-  const [promoSlide1, setPromoSlide1] = useState(0)
-  const [promoSlide2, setPromoSlide2] = useState(0)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [userEmail, setUserEmail] = useState('')
   const [loginForm, setLoginForm] = useState({ email: '', password: '' })
   const [loginError, setLoginError] = useState('')
   const [isLoggingIn, setIsLoggingIn] = useState(false)
   const [banners, setBanners] = useState<Banner[]>([])
-  const [promotionCards, setPromotionCards] = useState<PromotionCard[]>([])
   const [visitorCount, setVisitorCount] = useState<number | null>(null)
 
   // 기본 배너 (DB에 배너가 없을 때)
@@ -78,21 +65,6 @@ const HomePage = () => {
     fetchBanners()
   }, [])
 
-  // 프로모션 카드 데이터 가져오기
-  useEffect(() => {
-    const fetchPromotionCards = async () => {
-      const { data, error } = await supabase
-        .from('promotion_cards')
-        .select('*')
-        .eq('is_active', true)
-        .order('position', { ascending: true })
-
-      if (!error && data) {
-        setPromotionCards(data)
-      }
-    }
-    fetchPromotionCards()
-  }, [])
 
   // 방문자 수 추적 및 표시
   useEffect(() => {
@@ -259,19 +231,6 @@ const HomePage = () => {
     return () => clearInterval(timer)
   }, [banners.length])
 
-  // 프로모션 슬라이드 자동 전환
-  useEffect(() => {
-    const timer1 = setInterval(() => {
-      setPromoSlide1((prev) => (prev + 1) % promoItems1.length)
-    }, 3000)
-    const timer2 = setInterval(() => {
-      setPromoSlide2((prev) => (prev + 1) % promoItems2.length)
-    }, 3500)
-    return () => {
-      clearInterval(timer1)
-      clearInterval(timer2)
-    }
-  }, [])
 
   useEffect(() => {
     const checkSession = async () => {
@@ -445,146 +404,6 @@ const HomePage = () => {
                 })}
               </div>
 
-              {/* 프로모션 슬라이드 갤러리 - PC only */}
-              <div className="hidden md:grid grid-cols-2 gap-4 mt-4">
-                {/* 슬라이드 1 - 특가 할인 */}
-                <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-xl p-4 border border-orange-200 relative overflow-hidden">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="relative">
-                        <span className="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold rounded-full shadow-sm">
-                          특가
-                        </span>
-                        <span className="absolute -top-1 -right-1 w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></span>
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="text-base font-extrabold text-gray-900 tracking-tight">오늘의 할인</span>
-                        <span className="text-[10px] text-gray-500 font-medium">매일 업데이트</span>
-                      </div>
-                    </div>
-                    <div className="flex gap-1">
-                      <button 
-                        onClick={() => setPromoSlide1((prev) => (prev - 1 + promoItems1.length) % promoItems1.length)}
-                        className="w-6 h-6 flex items-center justify-center bg-white rounded-full shadow hover:bg-gray-50"
-                      >
-                        <ChevronLeft className="w-4 h-4 text-gray-600" />
-                      </button>
-                      <button 
-                        onClick={() => setPromoSlide1((prev) => (prev + 1) % promoItems1.length)}
-                        className="w-6 h-6 flex items-center justify-center bg-white rounded-full shadow hover:bg-gray-50"
-                      >
-                        <ChevronRight className="w-4 h-4 text-gray-600" />
-                      </button>
-                    </div>
-                  </div>
-                  <div className="relative h-[120px] overflow-hidden">
-                    <div 
-                      className="flex transition-transform duration-500 ease-in-out h-full"
-                      style={{ transform: `translateX(-${promoSlide1 * 100}%)` }}
-                    >
-                      {promoItems1.map((item) => (
-                        <Link 
-                          key={item.id} 
-                          to={`/products/${item.id}`}
-                          className="min-w-full flex items-center gap-4 group"
-                        >
-                          <div className="w-24 h-24 bg-white rounded-xl flex items-center justify-center text-4xl shadow-sm group-hover:shadow-md transition-shadow">
-                            {item.image}
-                          </div>
-                          <div className="flex-1">
-                            <p className="font-medium text-gray-800 group-hover:text-blue-600 transition-colors">{item.name}</p>
-                            <div className="flex items-center gap-2 mt-1">
-                              <span className="text-red-500 font-bold">{item.discount}%</span>
-                              <span className="text-gray-400 text-sm line-through">{item.price.toLocaleString()}원</span>
-                            </div>
-                            <p className="text-lg font-black text-gray-900 mt-0.5">
-                              {Math.floor(item.price * (1 - item.discount / 100)).toLocaleString()}원
-                            </p>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="flex justify-center gap-1.5 mt-3">
-                    {promoItems1.map((_, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => setPromoSlide1(idx)}
-                        className={`w-2 h-2 rounded-full transition-colors ${promoSlide1 === idx ? 'bg-red-500' : 'bg-gray-300'}`}
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                {/* 슬라이드 2 - 신상품 */}
-                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-200 relative overflow-hidden">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="relative">
-                        <span className="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-xs font-bold rounded-full shadow-sm">
-                          NEW
-                        </span>
-                        <span className="absolute -top-1 -right-1 w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="text-base font-extrabold text-gray-900 tracking-tight">신상품</span>
-                        <span className="text-[10px] text-gray-500 font-medium">최신 트렌드</span>
-                      </div>
-                    </div>
-                    <div className="flex gap-1">
-                      <button 
-                        onClick={() => setPromoSlide2((prev) => (prev - 1 + promoItems2.length) % promoItems2.length)}
-                        className="w-6 h-6 flex items-center justify-center bg-white rounded-full shadow hover:bg-gray-50"
-                      >
-                        <ChevronLeft className="w-4 h-4 text-gray-600" />
-                      </button>
-                      <button 
-                        onClick={() => setPromoSlide2((prev) => (prev + 1) % promoItems2.length)}
-                        className="w-6 h-6 flex items-center justify-center bg-white rounded-full shadow hover:bg-gray-50"
-                      >
-                        <ChevronRight className="w-4 h-4 text-gray-600" />
-                      </button>
-                    </div>
-                  </div>
-                  <div className="relative h-[120px] overflow-hidden">
-                    <div 
-                      className="flex transition-transform duration-500 ease-in-out h-full"
-                      style={{ transform: `translateX(-${promoSlide2 * 100}%)` }}
-                    >
-                      {promoItems2.map((item) => (
-                        <Link 
-                          key={item.id} 
-                          to={`/products/${item.id}`}
-                          className="min-w-full flex items-center gap-4 group"
-                        >
-                          <div className="w-24 h-24 bg-white rounded-xl flex items-center justify-center text-4xl shadow-sm group-hover:shadow-md transition-shadow">
-                            {item.image}
-                          </div>
-                          <div className="flex-1">
-                            <p className="font-medium text-gray-800 group-hover:text-blue-600 transition-colors">{item.name}</p>
-                            <div className="flex items-center gap-2 mt-1">
-                              <span className="text-blue-500 font-bold">{item.discount}%</span>
-                              <span className="text-gray-400 text-sm line-through">{item.price.toLocaleString()}원</span>
-                            </div>
-                            <p className="text-lg font-black text-gray-900 mt-0.5">
-                              {Math.floor(item.price * (1 - item.discount / 100)).toLocaleString()}원
-                            </p>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="flex justify-center gap-1.5 mt-3">
-                    {promoItems2.map((_, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => setPromoSlide2(idx)}
-                        className={`w-2 h-2 rounded-full transition-colors ${promoSlide2 === idx ? 'bg-blue-500' : 'bg-gray-300'}`}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
             </div>
 
             {/* Visitor Count & Login Box */}
@@ -705,52 +524,97 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* Promotion Cards */}
-      {promotionCards.length > 0 && (
-        <div className="py-8 md:py-12 bg-white">
-          <div className="max-w-[1200px] mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
-              {promotionCards.map((card) => (
-                <Link
-                  key={card.id}
-                  to={card.link_url || '#'}
-                  className={`bg-gradient-to-br ${card.background_color} rounded-2xl p-8 md:p-10 border border-gray-200/50 relative overflow-hidden transition-all group h-[200px] md:h-[240px]`}
-                >
-                  <div className="flex items-center justify-between h-full gap-6 md:gap-8">
-                    {/* 텍스트 영역 - 왼쪽 */}
-                    <div className="flex-1 flex flex-col justify-center z-10">
-                      <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-3 md:mb-4 leading-tight tracking-tight">
-                        {card.title}
-                      </h3>
-                      {card.subtitle && (
-                        <p className="text-sm md:text-base text-gray-700 leading-relaxed font-medium">
-                          {card.subtitle}
-                        </p>
-                      )}
-                    </div>
-                    
-                    {/* 이미지 영역 - 오른쪽 */}
-                    {card.image_url && (
-                      <div className="flex-shrink-0 w-36 md:w-48 h-36 md:h-48 flex items-center justify-center relative z-10">
-                        <img 
-                          src={card.image_url} 
-                          alt={card.title}
-                          className="max-w-full max-h-full object-contain drop-shadow-md"
-                        />
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* 배경 장식 요소 */}
-                  <div className="absolute bottom-0 right-0 w-32 h-32 md:w-40 md:h-40 opacity-5 group-hover:opacity-10 transition-opacity">
-                    <div className="w-full h-full bg-gradient-to-br from-white/20 to-transparent rounded-full blur-2xl"></div>
-                  </div>
-                </Link>
-              ))}
+      {/* 특가 상품 */}
+      <div className="py-6 md:py-10 bg-white">
+        <div className="max-w-[1200px] mx-auto px-4">
+          <div className="flex items-center gap-3 mb-4 md:mb-6">
+            <div className="relative">
+              <span className="inline-flex items-center px-3 py-1.5 bg-red-600 text-white text-xs md:text-sm font-bold">
+                특가
+              </span>
+            </div>
+            <div>
+              <h2 className="text-lg md:text-2xl font-bold text-gray-900">오늘의 할인</h2>
+              <p className="text-xs md:text-sm text-gray-500">매일 업데이트</p>
             </div>
           </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+            {promoItems1.map((item) => (
+              <Link 
+                key={item.id} 
+                to={`/products/${item.id}`}
+                className="bg-white border border-gray-300 rounded overflow-hidden hover:border-gray-400 transition-colors group"
+              >
+                <div className="aspect-square bg-gray-50 flex items-center justify-center text-5xl md:text-6xl relative">
+                  {item.image}
+                  <span className="absolute top-2 left-2 px-2 py-0.5 bg-red-600 text-white text-xs font-bold">
+                    {item.discount}%
+                  </span>
+                </div>
+                <div className="p-3 md:p-4">
+                  <p className="text-sm md:text-base font-medium text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+                    {item.name}
+                  </p>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-xs text-gray-400 line-through">
+                      {item.price.toLocaleString()}원
+                    </span>
+                    <span className="text-base md:text-lg font-bold text-gray-900">
+                      {Math.floor(item.price * (1 - item.discount / 100)).toLocaleString()}원
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
-      )}
+      </div>
+
+      {/* 신상품 */}
+      <div className="py-6 md:py-10 bg-gray-50">
+        <div className="max-w-[1200px] mx-auto px-4">
+          <div className="flex items-center gap-3 mb-4 md:mb-6">
+            <div className="relative">
+              <span className="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-xs md:text-sm font-bold">
+                NEW
+              </span>
+            </div>
+            <div>
+              <h2 className="text-lg md:text-2xl font-bold text-gray-900">신상품</h2>
+              <p className="text-xs md:text-sm text-gray-500">최신 트렌드</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+            {promoItems2.map((item) => (
+              <Link 
+                key={item.id} 
+                to={`/products/${item.id}`}
+                className="bg-white border border-gray-300 rounded overflow-hidden hover:border-gray-400 transition-colors group"
+              >
+                <div className="aspect-square bg-gray-50 flex items-center justify-center text-5xl md:text-6xl relative">
+                  {item.image}
+                  <span className="absolute top-2 left-2 px-2 py-0.5 bg-blue-600 text-white text-xs font-bold">
+                    {item.discount}%
+                  </span>
+                </div>
+                <div className="p-3 md:p-4">
+                  <p className="text-sm md:text-base font-medium text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+                    {item.name}
+                  </p>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-xs text-gray-400 line-through">
+                      {item.price.toLocaleString()}원
+                    </span>
+                    <span className="text-base md:text-lg font-bold text-gray-900">
+                      {Math.floor(item.price * (1 - item.discount / 100)).toLocaleString()}원
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
 
       {/* Products */}
       <div className="py-8 md:py-12 bg-white">
