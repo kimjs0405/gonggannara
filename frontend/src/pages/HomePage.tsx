@@ -311,9 +311,17 @@ const HomePage = () => {
                 {/* 슬라이드 1 - 특가 할인 */}
                 <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-xl p-4 border border-orange-200 relative overflow-hidden">
                   <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <span className="px-2 py-1 bg-red-500 text-white text-xs font-bold rounded">특가</span>
-                      <span className="text-sm font-bold text-gray-800">오늘의 할인</span>
+                    <div className="flex items-center gap-3">
+                      <div className="relative">
+                        <span className="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold rounded-full shadow-sm">
+                          특가
+                        </span>
+                        <span className="absolute -top-1 -right-1 w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-base font-extrabold text-gray-900 tracking-tight">오늘의 할인</span>
+                        <span className="text-[10px] text-gray-500 font-medium">매일 업데이트</span>
+                      </div>
                     </div>
                     <div className="flex gap-1">
                       <button 
@@ -372,9 +380,17 @@ const HomePage = () => {
                 {/* 슬라이드 2 - 신상품 */}
                 <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-200 relative overflow-hidden">
                   <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <span className="px-2 py-1 bg-blue-500 text-white text-xs font-bold rounded">NEW</span>
-                      <span className="text-sm font-bold text-gray-800">신상품</span>
+                    <div className="flex items-center gap-3">
+                      <div className="relative">
+                        <span className="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-xs font-bold rounded-full shadow-sm">
+                          NEW
+                        </span>
+                        <span className="absolute -top-1 -right-1 w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-base font-extrabold text-gray-900 tracking-tight">신상품</span>
+                        <span className="text-[10px] text-gray-500 font-medium">최신 트렌드</span>
+                      </div>
                     </div>
                     <div className="flex gap-1">
                       <button 
