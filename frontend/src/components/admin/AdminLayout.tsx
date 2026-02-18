@@ -19,7 +19,6 @@ import {
   Home,
   Activity,
   TrendingUp,
-  Clock,
   HelpCircle,
   UserCircle,
   Shield

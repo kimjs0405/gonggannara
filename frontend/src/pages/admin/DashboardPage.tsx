@@ -10,7 +10,6 @@ import {
   ArrowUpRight,
   MoreHorizontal,
   Eye,
-  Calendar,
   Filter,
   Download,
   RefreshCw,
@@ -29,8 +28,6 @@ import {
   Line,
   AreaChart,
   Area,
-  BarChart,
-  Bar,
   PieChart,
   Pie,
   Cell,
@@ -442,8 +439,6 @@ const DashboardPage = () => {
     )
   }
 
-  const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899']
-
   return (
     <div className="space-y-6">
       {/* Header with Filters */}
@@ -635,7 +630,7 @@ const DashboardPage = () => {
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    label={({ name, percent }: { name: string; percent: number }) => `${name} ${(percent * 100).toFixed(0)}%`}
                     outerRadius={80}
                     fill="#8884d8"
                     dataKey="value"
