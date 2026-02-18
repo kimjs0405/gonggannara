@@ -584,29 +584,29 @@ const HomePage = () => {
                   to={card.link_url || '#'}
                   className={`bg-gradient-to-br ${card.background_color} rounded-xl p-6 md:p-8 border border-gray-200 relative overflow-hidden hover:shadow-lg transition-all group`}
                 >
-                  <div className="flex flex-col md:flex-row items-start md:items-center justify-between h-full">
-                    <div className="flex-1 mb-4 md:mb-0">
-                      <h3 className="text-xl md:text-2xl font-black text-gray-900 mb-2 md:mb-3 tracking-tight">
+                  <div className="flex items-center justify-between h-full gap-6">
+                    {/* 텍스트 영역 - 왼쪽 */}
+                    <div className="flex-1 flex flex-col justify-center">
+                      <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-3 md:mb-4 leading-tight">
                         {card.title}
                       </h3>
                       {card.subtitle && (
-                        <p className="text-sm md:text-base text-gray-700 leading-relaxed">
+                        <p className="text-sm md:text-base text-gray-700 leading-relaxed font-medium">
                           {card.subtitle}
                         </p>
                       )}
                     </div>
+                    
+                    {/* 이미지 영역 - 오른쪽 */}
                     {card.image_url && (
-                      <div className="w-full md:w-32 h-32 md:h-32 flex items-center justify-center flex-shrink-0">
+                      <div className="flex-shrink-0 w-32 md:w-40 h-32 md:h-40 flex items-center justify-center relative">
                         <img 
                           src={card.image_url} 
                           alt={card.title}
-                          className="max-w-full max-h-full object-contain"
+                          className="max-w-full max-h-full object-contain drop-shadow-sm"
                         />
                       </div>
                     )}
-                  </div>
-                  <div className="absolute bottom-4 right-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                    <div className="text-6xl md:text-8xl">🎁</div>
                   </div>
                 </Link>
               ))}
