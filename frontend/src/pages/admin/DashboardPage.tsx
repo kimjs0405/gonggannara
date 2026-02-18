@@ -8,8 +8,7 @@ import {
   Package,
   DollarSign,
   ArrowUpRight,
-  MoreHorizontal,
-  Eye
+  MoreHorizontal
 } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 
@@ -106,11 +105,6 @@ const DashboardPage = () => {
         .select('*', { count: 'exact', head: true })
         .gte('created_at', lastMonthStart.toISOString())
         .lte('created_at', lastMonthEnd.toISOString())
-
-      // 전체 회원 수
-      const { count: totalUsers } = await supabase
-        .from('profiles')
-        .select('*', { count: 'exact', head: true })
 
       // 상품 수
       const { count: totalProducts } = await supabase
