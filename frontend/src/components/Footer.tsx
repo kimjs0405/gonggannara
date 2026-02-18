@@ -63,26 +63,12 @@ const Footer = () => {
             {/* 입금계좌 */}
             <div>
               <h3 className="text-sm font-bold text-gray-800 mb-4 pb-2 border-b border-gray-200">입금계좌</h3>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-green-600 w-12">농협</span>
-                    <span className="text-sm font-medium text-gray-800">355-0036-6349-43</span>
-                  </div>
+              <div className="flex items-center gap-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <img src="/KBbank.png" alt="국민은행" className="h-8 w-auto" />
+                <div>
+                  <p className="text-lg font-bold text-gray-800">51840101405665</p>
+                  <p className="text-xs text-gray-500">예금주 : 개성종합네트웍스</p>
                 </div>
-                <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-yellow-600 w-12">국민</span>
-                    <span className="text-sm font-medium text-gray-800">278537-04-001459</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-blue-600 w-12">신한</span>
-                    <span className="text-sm font-medium text-gray-800">110-456-789012</span>
-                  </div>
-                </div>
-                <p className="text-xs text-gray-500 mt-2">예금주 : 개성종합네트웍스</p>
               </div>
               <div className="grid grid-cols-2 gap-2 mt-3">
                 <button className="py-2 px-3 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700 transition-colors flex items-center justify-center gap-1">
