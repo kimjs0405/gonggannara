@@ -1,114 +1,186 @@
-import { Phone, Mail, MapPin } from 'lucide-react'
+import { Phone, Mail, MapPin, Download, Upload, CreditCard, FileText, Users, HelpCircle, Truck, Shield } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 const Footer = () => {
-  const footerLinks = [
-    {
-      title: '쇼핑안내',
-      links: [
-        { name: '전체상품', path: '/products' },
-        { name: '베스트상품', path: '/products?sort=best' },
-        { name: '신상품', path: '/products?sort=new' },
-        { name: '특가상품', path: '/products?sort=sale' },
-      ],
-    },
-    {
-      title: '인테리어',
-      links: [
-        { name: '견적문의', path: '/estimate' },
-        { name: '포트폴리오', path: '/portfolio' },
-        { name: '시공절차', path: '/process' },
-        { name: '고객후기', path: '/reviews' },
-      ],
-    },
-    {
-      title: '고객지원',
-      links: [
-        { name: '자주묻는질문', path: '/faq' },
-        { name: '1:1 문의', path: '/inquiry' },
-        { name: '주문/배송조회', path: '/orders' },
-        { name: '회사소개', path: '/about' },
-      ],
-    },
-  ]
-
   return (
-    <footer className="bg-gray-900 text-white">
-      {/* Main Footer */}
-      <div className="max-w-[1200px] mx-auto px-4 py-8 md:py-10">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-6 md:gap-8">
-          {/* Company Info */}
-          <div className="col-span-2">
-            <Link to="/" className="mb-3 md:mb-4 inline-block">
-              <img src="/logo.svg" alt="공간나라" className="h-8 md:h-10 brightness-0 invert" />
-            </Link>
-            <div className="space-y-0.5 md:space-y-1 text-xs md:text-sm text-gray-400 mb-4 md:mb-5">
-              <p>상호: 개성종합네트웍스</p>
-              <p>대표: 김준서</p>
-              <p>사업자등록번호: 289-70-00760</p>
-              <p className="flex items-start gap-1">
-                <MapPin className="w-3 h-3 mt-0.5 flex-shrink-0" />
-                <span>서울특별시 관악구 신림동 257-13 1층 대원빌딩</span>
-              </p>
-            </div>
-            <div className="space-y-1 md:space-y-1.5">
-              <a href="tel:02-875-8204" className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-blue-400" />
-                <span className="text-lg md:text-xl font-black text-blue-400">02-875-8204</span>
-              </a>
-              <p className="text-[10px] md:text-xs text-gray-500">평일 09:00 ~ 18:00</p>
-              <div className="flex items-center gap-2 text-xs md:text-sm text-gray-400">
-                <Mail className="w-4 h-4" />
-                <span>GongganWord@gmail.com</span>
+    <footer className="bg-white border-t">
+      {/* 고객센터 / 파일업로드 / 입금계좌 섹션 */}
+      <div className="border-b">
+        <div className="max-w-[1200px] mx-auto px-4 py-6 md:py-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            
+            {/* 고객센터 이용안내 */}
+            <div className="border-r-0 md:border-r border-gray-200 pr-0 md:pr-6">
+              <h3 className="text-sm font-bold text-gray-800 mb-4 pb-2 border-b border-gray-200">고객센터 이용안내</h3>
+              <div className="flex items-start gap-4">
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">대표전화</p>
+                  <a href="tel:02-875-8204" className="text-2xl md:text-3xl font-black text-blue-600">
+                    02-875-8204
+                  </a>
+                </div>
+                <div className="flex-1 text-xs text-gray-600 space-y-0.5">
+                  <p>운영시간 09:00~18:00</p>
+                  <p>점심시간 12:00~13:00</p>
+                  <p className="text-gray-400">주말 및 공휴일 휴무</p>
+                </div>
+              </div>
+              <div className="mt-3 pt-3 border-t border-gray-100">
+                <div className="flex items-center gap-2 text-xs text-gray-600">
+                  <Mail className="w-4 h-4 text-gray-400" />
+                  <a href="mailto:GongganWord@gmail.com" className="text-blue-600 hover:underline">
+                    GongganWord@gmail.com
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Links - Hidden on mobile, show as accordion or simplified */}
-          {footerLinks.map((section, index) => (
-            <div key={index} className="hidden md:block">
-              <h4 className="font-bold mb-3 text-white">{section.title}</h4>
-              <ul className="space-y-2">
-                {section.links.map((link, linkIndex) => (
-                  <li key={linkIndex}>
-                    <Link
-                      to={link.path}
-                      className="text-sm text-gray-400 hover:text-white transition-colors"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+            {/* 파일업로드/다운로드 */}
+            <div className="border-r-0 md:border-r border-gray-200 pr-0 md:pr-6">
+              <h3 className="text-sm font-bold text-gray-800 mb-4 pb-2 border-b border-gray-200">파일업로드/다운로드</h3>
+              <div className="space-y-3">
+                <a href="mailto:GongganWord@gmail.com" className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                    <Upload className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800">이메일로 파일올리기</p>
+                    <p className="text-xs text-gray-500">견적 및 도면 파일 전송</p>
+                  </div>
+                </a>
+                <Link to="/downloads" className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                  <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                    <Download className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800">자료 다운로드</p>
+                    <p className="text-xs text-gray-500">카탈로그, 시공 가이드</p>
+                  </div>
+                </Link>
+              </div>
             </div>
-          ))}
-        </div>
 
-        {/* Mobile Quick Links */}
-        <div className="md:hidden mt-6 pt-6 border-t border-gray-800">
-          <div className="grid grid-cols-4 gap-2 text-center text-xs">
-            <Link to="/products" className="py-2 text-gray-400 hover:text-white">전체상품</Link>
-            <Link to="/estimate" className="py-2 text-gray-400 hover:text-white">견적문의</Link>
-            <Link to="/faq" className="py-2 text-gray-400 hover:text-white">FAQ</Link>
-            <Link to="/about" className="py-2 text-gray-400 hover:text-white">회사소개</Link>
+            {/* 입금계좌 */}
+            <div>
+              <h3 className="text-sm font-bold text-gray-800 mb-4 pb-2 border-b border-gray-200">입금계좌</h3>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-green-600 w-12">농협</span>
+                    <span className="text-sm font-medium text-gray-800">355-0036-6349-43</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-yellow-600 w-12">국민</span>
+                    <span className="text-sm font-medium text-gray-800">278537-04-001459</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-blue-600 w-12">신한</span>
+                    <span className="text-sm font-medium text-gray-800">110-456-789012</span>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500 mt-2">예금주 : 개성종합네트웍스</p>
+              </div>
+              <div className="grid grid-cols-2 gap-2 mt-3">
+                <button className="py-2 px-3 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700 transition-colors flex items-center justify-center gap-1">
+                  <CreditCard className="w-3.5 h-3.5" />
+                  카드결제
+                </button>
+                <button className="py-2 px-3 bg-gray-600 text-white text-xs font-medium rounded hover:bg-gray-700 transition-colors flex items-center justify-center gap-1">
+                  <FileText className="w-3.5 h-3.5" />
+                  영수증 출력
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Bottom Bar */}
-      <div className="border-t border-gray-800">
-        <div className="max-w-[1200px] mx-auto px-4 py-3 md:py-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-2 md:gap-0">
-            <div className="flex items-center gap-3 md:gap-4 text-[10px] md:text-xs text-gray-500">
-              <Link to="/terms" className="hover:text-white transition-colors">이용약관</Link>
-              <span>|</span>
-              <Link to="/privacy" className="hover:text-white transition-colors font-bold">개인정보처리방침</Link>
-              <span>|</span>
-              <Link to="/guide" className="hover:text-white transition-colors">이용안내</Link>
-            </div>
-            <p className="text-[10px] md:text-xs text-gray-500">
-              © 2024 공간나라. All rights reserved.
+      {/* 약속 배너 */}
+      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+        <div className="max-w-[1200px] mx-auto px-4 py-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-base md:text-lg font-bold">
+              공간나라는 고객과의 약속을 지킵니다.
             </p>
+            <div className="flex flex-wrap items-center justify-center gap-3 md:gap-6 text-xs md:text-sm">
+              <div className="flex items-center gap-1.5">
+                <Shield className="w-4 h-4" />
+                <span>품질 보장</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Users className="w-4 h-4" />
+                <span>고객 우선</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Truck className="w-4 h-4" />
+                <span>빠른 배송</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <HelpCircle className="w-4 h-4" />
+                <span>A/S 보장</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 링크 바 */}
+      <div className="border-b bg-gray-50">
+        <div className="max-w-[1200px] mx-auto px-4 py-3">
+          <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4 text-xs md:text-sm">
+            <Link to="/about" className="text-gray-600 hover:text-blue-600 transition-colors">회사소개</Link>
+            <span className="text-gray-300">|</span>
+            <Link to="/terms" className="text-gray-600 hover:text-blue-600 transition-colors">이용약관</Link>
+            <span className="text-gray-300">|</span>
+            <Link to="/privacy" className="text-gray-800 font-bold hover:text-blue-600 transition-colors">개인정보처리방침</Link>
+            <span className="text-gray-300">|</span>
+            <Link to="/faq" className="text-gray-600 hover:text-blue-600 transition-colors">고객센터</Link>
+            <span className="text-gray-300">|</span>
+            <Link to="/guide" className="text-gray-600 hover:text-blue-600 transition-colors">이용안내</Link>
+            <span className="text-gray-300">|</span>
+            <Link to="/location" className="text-gray-600 hover:text-blue-600 transition-colors">오시는 길</Link>
+          </div>
+        </div>
+      </div>
+
+      {/* 사업자 정보 */}
+      <div className="bg-gray-100">
+        <div className="max-w-[1200px] mx-auto px-4 py-6">
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-8">
+            {/* 로고 */}
+            <Link to="/" className="flex-shrink-0">
+              <img src="/logo.svg" alt="공간나라" className="h-8 md:h-10" />
+            </Link>
+
+            {/* 사업자 정보 */}
+            <div className="flex-1 text-xs text-gray-500 space-y-1">
+              <p>
+                <span className="font-medium text-gray-700">개성종합네트웍스</span>
+                <span className="mx-2">|</span>
+                사업자등록번호 : 289-70-00760
+                <span className="mx-2">|</span>
+                대표 : 김준서
+                <span className="mx-2">|</span>
+                통신판매업신고 : 제2024-서울관악-0001호
+              </p>
+              <p className="flex items-start gap-1">
+                <MapPin className="w-3 h-3 mt-0.5 flex-shrink-0" />
+                <span>서울특별시 관악구 신림동 257-13 1층 대원빌딩</span>
+                <span className="mx-2">|</span>
+                <span>TEL : 02-875-8204</span>
+                <span className="mx-2">|</span>
+                <span>FAX : 02-875-8205</span>
+                <span className="mx-2">|</span>
+                <span>이메일 : GongganWord@gmail.com</span>
+              </p>
+              <p className="pt-2 text-gray-400">
+                COPYRIGHT © 공간나라. ALL RIGHTS RESERVED.
+              </p>
+            </div>
           </div>
         </div>
       </div>
