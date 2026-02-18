@@ -39,12 +39,12 @@ const Footer = () => {
             <div className="border-r-0 md:border-r border-gray-200 pr-0 md:pr-6">
               <h3 className="text-sm font-bold text-gray-800 mb-4 pb-2 border-b border-gray-200">파일업로드/다운로드</h3>
               <div className="space-y-3">
-                <a href="mailto:GongganWord@gmail.com" className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                <a href="https://drive.google.com/drive/folders/1_gxP6P8IbCWZ2HJOXz88MGGc-HJVkDgV?usp=sharing" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                   <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
                     <Upload className="w-5 h-5 text-blue-600" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-800">이메일로 파일올리기</p>
+                    <p className="text-sm font-medium text-gray-800">웹하드로 파일올리기</p>
                     <p className="text-xs text-gray-500">견적 및 도면 파일 전송</p>
                   </div>
                 </a>
