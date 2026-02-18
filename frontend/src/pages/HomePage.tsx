@@ -22,7 +22,6 @@ const HomePage = () => {
   const [loginError, setLoginError] = useState('')
   const [isLoggingIn, setIsLoggingIn] = useState(false)
   const [banners, setBanners] = useState<Banner[]>([])
-  const [visitorCount, setVisitorCount] = useState<number | null>(null)
 
   // 기본 배너 (DB에 배너가 없을 때)
   const defaultBanners = [
@@ -106,7 +105,6 @@ const HomePage = () => {
               console.error('Error updating visitor count:', updateError)
             } else if (updated) {
               localStorage.setItem('lastVisitDate', today)
-              setVisitorCount(updated.visitor_count)
             }
           } else {
             // 레코드가 없으면 새로 생성
@@ -121,56 +119,12 @@ const HomePage = () => {
             
             if (insertError) {
               console.error('Error inserting visitor stats:', insertError)
-              // INSERT 실패 시에도 기존 카운트는 표시
-              const { data: todayStats } = await supabase
-                .from('visitor_stats')
-                .select('visitor_count')
-                .eq('visit_date', todayDate)
-                .maybeSingle()
-              
-              if (todayStats) {
-                setVisitorCount(todayStats.visitor_count)
-              }
             } else if (inserted) {
               localStorage.setItem('lastVisitDate', today)
-              setVisitorCount(inserted.visitor_count)
             }
           }
         } catch (error) {
           console.error('Error tracking visitor:', error)
-          // 에러 발생 시에도 기존 카운트는 표시
-          try {
-            const todayDate = new Date().toISOString().split('T')[0]
-            const { data: todayStats } = await supabase
-              .from('visitor_stats')
-              .select('visitor_count')
-              .eq('visit_date', todayDate)
-              .maybeSingle()
-            
-            if (todayStats) {
-              setVisitorCount(todayStats.visitor_count)
-            }
-          } catch (e) {
-            console.error('Error fetching visitor count:', e)
-          }
-        }
-      } else {
-        // 이미 오늘 방문했으면 기존 카운트만 가져오기
-        try {
-          const todayDate = new Date().toISOString().split('T')[0]
-          const { data: todayStats, error } = await supabase
-            .from('visitor_stats')
-            .select('visitor_count')
-            .eq('visit_date', todayDate)
-            .maybeSingle()
-
-          if (error) {
-            console.error('Error fetching visitor count:', error)
-          } else if (todayStats) {
-            setVisitorCount(todayStats.visitor_count)
-          }
-        } catch (error) {
-          console.error('Error fetching visitor count:', error)
         }
       }
     }
