@@ -65,7 +65,7 @@ const Footer = () => {
               <h3 className="text-sm font-bold text-gray-800 mb-4 pb-2 border-b border-gray-200">입금계좌</h3>
               <div className="space-y-2">
                 <img src="/KBbank.png" alt="국민은행" className="h-6 w-auto" />
-                <p className="text-xl font-bold text-gray-800">51840101405665</p>
+                <p className="text-xl font-bold text-gray-800">518401-01-405665</p>
                 <p className="text-xs text-gray-500">예금주 : 개성종합네트웍스</p>
               </div>
               <div className="grid grid-cols-2 gap-2 mt-3">
