@@ -575,19 +575,19 @@ const HomePage = () => {
 
       {/* Promotion Cards */}
       {promotionCards.length > 0 && (
-        <div className="py-6 md:py-8 bg-white">
+        <div className="py-8 md:py-12 bg-white">
           <div className="max-w-[1200px] mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
               {promotionCards.map((card) => (
                 <Link
                   key={card.id}
                   to={card.link_url || '#'}
-                  className={`bg-gradient-to-br ${card.background_color} rounded-xl p-6 md:p-8 border border-gray-200 relative overflow-hidden hover:shadow-lg transition-all group`}
+                  className={`bg-gradient-to-br ${card.background_color} rounded-2xl p-8 md:p-10 border border-gray-200/50 relative overflow-hidden hover:shadow-xl transition-all group h-[200px] md:h-[240px]`}
                 >
-                  <div className="flex items-center justify-between h-full gap-6">
+                  <div className="flex items-center justify-between h-full gap-6 md:gap-8">
                     {/* 텍스트 영역 - 왼쪽 */}
-                    <div className="flex-1 flex flex-col justify-center">
-                      <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-3 md:mb-4 leading-tight">
+                    <div className="flex-1 flex flex-col justify-center z-10">
+                      <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-3 md:mb-4 leading-tight tracking-tight">
                         {card.title}
                       </h3>
                       {card.subtitle && (
@@ -599,14 +599,19 @@ const HomePage = () => {
                     
                     {/* 이미지 영역 - 오른쪽 */}
                     {card.image_url && (
-                      <div className="flex-shrink-0 w-32 md:w-40 h-32 md:h-40 flex items-center justify-center relative">
+                      <div className="flex-shrink-0 w-36 md:w-48 h-36 md:h-48 flex items-center justify-center relative z-10">
                         <img 
                           src={card.image_url} 
                           alt={card.title}
-                          className="max-w-full max-h-full object-contain drop-shadow-sm"
+                          className="max-w-full max-h-full object-contain drop-shadow-md"
                         />
                       </div>
                     )}
+                  </div>
+                  
+                  {/* 배경 장식 요소 */}
+                  <div className="absolute bottom-0 right-0 w-32 h-32 md:w-40 md:h-40 opacity-5 group-hover:opacity-10 transition-opacity">
+                    <div className="w-full h-full bg-gradient-to-br from-white/20 to-transparent rounded-full blur-2xl"></div>
                   </div>
                 </Link>
               ))}
