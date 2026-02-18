@@ -18,7 +18,6 @@ import {
   X,
   Home,
   Activity,
-  TrendingUp,
   HelpCircle,
   UserCircle,
   Shield
