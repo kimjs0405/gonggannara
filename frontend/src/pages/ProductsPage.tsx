@@ -356,14 +356,14 @@ const ProductsPage = () => {
 
         {/* Desktop: 필터는 왼쪽, 상세 필터와 상품 리스트는 오른쪽 */}
         <div className="hidden md:flex gap-6">
-          {/* Sidebar Filters - 왼쪽 */}
+          {/* Sidebar Filters - 왼쪽 (카테고리만) */}
           <div className="w-64 flex-shrink-0">
             <div className="bg-white rounded-xl p-5 shadow-sm sticky top-4">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-bold text-gray-800">필터</h3>
-                {(priceRanges.length > 0 || discountFilter || badgeFilter) && (
+                <h3 className="font-bold text-gray-800">카테고리</h3>
+                {selectedCategory && (
                   <button
-                    onClick={resetFilters}
+                    onClick={() => handleCategoryChange('')}
                     className="text-xs text-blue-600 hover:text-blue-700"
                   >
                     초기화
@@ -372,8 +372,7 @@ const ProductsPage = () => {
               </div>
 
               {/* 카테고리 */}
-              <div className="mb-6">
-                <h4 className="font-semibold text-gray-700 mb-3 text-sm">카테고리</h4>
+              <div>
                 <div className="space-y-1">
                   <button
                     onClick={() => handleCategoryChange('')}
@@ -396,63 +395,6 @@ const ProductsPage = () => {
                       }`}
                     >
                       {cat.name}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* 가격대 */}
-              <div className="mb-6">
-                <h4 className="font-semibold text-gray-700 mb-3 text-sm">가격대</h4>
-                <div className="space-y-2">
-                  {priceRangeOptions.map((option) => (
-                    <label key={option.label} className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={priceRanges.includes(option.label)}
-                        onChange={() => togglePriceRange(option.label)}
-                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-sm text-gray-600">{option.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* 할인율 */}
-              <div className="mb-6">
-                <h4 className="font-semibold text-gray-700 mb-3 text-sm">할인율</h4>
-                <div className="space-y-2">
-                  {discountOptions.map((option) => (
-                    <label key={option.value} className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="discount"
-                        checked={discountFilter === option.value}
-                        onChange={() => setDiscountFilter(discountFilter === option.value ? '' : option.value)}
-                        className="border-gray-300 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-sm text-gray-600">{option.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* 배지 */}
-              <div>
-                <h4 className="font-semibold text-gray-700 mb-3 text-sm">특가 배지</h4>
-                <div className="flex flex-wrap gap-2">
-                  {badgeOptions.map((option) => (
-                    <button
-                      key={option.value}
-                      onClick={() => setBadgeFilter(badgeFilter === option.value ? '' : option.value)}
-                      className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-                        badgeFilter === option.value
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                      }`}
-                    >
-                      {option.label}
                     </button>
                   ))}
                 </div>
@@ -559,57 +501,65 @@ const ProductsPage = () => {
               )}
             </div>
 
-            {/* 빠른 필터 버튼 */}
-            <div className="mt-1.5 md:mt-2 pt-1.5 md:pt-2 border-t border-gray-200">
-              <div className="flex flex-wrap gap-1 md:gap-1.5">
-                <span className="text-[9px] md:text-[10px] text-gray-500 self-center">빠른 필터:</span>
-                
-                {/* 할인율 빠른 필터 */}
-                {discountOptions.map((option) => (
-                  <button
-                    key={option.value}
-                    onClick={() => setDiscountFilter(discountFilter === option.value ? '' : option.value)}
-                    className={`px-1.5 md:px-2 py-0.5 rounded-full text-[9px] md:text-[10px] font-medium transition-colors ${
-                      discountFilter === option.value
-                        ? 'bg-orange-500 text-white'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}
-                  >
-                    {option.label}
-                  </button>
-                ))}
+            {/* 필터 옵션 */}
+            <div className="mt-1.5 md:mt-2 pt-1.5 md:pt-2 border-t border-gray-200 space-y-2">
+              {/* 가격대 */}
+              <div>
+                <h4 className="text-[9px] md:text-[10px] font-semibold text-gray-700 mb-1.5">가격대</h4>
+                <div className="flex flex-wrap gap-1 md:gap-1.5">
+                  {priceRangeOptions.map((option) => (
+                    <label key={option.label} className="flex items-center gap-1 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={priceRanges.includes(option.label)}
+                        onChange={() => togglePriceRange(option.label)}
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-3 h-3"
+                      />
+                      <span className="text-[9px] md:text-[10px] text-gray-600">{option.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
 
-                {/* 배지 빠른 필터 */}
-                {badgeOptions.map((option) => (
-                  <button
-                    key={option.value}
-                    onClick={() => setBadgeFilter(badgeFilter === option.value ? '' : option.value)}
-                    className={`px-1.5 md:px-2 py-0.5 rounded-full text-[9px] md:text-[10px] font-medium transition-colors ${
-                      badgeFilter === option.value
-                        ? option.value === 'BEST' ? 'bg-red-500 text-white' :
-                          option.value === 'HOT' ? 'bg-orange-500 text-white' :
-                          'bg-blue-500 text-white'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}
-                  >
-                    {option.label}
-                  </button>
-                ))}
+              {/* 할인율 */}
+              <div>
+                <h4 className="text-[9px] md:text-[10px] font-semibold text-gray-700 mb-1.5">할인율</h4>
+                <div className="flex flex-wrap gap-1 md:gap-1.5">
+                  {discountOptions.map((option) => (
+                    <label key={option.value} className="flex items-center gap-1 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="discount"
+                        checked={discountFilter === option.value}
+                        onChange={() => setDiscountFilter(discountFilter === option.value ? '' : option.value)}
+                        className="border-gray-300 text-blue-600 focus:ring-blue-500 w-3 h-3"
+                      />
+                      <span className="text-[9px] md:text-[10px] text-gray-600">{option.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
 
-                {/* 가격대 빠른 필터 (인기 있는 것만) */}
-                {['~5만원', '10만원~30만원', '50만원 이상'].map((range) => (
-                  <button
-                    key={range}
-                    onClick={() => togglePriceRange(range)}
-                    className={`px-1.5 md:px-2 py-0.5 rounded-full text-[9px] md:text-[10px] font-medium transition-colors ${
-                      priceRanges.includes(range)
-                        ? 'bg-green-500 text-white'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}
-                  >
-                    {range}
-                  </button>
-                ))}
+              {/* 배지 */}
+              <div>
+                <h4 className="text-[9px] md:text-[10px] font-semibold text-gray-700 mb-1.5">특가 배지</h4>
+                <div className="flex flex-wrap gap-1 md:gap-1.5">
+                  {badgeOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => setBadgeFilter(badgeFilter === option.value ? '' : option.value)}
+                      className={`px-1.5 md:px-2 py-0.5 rounded-full text-[9px] md:text-[10px] font-medium transition-colors ${
+                        badgeFilter === option.value
+                          ? option.value === 'BEST' ? 'bg-red-500 text-white' :
+                            option.value === 'HOT' ? 'bg-orange-500 text-white' :
+                            'bg-blue-500 text-white'
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
             </div>
