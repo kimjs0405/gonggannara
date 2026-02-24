@@ -149,7 +149,11 @@ const HomePage = () => {
   ]
 
 
-  const products: { id: number; name: string; price: number; discount: number; category: string }[] = []
+  // 실제 상품 데이터
+  const [products, setProducts] = useState<any[]>([])
+  const [discountProducts, setDiscountProducts] = useState<any[]>([])
+  const [newProducts, setNewProducts] = useState<any[]>([])
+  const [loadingProducts, setLoadingProducts] = useState(true)
 
   // 광고 슬라이드 데이터
   const adSlides1 = [
@@ -164,21 +168,45 @@ const HomePage = () => {
     { id: 3, title: '광고 2-3', image: '🌟', link: '/products' },
   ]
 
-  // 프로모션 슬라이드 1 - 특가 할인
-  const promoItems1 = [
-    { id: 1, name: '모던 패브릭 소파', price: 890000, discount: 35, image: '🛋️' },
-    { id: 2, name: 'LED 스탠드 조명', price: 128000, discount: 40, image: '💡' },
-    { id: 3, name: '원목 책상 세트', price: 450000, discount: 25, image: '🪑' },
-    { id: 4, name: '북유럽 러그', price: 189000, discount: 30, image: '🧶' },
-  ]
+  // 상품 데이터 가져오기
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoadingProducts(true)
+      try {
+        // 활성화된 모든 상품 가져오기
+        const { data: allProducts, error } = await supabase
+          .from('products')
+          .select('*')
+          .eq('is_active', true)
+          .order('created_at', { ascending: false })
+          .limit(20)
 
-  // 프로모션 슬라이드 2 - 신상품
-  const promoItems2 = [
-    { id: 5, name: '미니멀 수납장', price: 320000, discount: 20, image: '📦' },
-    { id: 6, name: '프리미엄 커튼', price: 98000, discount: 15, image: '🪟' },
-    { id: 7, name: '디자인 벽시계', price: 67000, discount: 25, image: '🕐' },
-    { id: 8, name: '아트 액자 세트', price: 145000, discount: 30, image: '🖼️' },
-  ]
+        if (error) {
+          console.error('Error fetching products:', error)
+        } else {
+          setProducts(allProducts || [])
+          
+          // 할인 상품 (discount > 0)
+          const discounted = (allProducts || []).filter((p: any) => p.discount > 0).slice(0, 4)
+          setDiscountProducts(discounted)
+          
+          // 신상품 (최근 7일 이내)
+          const sevenDaysAgo = new Date()
+          sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
+          const newItems = (allProducts || [])
+            .filter((p: any) => new Date(p.created_at) >= sevenDaysAgo)
+            .slice(0, 4)
+          setNewProducts(newItems.length > 0 ? newItems : (allProducts || []).slice(0, 4))
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error)
+      } finally {
+        setLoadingProducts(false)
+      }
+    }
+
+    fetchProducts()
+  }, [])
 
   const services = [
     { name: '거실 인테리어', desc: '품격있는 거실 공간' },
@@ -588,36 +616,53 @@ const HomePage = () => {
               오늘의 할인
             </h2>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-            {promoItems1.map((item) => (
-              <Link 
-                key={item.id} 
-                to={`/products/${item.id}`}
-                className="group bg-white border border-gray-200 hover:border-gray-300 transition-colors"
-              >
-                <div className="aspect-square bg-white flex items-center justify-center text-5xl md:text-6xl relative overflow-hidden">
-                  {item.image}
-                  <button 
-                    onClick={(e) => {
-                      e.preventDefault()
-                      e.stopPropagation()
-                    }}
-                    className="absolute bottom-2 right-2 w-8 h-8 flex items-center justify-center hover:scale-110 transition-transform"
-                  >
-                    <Heart className="w-4 h-4 text-gray-400 hover:text-red-500" />
-                  </button>
-                </div>
-                <div className="p-3 md:p-4">
-                  <p className="text-xs md:text-sm text-gray-900 mb-2 line-clamp-2 leading-snug">
-                    {item.name}
-                  </p>
-                  <p className="text-sm md:text-base font-bold text-gray-900">
-                    {Math.floor(item.price * (1 - item.discount / 100)).toLocaleString()}원
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
+          {loadingProducts ? (
+            <div className="text-center py-8 text-gray-500">로딩 중...</div>
+          ) : discountProducts.length > 0 ? (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+              {discountProducts.map((item) => (
+                <Link 
+                  key={item.id} 
+                  to={`/products/${item.id}`}
+                  className="group bg-white border border-gray-200 hover:border-gray-300 transition-colors"
+                >
+                  <div className="aspect-square bg-white relative overflow-hidden">
+                    {item.image_url ? (
+                      <img src={item.image_url} alt={item.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gray-100 text-4xl">
+                        📦
+                      </div>
+                    )}
+                    {item.discount > 0 && (
+                      <span className="absolute top-2 left-2 px-2 py-1 bg-red-500 text-white text-xs font-bold">
+                        {item.discount}%
+                      </span>
+                    )}
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                      }}
+                      className="absolute bottom-2 right-2 w-8 h-8 flex items-center justify-center hover:scale-110 transition-transform"
+                    >
+                      <Heart className="w-4 h-4 text-gray-400 hover:text-red-500" />
+                    </button>
+                  </div>
+                  <div className="p-3 md:p-4">
+                    <p className="text-xs md:text-sm text-gray-900 mb-2 line-clamp-2 leading-snug">
+                      {item.name}
+                    </p>
+                    <p className="text-sm md:text-base font-bold text-gray-900">
+                      {Math.floor(item.price * (1 - (item.discount || 0) / 100)).toLocaleString()}원
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8 text-gray-500">할인 상품이 없습니다.</div>
+          )}
         </div>
       </div>
 
@@ -630,36 +675,53 @@ const HomePage = () => {
               신상품
             </h2>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-            {promoItems2.map((item) => (
-              <Link 
-                key={item.id} 
-                to={`/products/${item.id}`}
-                className="group bg-white border border-gray-200 hover:border-gray-300 transition-colors"
-              >
-                <div className="aspect-square bg-white flex items-center justify-center text-5xl md:text-6xl relative overflow-hidden">
-                  {item.image}
-                  <button 
-                    onClick={(e) => {
-                      e.preventDefault()
-                      e.stopPropagation()
-                    }}
-                    className="absolute bottom-2 right-2 w-8 h-8 flex items-center justify-center hover:scale-110 transition-transform"
-                  >
-                    <Heart className="w-4 h-4 text-gray-400 hover:text-red-500" />
-                  </button>
-                </div>
-                <div className="p-3 md:p-4">
-                  <p className="text-xs md:text-sm text-gray-900 mb-2 line-clamp-2 leading-snug">
-                    {item.name}
-                  </p>
-                  <p className="text-sm md:text-base font-bold text-gray-900">
-                    {Math.floor(item.price * (1 - item.discount / 100)).toLocaleString()}원
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
+          {loadingProducts ? (
+            <div className="text-center py-8 text-gray-500">로딩 중...</div>
+          ) : newProducts.length > 0 ? (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+              {newProducts.map((item) => (
+                <Link 
+                  key={item.id} 
+                  to={`/products/${item.id}`}
+                  className="group bg-white border border-gray-200 hover:border-gray-300 transition-colors"
+                >
+                  <div className="aspect-square bg-white relative overflow-hidden">
+                    {item.image_url ? (
+                      <img src={item.image_url} alt={item.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gray-100 text-4xl">
+                        📦
+                      </div>
+                    )}
+                    {item.badge && (
+                      <span className="absolute top-2 left-2 px-2 py-1 bg-blue-500 text-white text-xs font-bold">
+                        {item.badge}
+                      </span>
+                    )}
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                      }}
+                      className="absolute bottom-2 right-2 w-8 h-8 flex items-center justify-center hover:scale-110 transition-transform"
+                    >
+                      <Heart className="w-4 h-4 text-gray-400 hover:text-red-500" />
+                    </button>
+                  </div>
+                  <div className="p-3 md:p-4">
+                    <p className="text-xs md:text-sm text-gray-900 mb-2 line-clamp-2 leading-snug">
+                      {item.name}
+                    </p>
+                    <p className="text-sm md:text-base font-bold text-gray-900">
+                      {Math.floor(item.price * (1 - (item.discount || 0) / 100)).toLocaleString()}원
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8 text-gray-500">신상품이 없습니다.</div>
+          )}
         </div>
       </div>
 
@@ -673,15 +735,29 @@ const HomePage = () => {
             </h2>
           </div>
 
-          {products.length > 0 ? (
+          {loadingProducts ? (
+            <div className="text-center py-8 text-gray-500">로딩 중...</div>
+          ) : products.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-              {products.map((product) => (
+              {products.slice(0, 8).map((product) => (
                 <Link
                   key={product.id}
                   to={`/products/${product.id}`}
                   className="group bg-white border border-gray-200 hover:border-gray-300 transition-colors"
                 >
                   <div className="aspect-square bg-white relative overflow-hidden">
+                    {product.image_url ? (
+                      <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gray-100 text-4xl">
+                        📦
+                      </div>
+                    )}
+                    {product.badge && (
+                      <span className="absolute top-2 left-2 px-2 py-1 bg-blue-500 text-white text-xs font-bold">
+                        {product.badge}
+                      </span>
+                    )}
                     <button 
                       onClick={(e) => {
                         e.preventDefault()
@@ -697,7 +773,7 @@ const HomePage = () => {
                       {product.name}
                     </p>
                     <p className="text-sm md:text-base font-bold text-gray-900">
-                      {formatPrice(getDiscountedPrice(product.price, product.discount))}
+                      {Math.floor(product.price * (1 - (product.discount || 0) / 100)).toLocaleString()}원
                     </p>
                   </div>
                 </Link>
@@ -709,7 +785,7 @@ const HomePage = () => {
                 <Package className="w-8 h-8 text-gray-400" />
               </div>
               <p className="text-gray-600 mb-2 text-base md:text-lg font-semibold">등록된 상품이 없습니다</p>
-              <p className="text-sm md:text-base text-gray-400">곧 새로운 상품이 등록될 예정입니다</p>
+              <p className="text-sm md:text-base text-gray-400">관리자 페이지에서 상품을 등록해주세요</p>
             </div>
           )}
         </div>

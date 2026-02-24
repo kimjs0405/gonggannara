@@ -100,12 +100,37 @@ const AdminProductsPage = () => {
   }
 
   const handleSave = async () => {
+    // 필수 필드 검증
+    if (!formData.name || !formData.price) {
+      alert('상품명과 판매가는 필수 입력 항목입니다.')
+      return
+    }
+
+    // slug 자동 생성 (입력하지 않은 경우)
+    let slug = formData.slug
+    if (!slug && formData.name) {
+      slug = formData.name
+        .toLowerCase()
+        .replace(/[^a-z0-9가-힣]/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '')
+    }
+
+    const productData = {
+      ...formData,
+      slug,
+      price: Number(formData.price),
+      original_price: formData.original_price ? Number(formData.original_price) : null,
+      discount: formData.discount ? Number(formData.discount) : 0,
+      stock: formData.stock ? Number(formData.stock) : 0,
+    }
+
     if (editingProduct) {
       // 수정
       const { error } = await supabase
         .from('products')
         .update({
-          ...formData,
+          ...productData,
           updated_at: new Date().toISOString(),
         })
         .eq('id', editingProduct.id)
@@ -113,16 +138,18 @@ const AdminProductsPage = () => {
       if (error) {
         alert('수정 실패: ' + error.message)
       } else {
+        alert('상품이 수정되었습니다.')
         setShowModal(false)
         fetchProducts()
       }
     } else {
       // 새 상품 등록
-      const { error } = await supabase.from('products').insert([formData])
+      const { error } = await supabase.from('products').insert([productData])
 
       if (error) {
         alert('등록 실패: ' + error.message)
       } else {
+        alert('상품이 등록되었습니다.')
         setShowModal(false)
         fetchProducts()
       }
@@ -431,7 +458,20 @@ const AdminProductsPage = () => {
                   <input
                     type="text"
                     value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    onChange={(e) => {
+                      const name = e.target.value
+                      // slug가 비어있거나 수정 중이 아닐 때만 자동 생성
+                      if (!editingProduct && (!formData.slug || formData.slug === '')) {
+                        const autoSlug = name
+                          .toLowerCase()
+                          .replace(/[^a-z0-9가-힣]/g, '-')
+                          .replace(/-+/g, '-')
+                          .replace(/^-|-$/g, '')
+                        setFormData({ ...formData, name, slug: autoSlug })
+                      } else {
+                        setFormData({ ...formData, name })
+                      }
+                    }}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                   />
                 </div>
@@ -444,6 +484,7 @@ const AdminProductsPage = () => {
                     placeholder="product-name"
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                   />
+                  <p className="text-xs text-gray-500 mt-1">URL에 사용되는 고유 식별자입니다</p>
                 </div>
               </div>
               <div>
