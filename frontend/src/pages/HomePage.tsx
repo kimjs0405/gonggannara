@@ -579,44 +579,55 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* 특가 상품 */}
-      <div className="py-6 md:py-10 bg-white">
-        <div className="max-w-[1200px] mx-auto px-4">
-          <div className="flex items-center gap-3 mb-4 md:mb-6">
+      {/* 특가 상품 - 오늘의 할인 */}
+      <div className="py-12 md:py-16 bg-gradient-to-b from-white to-gray-50/50">
+        <div className="max-w-[1280px] mx-auto px-4 md:px-6">
+          <div className="flex items-center gap-4 mb-8 md:mb-12">
             <div className="relative">
-              <span className="inline-flex items-center px-3 py-1.5 bg-red-600 text-white text-xs md:text-sm font-bold">
+              <span className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm md:text-base font-bold rounded-lg shadow-lg shadow-red-500/30">
                 특가
               </span>
             </div>
-            <div>
-              <h2 className="text-lg md:text-2xl font-bold text-gray-900">오늘의 할인</h2>
-              <p className="text-xs md:text-sm text-gray-500">매일 업데이트</p>
+            <div className="flex-1">
+              <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-1">오늘의 할인</h2>
+              <p className="text-sm md:text-base text-gray-500 font-medium">매일 업데이트되는 특별 할인 상품</p>
             </div>
+            <Link
+              to="/products"
+              className="hidden md:flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-blue-600 transition-colors"
+            >
+              더보기 <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {promoItems1.map((item) => (
               <Link 
                 key={item.id} 
                 to={`/products/${item.id}`}
-                className="bg-white border border-gray-300 rounded overflow-hidden hover:border-gray-400 transition-colors group"
+                className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100"
               >
-                <div className="aspect-square bg-gray-50 flex items-center justify-center text-5xl md:text-6xl relative">
+                <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center text-6xl md:text-7xl relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/0 to-white/20 group-hover:from-white/20 group-hover:to-white/40 transition-all duration-300"></div>
                   {item.image}
-                  <span className="absolute top-2 left-2 px-2 py-0.5 bg-red-600 text-white text-xs font-bold">
+                  <span className="absolute top-3 left-3 px-3 py-1.5 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs md:text-sm font-black rounded-lg shadow-md">
                     {item.discount}%
                   </span>
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-300"></div>
                 </div>
-                <div className="p-3 md:p-4">
-                  <p className="text-sm md:text-base font-medium text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+                <div className="p-4 md:p-5">
+                  <p className="text-sm md:text-base font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2 leading-snug">
                     {item.name}
                   </p>
-                  <div className="flex flex-col gap-1">
-                    <span className="text-xs text-gray-400 line-through">
+                  <div className="flex flex-col gap-1.5">
+                    <span className="text-xs md:text-sm text-gray-400 line-through font-medium">
                       {item.price.toLocaleString()}원
                     </span>
-                    <span className="text-base md:text-lg font-bold text-gray-900">
-                      {Math.floor(item.price * (1 - item.discount / 100)).toLocaleString()}원
-                    </span>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-lg md:text-xl font-black text-gray-900">
+                        {Math.floor(item.price * (1 - item.discount / 100)).toLocaleString()}원
+                      </span>
+                      <span className="text-xs text-red-600 font-bold">특가</span>
+                    </div>
                   </div>
                 </div>
               </Link>
@@ -626,43 +637,57 @@ const HomePage = () => {
       </div>
 
       {/* 신상품 */}
-      <div className="py-6 md:py-10 bg-gray-50">
-        <div className="max-w-[1200px] mx-auto px-4">
-          <div className="flex items-center gap-3 mb-4 md:mb-6">
+      <div className="py-12 md:py-16 bg-white">
+        <div className="max-w-[1280px] mx-auto px-4 md:px-6">
+          <div className="flex items-center gap-4 mb-8 md:mb-12">
             <div className="relative">
-              <span className="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-xs md:text-sm font-bold">
+              <span className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm md:text-base font-bold rounded-lg shadow-lg shadow-blue-500/30">
                 NEW
               </span>
             </div>
-            <div>
-              <h2 className="text-lg md:text-2xl font-bold text-gray-900">신상품</h2>
-              <p className="text-xs md:text-sm text-gray-500">최신 트렌드</p>
+            <div className="flex-1">
+              <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-1">신상품</h2>
+              <p className="text-sm md:text-base text-gray-500 font-medium">최신 트렌드를 반영한 신제품</p>
             </div>
+            <Link
+              to="/products"
+              className="hidden md:flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-blue-600 transition-colors"
+            >
+              더보기 <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {promoItems2.map((item) => (
               <Link 
                 key={item.id} 
                 to={`/products/${item.id}`}
-                className="bg-white border border-gray-300 rounded overflow-hidden hover:border-gray-400 transition-colors group"
+                className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100"
               >
-                <div className="aspect-square bg-gray-50 flex items-center justify-center text-5xl md:text-6xl relative">
+                <div className="aspect-square bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center text-6xl md:text-7xl relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/0 to-white/20 group-hover:from-white/20 group-hover:to-white/40 transition-all duration-300"></div>
                   {item.image}
-                  <span className="absolute top-2 left-2 px-2 py-0.5 bg-blue-600 text-white text-xs font-bold">
+                  <span className="absolute top-3 left-3 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs md:text-sm font-black rounded-lg shadow-md">
                     {item.discount}%
                   </span>
+                  <div className="absolute top-3 right-3 px-2 py-1 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm">
+                    <span className="text-[10px] font-black text-blue-600">NEW</span>
+                  </div>
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-300"></div>
                 </div>
-                <div className="p-3 md:p-4">
-                  <p className="text-sm md:text-base font-medium text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+                <div className="p-4 md:p-5">
+                  <p className="text-sm md:text-base font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2 leading-snug">
                     {item.name}
                   </p>
-                  <div className="flex flex-col gap-1">
-                    <span className="text-xs text-gray-400 line-through">
+                  <div className="flex flex-col gap-1.5">
+                    <span className="text-xs md:text-sm text-gray-400 line-through font-medium">
                       {item.price.toLocaleString()}원
                     </span>
-                    <span className="text-base md:text-lg font-bold text-gray-900">
-                      {Math.floor(item.price * (1 - item.discount / 100)).toLocaleString()}원
-                    </span>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-lg md:text-xl font-black text-gray-900">
+                        {Math.floor(item.price * (1 - item.discount / 100)).toLocaleString()}원
+                      </span>
+                      <span className="text-xs text-blue-600 font-bold">신상</span>
+                    </div>
                   </div>
                 </div>
               </Link>
@@ -671,52 +696,59 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* Products */}
-      <div className="py-8 md:py-12 bg-white">
-        <div className="max-w-[1200px] mx-auto px-4">
-          <div className="flex items-end justify-between mb-4 md:mb-8">
+      {/* 인기 상품 */}
+      <div className="py-12 md:py-16 bg-gradient-to-b from-gray-50/50 to-white">
+        <div className="max-w-[1280px] mx-auto px-4 md:px-6">
+          <div className="flex items-end justify-between mb-8 md:mb-12">
             <div>
-              <h2 className="text-lg md:text-2xl font-black text-gray-900 mb-0.5 md:mb-1">인기 상품</h2>
-              <p className="text-xs md:text-base text-gray-500">공간나라에서 가장 많이 찾는 상품</p>
+              <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-2">인기 상품</h2>
+              <p className="text-sm md:text-base text-gray-500 font-medium">공간나라에서 가장 많이 찾는 상품</p>
             </div>
             <Link
               to="/products"
-              className="flex items-center gap-1 text-sm md:text-base text-blue-600 font-medium hover:gap-2 transition-all"
+              className="flex items-center gap-2 px-4 py-2 text-sm md:text-base text-gray-700 font-semibold hover:text-blue-600 hover:gap-3 transition-all bg-white rounded-lg border border-gray-200 hover:border-blue-300 shadow-sm hover:shadow-md"
             >
               전체보기 <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
           {products.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               {products.map((product) => (
                 <Link
                   key={product.id}
                   to={`/products/${product.id}`}
-                  className="bg-white border rounded-lg overflow-hidden hover:shadow-lg transition-shadow group"
+                  className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100"
                 >
-                  <div className="h-32 md:h-48 bg-gray-100 relative">
+                  <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
                     {product.discount > 0 && (
-                      <span className="absolute top-2 left-2 px-1.5 md:px-2 py-0.5 md:py-1 bg-red-500 text-white text-[10px] md:text-xs font-bold rounded">
+                      <span className="absolute top-3 left-3 px-3 py-1.5 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-black rounded-lg shadow-md z-10">
                         {product.discount}%
                       </span>
                     )}
-                    <button className="absolute top-2 right-2 w-7 md:w-8 h-7 md:h-8 bg-white rounded-full flex items-center justify-center shadow hover:bg-blue-50 transition-colors opacity-0 group-hover:opacity-100">
-                      <ShoppingCart className="w-3.5 md:w-4 h-3.5 md:h-4 text-blue-600" />
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                      }}
+                      className="absolute top-3 right-3 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-blue-50 hover:scale-110 transition-all opacity-0 group-hover:opacity-100 z-10"
+                    >
+                      <ShoppingCart className="w-4 h-4 text-blue-600" />
                     </button>
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-300"></div>
                   </div>
-                  <div className="p-3 md:p-4">
-                    <p className="text-[10px] md:text-xs text-gray-400 mb-0.5 md:mb-1">{product.category}</p>
-                    <h3 className="text-sm md:text-base font-medium text-gray-800 mb-1 md:mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+                  <div className="p-4 md:p-5">
+                    <p className="text-xs text-gray-400 mb-1.5 font-medium">{product.category}</p>
+                    <h3 className="text-sm md:text-base font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2 leading-snug">
                       {product.name}
                     </h3>
-                    <div className="flex items-center gap-1 md:gap-2">
+                    <div className="flex items-baseline gap-2">
                       {product.discount > 0 && (
-                        <span className="text-xs md:text-sm text-gray-400 line-through">
+                        <span className="text-xs md:text-sm text-gray-400 line-through font-medium">
                           {formatPrice(product.price)}
                         </span>
                       )}
-                      <span className="text-sm md:text-lg font-bold text-blue-600">
+                      <span className="text-base md:text-xl font-black text-blue-600">
                         {formatPrice(getDiscountedPrice(product.price, product.discount))}
                       </span>
                     </div>
@@ -725,85 +757,91 @@ const HomePage = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-10 md:py-16 bg-gray-50 rounded-xl md:rounded-2xl">
-              <p className="text-gray-400 mb-2 md:mb-4 text-sm md:text-base">등록된 상품이 없습니다</p>
-              <p className="text-xs md:text-sm text-gray-400">곧 새로운 상품이 등록될 예정입니다</p>
+            <div className="text-center py-16 md:py-20 bg-white rounded-2xl border border-gray-200 shadow-sm">
+              <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                <Package className="w-8 h-8 text-gray-400" />
+              </div>
+              <p className="text-gray-600 mb-2 text-base md:text-lg font-semibold">등록된 상품이 없습니다</p>
+              <p className="text-sm md:text-base text-gray-400">곧 새로운 상품이 등록될 예정입니다</p>
             </div>
           )}
         </div>
       </div>
 
-      {/* Interior Services */}
-      <div className="py-8 md:py-12 bg-gray-900 text-white">
-        <div className="max-w-[1200px] mx-auto px-4">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-0 mb-5 md:mb-8">
+      {/* 인테리어 시공 서비스 */}
+      <div className="py-12 md:py-16 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(59,130,246,0.1),transparent_50%)]"></div>
+        <div className="max-w-[1280px] mx-auto px-4 md:px-6 relative z-10">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-0 mb-10 md:mb-12">
             <div>
-              <h2 className="text-lg md:text-2xl font-black mb-0.5 md:mb-1">인테리어 시공 서비스</h2>
-              <p className="text-xs md:text-base text-gray-400">전문가가 직접 시공해드립니다</p>
+              <h2 className="text-2xl md:text-3xl font-black mb-2">인테리어 시공 서비스</h2>
+              <p className="text-sm md:text-base text-gray-300 font-medium">전문가가 직접 시공해드립니다</p>
             </div>
             <Link
               to="/estimate"
-              className="self-start md:self-auto px-4 md:px-6 py-2 md:py-3 bg-blue-600 rounded-lg text-sm md:text-base font-bold hover:bg-blue-700 transition-colors"
+              className="self-start md:self-auto px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl text-sm md:text-base font-bold hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/40 transform hover:scale-105"
             >
               무료 견적받기
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {services.map((service, idx) => (
               <Link
                 key={idx}
                 to="/portfolio"
-                className="bg-gray-800 rounded-lg md:rounded-xl p-4 md:p-6 hover:bg-gray-700 transition-colors"
+                className="group bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 hover:bg-gray-700/90 transition-all duration-300 border border-gray-700/50 hover:border-gray-600 hover:shadow-xl hover:shadow-black/20 transform hover:-translate-y-1"
               >
-                <h3 className="font-bold text-sm md:text-lg mb-0.5 md:mb-1">{service.name}</h3>
-                <p className="text-xs md:text-sm text-gray-400">{service.desc}</p>
+                <h3 className="font-black text-base md:text-xl mb-2 group-hover:text-blue-400 transition-colors">{service.name}</h3>
+                <p className="text-xs md:text-sm text-gray-400 font-medium">{service.desc}</p>
               </Link>
             ))}
           </div>
 
-          <div className="mt-5 md:mt-8 flex flex-col md:flex-row items-center justify-center gap-2 md:gap-8 py-4 md:py-6 border-t border-gray-800">
-            <a href="tel:02-875-8204" className="flex items-center gap-2">
-              <Phone className="w-4 md:w-5 h-4 md:h-5 text-blue-400" />
-              <span className="text-lg md:text-xl font-bold">02-875-8204</span>
+          <div className="mt-10 md:mt-12 flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 py-6 md:py-8 border-t border-gray-700/50">
+            <a href="tel:02-875-8204" className="flex items-center gap-3 group">
+              <div className="w-12 h-12 bg-blue-600/20 rounded-full flex items-center justify-center group-hover:bg-blue-600/30 transition-colors">
+                <Phone className="w-5 h-5 md:w-6 md:h-6 text-blue-400" />
+              </div>
+              <span className="text-xl md:text-2xl font-black">02-875-8204</span>
             </a>
-            <span className="hidden md:inline text-gray-500">|</span>
-            <span className="text-xs md:text-base text-gray-400">평일 09:00 ~ 18:00 상담 가능</span>
+            <span className="hidden md:inline text-gray-600">|</span>
+            <span className="text-sm md:text-base text-gray-400 font-medium">평일 09:00 ~ 18:00 상담 가능</span>
           </div>
         </div>
       </div>
 
-      {/* Reviews */}
-      <div className="py-8 md:py-12 bg-white">
-        <div className="max-w-[1200px] mx-auto px-4">
-          <div className="flex items-end justify-between mb-4 md:mb-8">
+      {/* 고객 후기 */}
+      <div className="py-12 md:py-16 bg-white">
+        <div className="max-w-[1280px] mx-auto px-4 md:px-6">
+          <div className="flex items-end justify-between mb-8 md:mb-12">
             <div>
-              <h2 className="text-lg md:text-2xl font-black text-gray-900 mb-0.5 md:mb-1">고객 후기</h2>
-              <p className="text-xs md:text-base text-gray-500">공간나라 고객님들의 솔직한 후기</p>
+              <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-2">고객 후기</h2>
+              <p className="text-sm md:text-base text-gray-500 font-medium">공간나라 고객님들의 솔직한 후기</p>
             </div>
             <Link
               to="/reviews"
-              className="flex items-center gap-1 text-sm md:text-base text-blue-600 font-medium hover:gap-2 transition-all"
+              className="flex items-center gap-2 px-4 py-2 text-sm md:text-base text-gray-700 font-semibold hover:text-blue-600 hover:gap-3 transition-all bg-white rounded-lg border border-gray-200 hover:border-blue-300 shadow-sm hover:shadow-md"
             >
               전체보기 <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
             {reviews.map((review, idx) => (
-              <div key={idx} className="bg-gray-50 rounded-lg md:rounded-xl p-4 md:p-5">
-                <div className="flex items-center justify-between mb-2 md:mb-3">
-                  <span className="px-2 py-0.5 md:py-1 bg-blue-100 text-blue-700 text-[10px] md:text-xs font-medium rounded">
+              <div key={idx} className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-6 md:p-8 border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="px-3 py-1.5 bg-gradient-to-r from-blue-100 to-blue-50 text-blue-700 text-xs font-bold rounded-lg border border-blue-200">
                     {review.type}
                   </span>
                   <div className="flex items-center gap-0.5">
                     {[...Array(review.rating)].map((_, i) => (
-                      <Star key={i} className="w-3 md:w-4 h-3 md:h-4 fill-yellow-400 text-yellow-400" />
+                      <Star key={i} className="w-4 h-4 md:w-5 md:h-5 fill-yellow-400 text-yellow-400" />
                     ))}
                   </div>
                 </div>
-                <p className="text-sm md:text-base text-gray-700 mb-2 md:mb-3">"{review.content}"</p>
-                <p className="text-xs md:text-sm text-gray-500">{review.name} 고객님</p>
+                <p className="text-sm md:text-base text-gray-700 mb-4 leading-relaxed font-medium">"{review.content}"</p>
+                <p className="text-xs md:text-sm text-gray-500 font-semibold">{review.name} 고객님</p>
               </div>
             ))}
           </div>
@@ -811,24 +849,25 @@ const HomePage = () => {
       </div>
 
       {/* CTA */}
-      <div className="py-8 md:py-10 bg-blue-600">
-        <div className="max-w-[1200px] mx-auto px-4 text-center">
-          <h2 className="text-lg md:text-2xl font-black text-white mb-1 md:mb-2">
+      <div className="py-12 md:py-16 bg-gradient-to-r from-blue-600 via-blue-700 to-blue-600 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent_70%)]"></div>
+        <div className="max-w-[1280px] mx-auto px-4 md:px-6 text-center relative z-10">
+          <h2 className="text-2xl md:text-4xl font-black text-white mb-3 md:mb-4">
             인테리어 고민, 공간나라에서 해결하세요
           </h2>
-          <p className="text-xs md:text-base text-blue-200 mb-4 md:mb-6">상품 구매부터 시공까지 원스톱 서비스</p>
-          <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4">
+          <p className="text-sm md:text-lg text-blue-100 mb-8 md:mb-10 font-medium">상품 구매부터 시공까지 원스톱 서비스</p>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-4">
             <Link
               to="/products"
-              className="w-full md:w-auto px-6 py-2.5 md:py-3 bg-white text-blue-600 rounded-lg text-sm md:text-base font-bold hover:bg-gray-100 transition-colors"
+              className="w-full md:w-auto px-8 py-4 bg-white text-blue-600 rounded-xl text-base md:text-lg font-black hover:bg-gray-50 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105"
             >
               쇼핑하러 가기
             </Link>
             <a
               href="tel:02-875-8204"
-              className="w-full md:w-auto px-6 py-2.5 md:py-3 border-2 border-white text-white rounded-lg text-sm md:text-base font-bold hover:bg-white/10 transition-colors flex items-center justify-center gap-2"
+              className="w-full md:w-auto px-8 py-4 border-2 border-white text-white rounded-xl text-base md:text-lg font-black hover:bg-white/10 transition-all backdrop-blur-sm flex items-center justify-center gap-2"
             >
-              <Phone className="w-4 h-4" />
+              <Phone className="w-5 h-5" />
               02-875-8204
             </a>
           </div>
