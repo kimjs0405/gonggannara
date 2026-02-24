@@ -126,8 +126,8 @@ const AdminProductsPage = () => {
       return
     }
 
-    // slug 자동 생성 (입력하지 않은 경우)
-    let slug = formData.slug
+    // slug 자동 생성 및 중복 체크
+    let slug = formData.slug.trim()
     if (!slug && formData.name) {
       slug = formData.name
         .toLowerCase()
@@ -136,77 +136,128 @@ const AdminProductsPage = () => {
         .replace(/^-|-$/g, '')
     }
 
-    const productData: any = {
-      name: formData.name,
-      slug,
-      description: formData.description || null,
-      price: Number(formData.price),
-      original_price: formData.original_price ? Number(formData.original_price) : null,
-      discount: formData.discount ? Number(formData.discount) : 0,
-      category_id: formData.category_id || null,
-      image_url: formData.image_url || null,
-      images: formData.images.length > 0 ? formData.images : null,
-      badge: formData.badge || null,
-      stock: formData.stock ? Number(formData.stock) : 0,
-      is_active: formData.is_active,
-      features: formData.features.length > 0 ? formData.features : null,
-      shipping_info: formData.shipping_info || null,
-    }
-
-    // 추가 필드들은 JSON 필드나 별도 테이블에 저장하거나, description에 포함시킬 수 있습니다
-    // 여기서는 간단하게 JSON 형태로 저장하거나 description에 포함시키겠습니다
-    const additionalInfo: any = {}
-    if (formData.product_code) additionalInfo.product_code = formData.product_code
-    if (formData.barcode) additionalInfo.barcode = formData.barcode
-    if (formData.manufacturer) additionalInfo.manufacturer = formData.manufacturer
-    if (formData.origin) additionalInfo.origin = formData.origin
-    if (formData.shipping_fee) additionalInfo.shipping_fee = formData.shipping_fee
-    if (formData.keywords) additionalInfo.keywords = formData.keywords
-    if (formData.meta_title) additionalInfo.meta_title = formData.meta_title
-    if (formData.meta_description) additionalInfo.meta_description = formData.meta_description
-    if (formData.sale_start_date) additionalInfo.sale_start_date = formData.sale_start_date
-    if (formData.sale_end_date) additionalInfo.sale_end_date = formData.sale_end_date
-    if (formData.weight) additionalInfo.weight = formData.weight
-    if (formData.dimensions) additionalInfo.dimensions = formData.dimensions
-    if (formData.warranty) additionalInfo.warranty = formData.warranty
-    if (formData.detailed_description) additionalInfo.detailed_description = formData.detailed_description
-
-    // 추가 정보를 description에 JSON으로 포함시키거나 별도 필드에 저장
-    // 여기서는 features 필드에 추가 정보를 포함시키는 방식으로 처리
-    if (Object.keys(additionalInfo).length > 0) {
-      productData.features = formData.features.length > 0 
-        ? [...formData.features, JSON.stringify(additionalInfo)]
-        : [JSON.stringify(additionalInfo)]
-    }
-
-    if (editingProduct) {
-      // 수정
-      const { error } = await supabase
+    // slug 중복 체크 (수정 시에는 제외)
+    if (!editingProduct) {
+      const { data: existingProduct } = await supabase
         .from('products')
-        .update({
-          ...productData,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', editingProduct.id)
+        .select('id')
+        .eq('slug', slug)
+        .single()
 
-      if (error) {
-        alert('수정 실패: ' + error.message)
-      } else {
-        alert('상품이 수정되었습니다.')
-        setShowModal(false)
-        fetchProducts()
+      if (existingProduct) {
+        // 중복된 경우 타임스탬프 추가
+        slug = `${slug}-${Date.now()}`
       }
     } else {
-      // 새 상품 등록
-      const { error } = await supabase.from('products').insert([productData])
+      // 수정 시에는 다른 상품과의 중복만 체크
+      const { data: existingProduct } = await supabase
+        .from('products')
+        .select('id')
+        .eq('slug', slug)
+        .neq('id', editingProduct.id)
+        .single()
 
-      if (error) {
-        alert('등록 실패: ' + error.message)
-      } else {
-        alert('상품이 등록되었습니다.')
-        setShowModal(false)
-        fetchProducts()
+      if (existingProduct) {
+        alert('이미 사용 중인 슬러그입니다. 다른 슬러그를 입력해주세요.')
+        return
       }
+    }
+
+    // 가격 검증
+    const price = Number(formData.price)
+    if (isNaN(price) || price <= 0) {
+      alert('올바른 판매가를 입력해주세요.')
+      return
+    }
+
+    // 할인율 계산 (정가가 있는 경우)
+    let discount = formData.discount || 0
+    if (formData.original_price && formData.original_price > price) {
+      discount = Math.round(((formData.original_price - price) / formData.original_price) * 100)
+    }
+
+    // 상품 데이터 구성
+    const productData: any = {
+      name: formData.name.trim(),
+      slug: slug.trim(),
+      description: formData.description.trim() || null,
+      price: price,
+      original_price: formData.original_price && formData.original_price > 0 ? Number(formData.original_price) : null,
+      discount: discount,
+      category_id: formData.category_id || null,
+      image_url: formData.image_url.trim() || null,
+      images: formData.images.length > 0 ? formData.images.filter(img => img.trim()) : null,
+      badge: formData.badge || null,
+      stock: formData.stock ? Number(formData.stock) : 0,
+      is_active: formData.is_active !== undefined ? formData.is_active : true,
+      features: formData.features.length > 0 ? formData.features.filter(f => f.trim()) : null,
+      shipping_info: formData.shipping_info.trim() || null,
+    }
+
+    // 추가 정보는 description에 포함 (간단한 텍스트 형태로)
+    if (formData.detailed_description || formData.manufacturer || formData.origin) {
+      const additionalInfo = []
+      if (formData.detailed_description) additionalInfo.push(`상세설명: ${formData.detailed_description}`)
+      if (formData.manufacturer) additionalInfo.push(`제조사: ${formData.manufacturer}`)
+      if (formData.origin) additionalInfo.push(`원산지: ${formData.origin}`)
+      if (formData.warranty) additionalInfo.push(`보증기간: ${formData.warranty}`)
+      if (formData.dimensions) additionalInfo.push(`치수: ${formData.dimensions}`)
+      if (formData.weight) additionalInfo.push(`무게: ${formData.weight}kg`)
+      
+      if (additionalInfo.length > 0) {
+        productData.description = productData.description 
+          ? `${productData.description}\n\n${additionalInfo.join('\n')}`
+          : additionalInfo.join('\n')
+      }
+    }
+
+    try {
+      if (editingProduct) {
+        // 수정
+        const { error } = await supabase
+          .from('products')
+          .update({
+            ...productData,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', editingProduct.id)
+
+        if (error) {
+          console.error('Update error:', error)
+          alert(`수정 실패: ${error.message}`)
+          return
+        }
+
+        alert('상품이 수정되었습니다.')
+        setShowModal(false)
+        await fetchProducts()
+      } else {
+        // 새 상품 등록
+        const { data, error } = await supabase
+          .from('products')
+          .insert([productData])
+          .select()
+
+        if (error) {
+          console.error('Insert error:', error)
+          alert(`등록 실패: ${error.message}`)
+          return
+        }
+
+        if (data && data.length > 0) {
+          alert('상품이 등록되었습니다.')
+          setShowModal(false)
+          await fetchProducts()
+          
+          // 홈페이지 새로고침을 위한 이벤트 발생 (다른 탭이 열려있을 경우)
+          window.dispatchEvent(new Event('productUpdated'))
+        } else {
+          alert('상품 등록에 실패했습니다.')
+        }
+      }
+    } catch (error: any) {
+      console.error('Save error:', error)
+      alert(`오류가 발생했습니다: ${error.message || '알 수 없는 오류'}`)
     }
   }
 

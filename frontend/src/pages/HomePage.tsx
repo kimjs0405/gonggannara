@@ -169,43 +169,105 @@ const HomePage = () => {
   ]
 
   // 상품 데이터 가져오기
-  useEffect(() => {
-    const fetchProducts = async () => {
-      setLoadingProducts(true)
-      try {
-        // 활성화된 모든 상품 가져오기
-        const { data: allProducts, error } = await supabase
-          .from('products')
-          .select('*')
-          .eq('is_active', true)
-          .order('created_at', { ascending: false })
-          .limit(20)
+  const fetchProducts = async () => {
+    setLoadingProducts(true)
+    try {
+      // 활성화된 모든 상품 가져오기
+      const { data: allProducts, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('is_active', true)
+        .order('created_at', { ascending: false })
 
-        if (error) {
-          console.error('Error fetching products:', error)
-        } else {
-          setProducts(allProducts || [])
-          
-          // 할인 상품 (discount > 0)
-          const discounted = (allProducts || []).filter((p: any) => p.discount > 0).slice(0, 4)
-          setDiscountProducts(discounted)
-          
-          // 신상품 (최근 7일 이내)
-          const sevenDaysAgo = new Date()
-          sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
-          const newItems = (allProducts || [])
-            .filter((p: any) => new Date(p.created_at) >= sevenDaysAgo)
-            .slice(0, 4)
-          setNewProducts(newItems.length > 0 ? newItems : (allProducts || []).slice(0, 4))
-        }
-      } catch (error) {
+      if (error) {
         console.error('Error fetching products:', error)
-      } finally {
-        setLoadingProducts(false)
+        setProducts([])
+        setDiscountProducts([])
+        setNewProducts([])
+        return
       }
-    }
 
+      if (!allProducts || allProducts.length === 0) {
+        setProducts([])
+        setDiscountProducts([])
+        setNewProducts([])
+        setLoadingProducts(false)
+        return
+      }
+
+      // 중복 제거 (id 기준)
+      const uniqueProducts = Array.from(
+        new Map(allProducts.map((p: any) => [p.id, p])).values()
+      )
+
+      // 유효한 상품만 필터링 (필수 필드 확인)
+      const validProducts = uniqueProducts.filter((p: any) => 
+        p.id && 
+        p.name && 
+        p.price && 
+        p.price > 0 &&
+        p.slug
+      )
+
+      // 전체 상품 설정 (최대 20개)
+      setProducts(validProducts.slice(0, 20))
+      
+      // 할인 상품 (discount > 0이고 정가가 있는 경우)
+      const discounted = validProducts
+        .filter((p: any) => p.discount > 0 && p.original_price && p.original_price > p.price)
+        .sort((a: any, b: any) => b.discount - a.discount)
+        .slice(0, 4)
+      setDiscountProducts(discounted)
+      
+      // 신상품 (최근 7일 이내, created_at이 있는 경우)
+      const sevenDaysAgo = new Date()
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
+      sevenDaysAgo.setHours(0, 0, 0, 0)
+      
+      const newItems = validProducts
+        .filter((p: any) => {
+          if (!p.created_at) return false
+          const createdDate = new Date(p.created_at)
+          createdDate.setHours(0, 0, 0, 0)
+          return createdDate >= sevenDaysAgo
+        })
+        .sort((a: any, b: any) => {
+          const dateA = new Date(a.created_at).getTime()
+          const dateB = new Date(b.created_at).getTime()
+          return dateB - dateA
+        })
+        .slice(0, 4)
+      
+      // 신상품이 없으면 최신 상품 4개
+      setNewProducts(newItems.length > 0 ? newItems : validProducts.slice(0, 4))
+    } catch (error) {
+      console.error('Error fetching products:', error)
+      setProducts([])
+      setDiscountProducts([])
+      setNewProducts([])
+    } finally {
+      setLoadingProducts(false)
+    }
+  }
+
+  useEffect(() => {
     fetchProducts()
+
+    // 상품 업데이트 이벤트 리스너
+    const handleProductUpdate = () => {
+      fetchProducts()
+    }
+    window.addEventListener('productUpdated', handleProductUpdate)
+
+    // 주기적 새로고침 (5분마다)
+    const interval = setInterval(() => {
+      fetchProducts()
+    }, 5 * 60 * 1000)
+
+    return () => {
+      window.removeEventListener('productUpdated', handleProductUpdate)
+      clearInterval(interval)
+    }
   }, [])
 
   const services = [
@@ -643,11 +705,18 @@ const HomePage = () => {
                   </div>
                   <div className="p-3 md:p-4">
                     <p className="text-xs md:text-sm text-gray-900 mb-2 line-clamp-2 leading-snug">
-                      {item.name}
+                      {item.name || '상품명 없음'}
                     </p>
-                    <p className="text-sm md:text-base font-bold text-gray-900">
-                      {Math.floor(item.price * (1 - (item.discount || 0) / 100)).toLocaleString()}원
-                    </p>
+                    <div className="flex flex-col gap-1">
+                      {item.original_price && item.original_price > item.price && (
+                        <span className="text-xs text-gray-400 line-through">
+                          {item.original_price.toLocaleString()}원
+                        </span>
+                      )}
+                      <p className="text-sm md:text-base font-bold text-gray-900">
+                        {item.price.toLocaleString()}원
+                      </p>
+                    </div>
                   </div>
                 </Link>
               ))}
@@ -702,11 +771,18 @@ const HomePage = () => {
                   </div>
                   <div className="p-3 md:p-4">
                     <p className="text-xs md:text-sm text-gray-900 mb-2 line-clamp-2 leading-snug">
-                      {item.name}
+                      {item.name || '상품명 없음'}
                     </p>
-                    <p className="text-sm md:text-base font-bold text-gray-900">
-                      {Math.floor(item.price * (1 - (item.discount || 0) / 100)).toLocaleString()}원
-                    </p>
+                    <div className="flex flex-col gap-1">
+                      {item.original_price && item.original_price > item.price && (
+                        <span className="text-xs text-gray-400 line-through">
+                          {item.original_price.toLocaleString()}원
+                        </span>
+                      )}
+                      <p className="text-sm md:text-base font-bold text-gray-900">
+                        {item.price.toLocaleString()}원
+                      </p>
+                    </div>
                   </div>
                 </Link>
               ))}
@@ -762,11 +838,18 @@ const HomePage = () => {
                   </div>
                   <div className="p-3 md:p-4">
                     <p className="text-xs md:text-sm text-gray-900 mb-2 line-clamp-2 leading-snug">
-                      {product.name}
+                      {product.name || '상품명 없음'}
                     </p>
-                    <p className="text-sm md:text-base font-bold text-gray-900">
-                      {Math.floor(product.price * (1 - (product.discount || 0) / 100)).toLocaleString()}원
-                    </p>
+                    <div className="flex flex-col gap-1">
+                      {product.original_price && product.original_price > product.price && (
+                        <span className="text-xs text-gray-400 line-through">
+                          {product.original_price.toLocaleString()}원
+                        </span>
+                      )}
+                      <p className="text-sm md:text-base font-bold text-gray-900">
+                        {product.price.toLocaleString()}원
+                      </p>
+                    </div>
                   </div>
                 </Link>
               ))}
