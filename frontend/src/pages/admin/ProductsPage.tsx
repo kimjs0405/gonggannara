@@ -48,15 +48,35 @@ const AdminProductsPage = () => {
     name: '',
     slug: '',
     description: '',
+    detailed_description: '',
     price: 0,
     original_price: 0,
     discount: 0,
     category_id: '',
     image_url: '',
+    images: [] as string[],
     badge: '',
     stock: 0,
+    min_stock: 0,
     is_active: true,
+    product_code: '',
+    barcode: '',
+    manufacturer: '',
+    origin: '',
+    shipping_fee: 0,
+    shipping_info: '',
+    features: [] as string[],
+    keywords: '',
+    meta_title: '',
+    meta_description: '',
+    sale_start_date: '',
+    sale_end_date: '',
+    weight: 0,
+    dimensions: '',
+    warranty: '',
   })
+  const [newImageUrl, setNewImageUrl] = useState('')
+  const [newFeature, setNewFeature] = useState('')
 
   useEffect(() => {
     fetchProducts()
@@ -116,13 +136,47 @@ const AdminProductsPage = () => {
         .replace(/^-|-$/g, '')
     }
 
-    const productData = {
-      ...formData,
+    const productData: any = {
+      name: formData.name,
       slug,
+      description: formData.description || null,
       price: Number(formData.price),
       original_price: formData.original_price ? Number(formData.original_price) : null,
       discount: formData.discount ? Number(formData.discount) : 0,
+      category_id: formData.category_id || null,
+      image_url: formData.image_url || null,
+      images: formData.images.length > 0 ? formData.images : null,
+      badge: formData.badge || null,
       stock: formData.stock ? Number(formData.stock) : 0,
+      is_active: formData.is_active,
+      features: formData.features.length > 0 ? formData.features : null,
+      shipping_info: formData.shipping_info || null,
+    }
+
+    // 추가 필드들은 JSON 필드나 별도 테이블에 저장하거나, description에 포함시킬 수 있습니다
+    // 여기서는 간단하게 JSON 형태로 저장하거나 description에 포함시키겠습니다
+    const additionalInfo: any = {}
+    if (formData.product_code) additionalInfo.product_code = formData.product_code
+    if (formData.barcode) additionalInfo.barcode = formData.barcode
+    if (formData.manufacturer) additionalInfo.manufacturer = formData.manufacturer
+    if (formData.origin) additionalInfo.origin = formData.origin
+    if (formData.shipping_fee) additionalInfo.shipping_fee = formData.shipping_fee
+    if (formData.keywords) additionalInfo.keywords = formData.keywords
+    if (formData.meta_title) additionalInfo.meta_title = formData.meta_title
+    if (formData.meta_description) additionalInfo.meta_description = formData.meta_description
+    if (formData.sale_start_date) additionalInfo.sale_start_date = formData.sale_start_date
+    if (formData.sale_end_date) additionalInfo.sale_end_date = formData.sale_end_date
+    if (formData.weight) additionalInfo.weight = formData.weight
+    if (formData.dimensions) additionalInfo.dimensions = formData.dimensions
+    if (formData.warranty) additionalInfo.warranty = formData.warranty
+    if (formData.detailed_description) additionalInfo.detailed_description = formData.detailed_description
+
+    // 추가 정보를 description에 JSON으로 포함시키거나 별도 필드에 저장
+    // 여기서는 features 필드에 추가 정보를 포함시키는 방식으로 처리
+    if (Object.keys(additionalInfo).length > 0) {
+      productData.features = formData.features.length > 0 
+        ? [...formData.features, JSON.stringify(additionalInfo)]
+        : [JSON.stringify(additionalInfo)]
     }
 
     if (editingProduct) {
@@ -187,15 +241,35 @@ const AdminProductsPage = () => {
       name: '',
       slug: '',
       description: '',
+      detailed_description: '',
       price: 0,
       original_price: 0,
       discount: 0,
       category_id: '',
       image_url: '',
+      images: [],
       badge: '',
       stock: 0,
+      min_stock: 0,
       is_active: true,
+      product_code: '',
+      barcode: '',
+      manufacturer: '',
+      origin: '',
+      shipping_fee: 0,
+      shipping_info: '',
+      features: [],
+      keywords: '',
+      meta_title: '',
+      meta_description: '',
+      sale_start_date: '',
+      sale_end_date: '',
+      weight: 0,
+      dimensions: '',
+      warranty: '',
     })
+    setNewImageUrl('')
+    setNewFeature('')
     setShowModal(true)
   }
 
@@ -205,15 +279,35 @@ const AdminProductsPage = () => {
       name: product.name,
       slug: product.slug,
       description: product.description || '',
+      detailed_description: '',
       price: product.price,
       original_price: product.original_price || 0,
       discount: product.discount || 0,
       category_id: product.category_id || '',
       image_url: product.image_url || '',
+      images: [],
       badge: product.badge || '',
       stock: product.stock,
+      min_stock: 0,
       is_active: product.is_active,
+      product_code: '',
+      barcode: '',
+      manufacturer: '',
+      origin: '',
+      shipping_fee: 0,
+      shipping_info: '',
+      features: [],
+      keywords: '',
+      meta_title: '',
+      meta_description: '',
+      sale_start_date: '',
+      sale_end_date: '',
+      weight: 0,
+      dimensions: '',
+      warranty: '',
     })
+    setNewImageUrl('')
+    setNewFeature('')
     setShowModal(true)
   }
 
@@ -443,160 +537,578 @@ const AdminProductsPage = () => {
 
       {/* Add/Edit Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between p-4 border-b">
-              <h2 className="text-lg font-bold">{editingProduct ? '상품 수정' : '상품 등록'}</h2>
-              <button onClick={() => setShowModal(false)} className="p-1 hover:bg-gray-100 rounded">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50" style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}>
+          <div className="bg-white w-full max-w-4xl max-h-[95vh] overflow-y-auto" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.3)' }}>
+            {/* Header */}
+            <div className="bg-blue-600 text-white px-6 py-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold">{editingProduct ? '상품 정보 수정' : '신규 상품 등록'}</h2>
+              <button onClick={() => setShowModal(false)} className="text-white hover:bg-blue-700 p-1 rounded">
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <div className="p-4 space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">상품명 *</label>
-                  <input
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => {
-                      const name = e.target.value
-                      // slug가 비어있거나 수정 중이 아닐 때만 자동 생성
-                      if (!editingProduct && (!formData.slug || formData.slug === '')) {
-                        const autoSlug = name
-                          .toLowerCase()
-                          .replace(/[^a-z0-9가-힣]/g, '-')
-                          .replace(/-+/g, '-')
-                          .replace(/^-|-$/g, '')
-                        setFormData({ ...formData, name, slug: autoSlug })
-                      } else {
-                        setFormData({ ...formData, name })
-                      }
-                    }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                  />
+            
+            {/* Form Content */}
+            <div className="p-6 bg-gray-50">
+              {/* 기본 정보 */}
+              <div className="bg-white border border-gray-300 mb-4">
+                <div className="bg-gray-100 border-b border-gray-300 px-4 py-2">
+                  <h3 className="text-sm font-semibold text-gray-700">기본 정보</h3>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">슬러그 *</label>
-                  <input
-                    type="text"
-                    value={formData.slug}
-                    onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                    placeholder="product-name"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                  />
-                  <p className="text-xs text-gray-500 mt-1">URL에 사용되는 고유 식별자입니다</p>
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">설명</label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                />
-              </div>
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">판매가 *</label>
-                  <input
-                    type="number"
-                    value={formData.price}
-                    onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">정가</label>
-                  <input
-                    type="number"
-                    value={formData.original_price}
-                    onChange={(e) => setFormData({ ...formData, original_price: Number(e.target.value) })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">할인율 (%)</label>
-                  <input
-                    type="number"
-                    value={formData.discount}
-                    onChange={(e) => setFormData({ ...formData, discount: Number(e.target.value) })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">카테고리</label>
-                  <select
-                    value={formData.category_id}
-                    onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                  >
-                    <option value="">선택하세요</option>
-                    {categories.map(cat => (
-                      <option key={cat.id} value={cat.id}>{cat.name}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">재고</label>
-                  <input
-                    type="number"
-                    value={formData.stock}
-                    onChange={(e) => setFormData({ ...formData, stock: Number(e.target.value) })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">이미지 URL</label>
-                  <input
-                    type="text"
-                    value={formData.image_url}
-                    onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                    placeholder="https://..."
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">배지</label>
-                  <select
-                    value={formData.badge}
-                    onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                  >
-                    <option value="">없음</option>
-                    <option value="NEW">NEW</option>
-                    <option value="BEST">BEST</option>
-                    <option value="HOT">HOT</option>
-                    <option value="SALE">SALE</option>
-                  </select>
+                <div className="p-4 space-y-4">
+                  <table className="w-full border-collapse">
+                    <tbody>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 w-32 border-r border-gray-200">상품명 <span className="text-red-500">*</span></td>
+                        <td className="px-4 py-3">
+                          <input
+                            type="text"
+                            value={formData.name}
+                            onChange={(e) => {
+                              const name = e.target.value
+                              if (!editingProduct && (!formData.slug || formData.slug === '')) {
+                                const autoSlug = name
+                                  .toLowerCase()
+                                  .replace(/[^a-z0-9가-힣]/g, '-')
+                                  .replace(/-+/g, '-')
+                                  .replace(/^-|-$/g, '')
+                                setFormData({ ...formData, name, slug: autoSlug })
+                              } else {
+                                setFormData({ ...formData, name })
+                              }
+                            }}
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          />
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 border-r border-gray-200">상품코드</td>
+                        <td className="px-4 py-3">
+                          <input
+                            type="text"
+                            value={formData.product_code}
+                            onChange={(e) => setFormData({ ...formData, product_code: e.target.value })}
+                            placeholder="PRD-00001"
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          />
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 border-r border-gray-200">슬러그 <span className="text-red-500">*</span></td>
+                        <td className="px-4 py-3">
+                          <input
+                            type="text"
+                            value={formData.slug}
+                            onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                            placeholder="product-name"
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          />
+                          <p className="text-xs text-gray-500 mt-1">URL에 사용되는 고유 식별자</p>
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 border-r border-gray-200">바코드</td>
+                        <td className="px-4 py-3">
+                          <input
+                            type="text"
+                            value={formData.barcode}
+                            onChange={(e) => setFormData({ ...formData, barcode: e.target.value })}
+                            placeholder="8801234567890"
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          />
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 border-r border-gray-200">카테고리</td>
+                        <td className="px-4 py-3">
+                          <select
+                            value={formData.category_id}
+                            onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          >
+                            <option value="">선택하세요</option>
+                            {categories.map(cat => (
+                              <option key={cat.id} value={cat.id}>{cat.name}</option>
+                            ))}
+                          </select>
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 border-r border-gray-200">간단 설명</td>
+                        <td className="px-4 py-3">
+                          <textarea
+                            value={formData.description}
+                            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                            rows={3}
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
-              <div>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={formData.is_active}
-                    onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-                    className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                  />
-                  <span className="text-sm text-gray-700">판매중</span>
-                </label>
+
+              {/* 가격 정보 */}
+              <div className="bg-white border border-gray-300 mb-4">
+                <div className="bg-gray-100 border-b border-gray-300 px-4 py-2">
+                  <h3 className="text-sm font-semibold text-gray-700">가격 정보</h3>
+                </div>
+                <div className="p-4">
+                  <table className="w-full border-collapse">
+                    <tbody>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 w-32 border-r border-gray-200">판매가 <span className="text-red-500">*</span></td>
+                        <td className="px-4 py-3">
+                          <input
+                            type="number"
+                            value={formData.price || ''}
+                            onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) || 0 })}
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          />
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 border-r border-gray-200">정가</td>
+                        <td className="px-4 py-3">
+                          <input
+                            type="number"
+                            value={formData.original_price || ''}
+                            onChange={(e) => setFormData({ ...formData, original_price: Number(e.target.value) || 0 })}
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          />
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 border-r border-gray-200">할인율 (%)</td>
+                        <td className="px-4 py-3">
+                          <input
+                            type="number"
+                            value={formData.discount || ''}
+                            onChange={(e) => setFormData({ ...formData, discount: Number(e.target.value) || 0 })}
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          />
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 border-r border-gray-200">배송비</td>
+                        <td className="px-4 py-3">
+                          <input
+                            type="number"
+                            value={formData.shipping_fee || ''}
+                            onChange={(e) => setFormData({ ...formData, shipping_fee: Number(e.target.value) || 0 })}
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* 재고 정보 */}
+              <div className="bg-white border border-gray-300 mb-4">
+                <div className="bg-gray-100 border-b border-gray-300 px-4 py-2">
+                  <h3 className="text-sm font-semibold text-gray-700">재고 정보</h3>
+                </div>
+                <div className="p-4">
+                  <table className="w-full border-collapse">
+                    <tbody>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 w-32 border-r border-gray-200">재고 수량</td>
+                        <td className="px-4 py-3">
+                          <input
+                            type="number"
+                            value={formData.stock || ''}
+                            onChange={(e) => setFormData({ ...formData, stock: Number(e.target.value) || 0 })}
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          />
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 border-r border-gray-200">최소 재고</td>
+                        <td className="px-4 py-3">
+                          <input
+                            type="number"
+                            value={formData.min_stock || ''}
+                            onChange={(e) => setFormData({ ...formData, min_stock: Number(e.target.value) || 0 })}
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          />
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 border-r border-gray-200">판매 상태</td>
+                        <td className="px-4 py-3">
+                          <label className="flex items-center gap-2 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={formData.is_active}
+                              onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
+                              className="w-4 h-4 border-gray-300"
+                            />
+                            <span className="text-sm text-gray-700">판매중</span>
+                          </label>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* 상품 상세 정보 */}
+              <div className="bg-white border border-gray-300 mb-4">
+                <div className="bg-gray-100 border-b border-gray-300 px-4 py-2">
+                  <h3 className="text-sm font-semibold text-gray-700">상품 상세 정보</h3>
+                </div>
+                <div className="p-4">
+                  <table className="w-full border-collapse">
+                    <tbody>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 w-32 border-r border-gray-200">제조사</td>
+                        <td className="px-4 py-3">
+                          <input
+                            type="text"
+                            value={formData.manufacturer}
+                            onChange={(e) => setFormData({ ...formData, manufacturer: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          />
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 border-r border-gray-200">원산지</td>
+                        <td className="px-4 py-3">
+                          <input
+                            type="text"
+                            value={formData.origin}
+                            onChange={(e) => setFormData({ ...formData, origin: e.target.value })}
+                            placeholder="대한민국"
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          />
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 border-r border-gray-200">무게 (kg)</td>
+                        <td className="px-4 py-3">
+                          <input
+                            type="number"
+                            step="0.01"
+                            value={formData.weight || ''}
+                            onChange={(e) => setFormData({ ...formData, weight: Number(e.target.value) || 0 })}
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          />
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 border-r border-gray-200">치수</td>
+                        <td className="px-4 py-3">
+                          <input
+                            type="text"
+                            value={formData.dimensions}
+                            onChange={(e) => setFormData({ ...formData, dimensions: e.target.value })}
+                            placeholder="가로 x 세로 x 높이 (cm)"
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          />
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 border-r border-gray-200">보증기간</td>
+                        <td className="px-4 py-3">
+                          <input
+                            type="text"
+                            value={formData.warranty}
+                            onChange={(e) => setFormData({ ...formData, warranty: e.target.value })}
+                            placeholder="1년"
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          />
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 border-r border-gray-200">배송 정보</td>
+                        <td className="px-4 py-3">
+                          <textarea
+                            value={formData.shipping_info}
+                            onChange={(e) => setFormData({ ...formData, shipping_info: e.target.value })}
+                            rows={2}
+                            placeholder="배송 방법 및 소요 시간"
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          />
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 border-r border-gray-200">상세 설명</td>
+                        <td className="px-4 py-3">
+                          <textarea
+                            value={formData.detailed_description}
+                            onChange={(e) => setFormData({ ...formData, detailed_description: e.target.value })}
+                            rows={5}
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* 이미지 및 배지 */}
+              <div className="bg-white border border-gray-300 mb-4">
+                <div className="bg-gray-100 border-b border-gray-300 px-4 py-2">
+                  <h3 className="text-sm font-semibold text-gray-700">이미지 및 배지</h3>
+                </div>
+                <div className="p-4">
+                  <table className="w-full border-collapse">
+                    <tbody>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 w-32 border-r border-gray-200">대표 이미지</td>
+                        <td className="px-4 py-3">
+                          <input
+                            type="text"
+                            value={formData.image_url}
+                            onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
+                            placeholder="https://..."
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          />
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 border-r border-gray-200">추가 이미지</td>
+                        <td className="px-4 py-3">
+                          <div className="flex gap-2 mb-2">
+                            <input
+                              type="text"
+                              value={newImageUrl}
+                              onChange={(e) => setNewImageUrl(e.target.value)}
+                              placeholder="이미지 URL 입력"
+                              className="flex-1 px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                              style={{ fontSize: '13px' }}
+                            />
+                            <button
+                              onClick={() => {
+                                if (newImageUrl) {
+                                  setFormData({ ...formData, images: [...formData.images, newImageUrl] })
+                                  setNewImageUrl('')
+                                }
+                              }}
+                              className="px-4 py-2 bg-gray-600 text-white hover:bg-gray-700"
+                              style={{ fontSize: '13px' }}
+                            >
+                              추가
+                            </button>
+                          </div>
+                          <div className="space-y-1">
+                            {formData.images.map((img, idx) => (
+                              <div key={idx} className="flex items-center gap-2">
+                                <input
+                                  type="text"
+                                  value={img}
+                                  readOnly
+                                  className="flex-1 px-2 py-1 border border-gray-300 bg-gray-50"
+                                  style={{ fontSize: '12px' }}
+                                />
+                                <button
+                                  onClick={() => {
+                                    setFormData({ ...formData, images: formData.images.filter((_, i) => i !== idx) })
+                                  }}
+                                  className="px-2 py-1 bg-red-600 text-white hover:bg-red-700"
+                                  style={{ fontSize: '12px' }}
+                                >
+                                  삭제
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 border-r border-gray-200">배지</td>
+                        <td className="px-4 py-3">
+                          <select
+                            value={formData.badge}
+                            onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          >
+                            <option value="">없음</option>
+                            <option value="NEW">NEW</option>
+                            <option value="BEST">BEST</option>
+                            <option value="HOT">HOT</option>
+                            <option value="SALE">SALE</option>
+                          </select>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* 판매 기간 및 검색 */}
+              <div className="bg-white border border-gray-300 mb-4">
+                <div className="bg-gray-100 border-b border-gray-300 px-4 py-2">
+                  <h3 className="text-sm font-semibold text-gray-700">판매 기간 및 검색</h3>
+                </div>
+                <div className="p-4">
+                  <table className="w-full border-collapse">
+                    <tbody>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 w-32 border-r border-gray-200">판매 시작일</td>
+                        <td className="px-4 py-3">
+                          <input
+                            type="date"
+                            value={formData.sale_start_date}
+                            onChange={(e) => setFormData({ ...formData, sale_start_date: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          />
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 border-r border-gray-200">판매 종료일</td>
+                        <td className="px-4 py-3">
+                          <input
+                            type="date"
+                            value={formData.sale_end_date}
+                            onChange={(e) => setFormData({ ...formData, sale_end_date: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          />
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 border-r border-gray-200">검색 키워드</td>
+                        <td className="px-4 py-3">
+                          <input
+                            type="text"
+                            value={formData.keywords}
+                            onChange={(e) => setFormData({ ...formData, keywords: e.target.value })}
+                            placeholder="쉼표로 구분하여 입력"
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          />
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 border-r border-gray-200">상품 특징</td>
+                        <td className="px-4 py-3">
+                          <div className="flex gap-2 mb-2">
+                            <input
+                              type="text"
+                              value={newFeature}
+                              onChange={(e) => setNewFeature(e.target.value)}
+                              placeholder="특징 입력"
+                              className="flex-1 px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                              style={{ fontSize: '13px' }}
+                              onKeyPress={(e) => {
+                                if (e.key === 'Enter' && newFeature) {
+                                  setFormData({ ...formData, features: [...formData.features, newFeature] })
+                                  setNewFeature('')
+                                }
+                              }}
+                            />
+                            <button
+                              onClick={() => {
+                                if (newFeature) {
+                                  setFormData({ ...formData, features: [...formData.features, newFeature] })
+                                  setNewFeature('')
+                                }
+                              }}
+                              className="px-4 py-2 bg-gray-600 text-white hover:bg-gray-700"
+                              style={{ fontSize: '13px' }}
+                            >
+                              추가
+                            </button>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {formData.features.map((feature, idx) => (
+                              <span key={idx} className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 border border-blue-200">
+                                {feature}
+                                <button
+                                  onClick={() => {
+                                    setFormData({ ...formData, features: formData.features.filter((_, i) => i !== idx) })
+                                  }}
+                                  className="text-blue-700 hover:text-blue-900"
+                                >
+                                  ×
+                                </button>
+                              </span>
+                            ))}
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* SEO 정보 */}
+              <div className="bg-white border border-gray-300 mb-4">
+                <div className="bg-gray-100 border-b border-gray-300 px-4 py-2">
+                  <h3 className="text-sm font-semibold text-gray-700">SEO 정보</h3>
+                </div>
+                <div className="p-4">
+                  <table className="w-full border-collapse">
+                    <tbody>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 w-32 border-r border-gray-200">메타 제목</td>
+                        <td className="px-4 py-3">
+                          <input
+                            type="text"
+                            value={formData.meta_title}
+                            onChange={(e) => setFormData({ ...formData, meta_title: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          />
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200">
+                        <td className="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700 border-r border-gray-200">메타 설명</td>
+                        <td className="px-4 py-3">
+                          <textarea
+                            value={formData.meta_description}
+                            onChange={(e) => setFormData({ ...formData, meta_description: e.target.value })}
+                            rows={2}
+                            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                            style={{ fontSize: '13px' }}
+                          />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
-            <div className="flex justify-end gap-3 p-4 border-t">
+            
+            {/* Footer Buttons */}
+            <div className="bg-gray-100 border-t border-gray-300 px-6 py-4 flex justify-end gap-3">
               <button
                 onClick={() => setShowModal(false)}
-                className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+                className="px-6 py-2 bg-white border border-gray-400 text-gray-700 hover:bg-gray-50"
+                style={{ fontSize: '13px', fontWeight: '500' }}
               >
                 취소
               </button>
               <button
                 onClick={handleSave}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white hover:bg-blue-700"
+                style={{ fontSize: '13px', fontWeight: '500' }}
               >
                 <Save className="w-4 h-4" />
                 저장
