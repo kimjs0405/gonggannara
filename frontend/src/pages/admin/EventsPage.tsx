@@ -4,7 +4,6 @@ import {
   Edit2, 
   Trash2, 
   Calendar,
-  Image as ImageIcon,
   Upload,
   X,
   Loader2
