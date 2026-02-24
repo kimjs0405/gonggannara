@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react'
-import { Link, useParams, useNavigate } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { Heart, Share2, Minus, Plus, ShoppingCart, CreditCard } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
 const ProductDetailPage = () => {
   const { id } = useParams()
-  const navigate = useNavigate()
   const [quantity, setQuantity] = useState(1)
   const [selectedTab, setSelectedTab] = useState('detail')
   const [product, setProduct] = useState<any>(null)

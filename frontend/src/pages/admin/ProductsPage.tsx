@@ -22,9 +22,12 @@ interface Product {
   discount: number
   category_id: string
   image_url: string
+  images?: string[] | null
   badge: string
   stock: number
   is_active: boolean
+  features?: string[] | null
+  shipping_info?: string | null
   created_at: string
 }
 
