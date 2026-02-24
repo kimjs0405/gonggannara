@@ -156,17 +156,47 @@ const HomePage = () => {
   const [loadingProducts, setLoadingProducts] = useState(true)
 
   // 광고 슬라이드 데이터
-  const adSlides1 = [
-    { id: 1, title: '광고 1-1', image: '🎯', link: '/products' },
-    { id: 2, title: '광고 1-2', image: '📢', link: '/products' },
-    { id: 3, title: '광고 1-3', image: '✨', link: '/products' },
-  ]
+  const [adSlides1, setAdSlides1] = useState<Array<{ id: string; title: string; image_url: string; link_url: string | null }>>([])
+  const [adSlides2, setAdSlides2] = useState<Array<{ id: string; title: string; image_url: string; link_url: string | null }>>([])
 
-  const adSlides2 = [
-    { id: 1, title: '광고 2-1', image: '🔥', link: '/products' },
-    { id: 2, title: '광고 2-2', image: '💎', link: '/products' },
-    { id: 3, title: '광고 2-3', image: '🌟', link: '/products' },
-  ]
+  // 광고 슬라이드 데이터 가져오기
+  const fetchAdSlides = async () => {
+    try {
+      const { data: group1, error: error1 } = await supabase
+        .from('ad_slides')
+        .select('*')
+        .eq('slide_group', 'group1')
+        .eq('is_active', true)
+        .order('position', { ascending: true })
+
+      const { data: group2, error: error2 } = await supabase
+        .from('ad_slides')
+        .select('*')
+        .eq('slide_group', 'group2')
+        .eq('is_active', true)
+        .order('position', { ascending: true })
+
+      if (!error1 && group1) {
+        setAdSlides1(group1.map(slide => ({
+          id: slide.id,
+          title: slide.title,
+          image_url: slide.image_url,
+          link_url: slide.link_url,
+        })))
+      }
+
+      if (!error2 && group2) {
+        setAdSlides2(group2.map(slide => ({
+          id: slide.id,
+          title: slide.title,
+          image_url: slide.image_url,
+          link_url: slide.link_url,
+        })))
+      }
+    } catch (error) {
+      console.error('Error fetching ad slides:', error)
+    }
+  }
 
   // 상품 데이터 가져오기
   const fetchProducts = async () => {
@@ -252,6 +282,7 @@ const HomePage = () => {
 
   useEffect(() => {
     fetchProducts()
+    fetchAdSlides()
 
     // 상품 업데이트 이벤트 리스너
     const handleProductUpdate = () => {
@@ -259,13 +290,21 @@ const HomePage = () => {
     }
     window.addEventListener('productUpdated', handleProductUpdate)
 
+    // 광고 슬라이드 업데이트 이벤트 리스너
+    const handleAdSlideUpdate = () => {
+      fetchAdSlides()
+    }
+    window.addEventListener('adSlideUpdated', handleAdSlideUpdate)
+
     // 주기적 새로고침 (5분마다)
     const interval = setInterval(() => {
       fetchProducts()
+      fetchAdSlides()
     }, 5 * 60 * 1000)
 
     return () => {
       window.removeEventListener('productUpdated', handleProductUpdate)
+      window.removeEventListener('adSlideUpdated', handleAdSlideUpdate)
       clearInterval(interval)
     }
   }, [])
@@ -292,17 +331,21 @@ const HomePage = () => {
 
   // 광고 슬라이드 자동 전환
   useEffect(() => {
-    const timer1 = setInterval(() => {
+    if (adSlides1.length === 0 && adSlides2.length === 0) return
+    
+    const timer1 = adSlides1.length > 0 ? setInterval(() => {
       setAdSlide1((prev) => (prev + 1) % adSlides1.length)
-    }, 4000)
-    const timer2 = setInterval(() => {
+    }, 4000) : null
+    
+    const timer2 = adSlides2.length > 0 ? setInterval(() => {
       setAdSlide2((prev) => (prev + 1) % adSlides2.length)
-    }, 4500)
+    }, 4500) : null
+    
     return () => {
-      clearInterval(timer1)
-      clearInterval(timer2)
+      if (timer1) clearInterval(timer1)
+      if (timer2) clearInterval(timer2)
     }
-  }, [])
+  }, [adSlides1.length, adSlides2.length])
 
 
   useEffect(() => {
@@ -477,18 +520,26 @@ const HomePage = () => {
                     className="flex transition-transform duration-500 ease-in-out h-full"
                     style={{ transform: `translateX(-${adSlide1 * 100}%)` }}
                   >
-                    {adSlides1.map((ad) => (
+                    {adSlides1.length > 0 ? adSlides1.map((ad) => (
                       <Link
                         key={ad.id}
-                        to={ad.link}
+                        to={ad.link_url || '/products'}
                         className="min-w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 transition-colors"
                       >
-                        <div className="text-center">
-                          <div className="text-5xl md:text-6xl mb-2">{ad.image}</div>
-                          <p className="text-sm md:text-base font-bold text-gray-800">{ad.title}</p>
+                        <div className="text-center w-full h-full flex flex-col items-center justify-center">
+                          <img 
+                            src={ad.image_url} 
+                            alt={ad.title}
+                            className="max-w-full max-h-full object-contain"
+                          />
+                          <p className="text-sm md:text-base font-bold text-gray-800 mt-2">{ad.title}</p>
                         </div>
                       </Link>
-                    ))}
+                    )) : (
+                      <div className="min-w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50">
+                        <p className="text-sm text-gray-500">광고 슬라이드가 없습니다</p>
+                      </div>
+                    )}
                   </div>
                   {/* 네비게이션 버튼 */}
                   <button
@@ -521,18 +572,26 @@ const HomePage = () => {
                     className="flex transition-transform duration-500 ease-in-out h-full"
                     style={{ transform: `translateX(-${adSlide2 * 100}%)` }}
                   >
-                    {adSlides2.map((ad) => (
+                    {adSlides2.length > 0 ? adSlides2.map((ad) => (
                       <Link
                         key={ad.id}
-                        to={ad.link}
+                        to={ad.link_url || '/products'}
                         className="min-w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-50 to-red-50 hover:from-orange-100 hover:to-red-100 transition-colors"
                       >
-                        <div className="text-center">
-                          <div className="text-5xl md:text-6xl mb-2">{ad.image}</div>
-                          <p className="text-sm md:text-base font-bold text-gray-800">{ad.title}</p>
+                        <div className="text-center w-full h-full flex flex-col items-center justify-center">
+                          <img 
+                            src={ad.image_url} 
+                            alt={ad.title}
+                            className="max-w-full max-h-full object-contain"
+                          />
+                          <p className="text-sm md:text-base font-bold text-gray-800 mt-2">{ad.title}</p>
                         </div>
                       </Link>
-                    ))}
+                    )) : (
+                      <div className="min-w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-50 to-red-50">
+                        <p className="text-sm text-gray-500">광고 슬라이드가 없습니다</p>
+                      </div>
+                    )}
                   </div>
                   {/* 네비게이션 버튼 */}
                   <button

@@ -24,6 +24,9 @@ import AdminOrdersPage from './pages/admin/OrdersPage'
 import AdminUsersPage from './pages/admin/UsersPage'
 import AnalyticsPage from './pages/admin/AnalyticsPage'
 import PromotionsPage from './pages/admin/PromotionsPage'
+import CouponsPage from './pages/admin/CouponsPage'
+import EventsPage from './pages/admin/EventsPage'
+import AdSlidesPage from './pages/admin/AdSlidesPage'
 import BannersPage from './pages/admin/BannersPage'
 import PromotionCardsPage from './pages/admin/PromotionCardsPage'
 import AdminReviewsPage from './pages/admin/ReviewsPage'
@@ -67,6 +70,9 @@ function App() {
         <Route path="users" element={<AdminUsersPage />} />
         <Route path="analytics" element={<AnalyticsPage />} />
         <Route path="promotions" element={<PromotionsPage />} />
+        <Route path="coupons" element={<CouponsPage />} />
+        <Route path="events" element={<EventsPage />} />
+        <Route path="ad-slides" element={<AdSlidesPage />} />
         <Route path="banners" element={<BannersPage />} />
         <Route path="promotion-cards" element={<PromotionCardsPage />} />
         <Route path="reviews" element={<AdminReviewsPage />} />
