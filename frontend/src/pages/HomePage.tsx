@@ -287,14 +287,6 @@ const HomePage = () => {
     setUserEmail('')
   }
 
-  const formatPrice = (price: number) => {
-    return price.toLocaleString() + '원'
-  }
-
-  const getDiscountedPrice = (price: number, discount: number) => {
-    return Math.floor(price * (1 - discount / 100))
-  }
-
   return (
     <div>
       {/* Hero Banner - 창 형태 */}
