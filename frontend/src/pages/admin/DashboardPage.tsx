@@ -109,42 +109,55 @@ const DashboardPage = () => {
     try {
       const now = new Date()
       let periodStart: Date
+      let previousPeriodStart: Date
+      let previousPeriodEnd: Date
       
       switch (dateRange) {
         case 'week':
           periodStart = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
+          previousPeriodStart = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000)
+          previousPeriodEnd = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
           break
         case 'month':
           periodStart = new Date(now.getFullYear(), now.getMonth(), 1)
+          previousPeriodStart = new Date(now.getFullYear(), now.getMonth() - 1, 1)
+          previousPeriodEnd = new Date(now.getFullYear(), now.getMonth(), 0)
           break
         case 'quarter':
-          periodStart = new Date(now.getFullYear(), now.getMonth() - 3, 1)
+          const currentQuarter = Math.floor(now.getMonth() / 3)
+          periodStart = new Date(now.getFullYear(), currentQuarter * 3, 1)
+          const prevQuarter = currentQuarter === 0 ? 3 : currentQuarter - 1
+          const prevYear = currentQuarter === 0 ? now.getFullYear() - 1 : now.getFullYear()
+          previousPeriodStart = new Date(prevYear, prevQuarter * 3, 1)
+          previousPeriodEnd = new Date(prevYear, (prevQuarter + 1) * 3, 0)
           break
         case 'year':
           periodStart = new Date(now.getFullYear(), 0, 1)
+          previousPeriodStart = new Date(now.getFullYear() - 1, 0, 1)
+          previousPeriodEnd = new Date(now.getFullYear() - 1, 11, 31)
           break
         default:
           periodStart = new Date(now.getFullYear(), now.getMonth(), 1)
+          previousPeriodStart = new Date(now.getFullYear(), now.getMonth() - 1, 1)
+          previousPeriodEnd = new Date(now.getFullYear(), now.getMonth(), 0)
       }
 
-      const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1)
-      const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1)
-      const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0)
-
-      // 주문 데이터
-      const { data: ordersThisMonth } = await supabase
+      // 현재 기간 주문 데이터
+      const { data: periodOrders } = await supabase
         .from('orders')
         .select('*, order_items(*), profiles(name, email)')
         .neq('status', 'cancelled')
-        .gte('created_at', thisMonthStart.toISOString())
+        .gte('created_at', periodStart.toISOString())
 
-      const { data: ordersLastMonth } = await supabase
+      // 이전 기간 주문 데이터 (비교용)
+      const { data: previousPeriodOrders } = await supabase
         .from('orders')
         .select('*')
         .neq('status', 'cancelled')
-        .gte('created_at', lastMonthStart.toISOString())
-        .lte('created_at', lastMonthEnd.toISOString())
+        .gte('created_at', previousPeriodStart.toISOString())
+        .lte('created_at', previousPeriodEnd.toISOString())
 
+      // 최근 주문 (전체)
       const { data: allOrders } = await supabase
         .from('orders')
         .select('*, order_items(*), profiles(name, email)')
@@ -152,23 +165,18 @@ const DashboardPage = () => {
         .order('created_at', { ascending: false })
         .limit(10)
 
-      const { data: periodOrders } = await supabase
-        .from('orders')
-        .select('*, order_items(*), profiles(name, email)')
-        .neq('status', 'cancelled')
+      // 현재 기간 회원 수
+      const { count: usersThisPeriod } = await supabase
+        .from('profiles')
+        .select('*', { count: 'exact', head: true })
         .gte('created_at', periodStart.toISOString())
 
-      // 회원 수
-      const { count: usersThisMonth } = await supabase
+      // 이전 기간 회원 수
+      const { count: usersPreviousPeriod } = await supabase
         .from('profiles')
         .select('*', { count: 'exact', head: true })
-        .gte('created_at', thisMonthStart.toISOString())
-
-      const { count: usersLastMonth } = await supabase
-        .from('profiles')
-        .select('*', { count: 'exact', head: true })
-        .gte('created_at', lastMonthStart.toISOString())
-        .lte('created_at', lastMonthEnd.toISOString())
+        .gte('created_at', previousPeriodStart.toISOString())
+        .lte('created_at', previousPeriodEnd.toISOString())
 
       // 상품 수
       const { count: totalProducts } = await supabase
@@ -183,23 +191,23 @@ const DashboardPage = () => {
         .order('visit_date', { ascending: true })
 
       // 계산
-      const revenueThisMonth = ordersThisMonth?.reduce((sum, o) => sum + o.total_amount, 0) || 0
-      const ordersCountThisMonth = ordersThisMonth?.length || 0
-      const revenueLastMonth = ordersLastMonth?.reduce((sum, o) => sum + o.total_amount, 0) || 0
-      const ordersCountLastMonth = ordersLastMonth?.length || 0
+      const revenueThisPeriod = periodOrders?.reduce((sum, o) => sum + o.total_amount, 0) || 0
+      const ordersCountThisPeriod = periodOrders?.length || 0
+      const revenuePreviousPeriod = previousPeriodOrders?.reduce((sum, o) => sum + o.total_amount, 0) || 0
+      const ordersCountPreviousPeriod = previousPeriodOrders?.length || 0
 
-      const revenueChange = revenueLastMonth > 0 
-        ? ((revenueThisMonth - revenueLastMonth) / revenueLastMonth) * 100 
-        : (revenueThisMonth > 0 ? 100 : 0)
-      const ordersChange = ordersCountLastMonth > 0
-        ? ((ordersCountThisMonth - ordersCountLastMonth) / ordersCountLastMonth) * 100
-        : (ordersCountThisMonth > 0 ? 100 : 0)
-      const usersChange = (usersLastMonth || 0) > 0
-        ? (((usersThisMonth || 0) - (usersLastMonth || 0)) / (usersLastMonth || 0)) * 100
-        : ((usersThisMonth || 0) > 0 ? 100 : 0)
+      const revenueChange = revenuePreviousPeriod > 0 
+        ? ((revenueThisPeriod - revenuePreviousPeriod) / revenuePreviousPeriod) * 100 
+        : (revenueThisPeriod > 0 ? 100 : 0)
+      const ordersChange = ordersCountPreviousPeriod > 0
+        ? ((ordersCountThisPeriod - ordersCountPreviousPeriod) / ordersCountPreviousPeriod) * 100
+        : (ordersCountThisPeriod > 0 ? 100 : 0)
+      const usersChange = (usersPreviousPeriod || 0) > 0
+        ? (((usersThisPeriod || 0) - (usersPreviousPeriod || 0)) / (usersPreviousPeriod || 0)) * 100
+        : ((usersThisPeriod || 0) > 0 ? 100 : 0)
 
-      const totalRevenue = periodOrders?.reduce((sum, o) => sum + o.total_amount, 0) || 0
-      const totalOrdersCount = periodOrders?.length || 0
+      const totalRevenue = revenueThisPeriod
+      const totalOrdersCount = ordersCountThisPeriod
 
       // 차트 데이터 생성
       const daysDiff = Math.ceil((now.getTime() - periodStart.getTime()) / (1000 * 60 * 60 * 24))
@@ -317,7 +325,7 @@ const DashboardPage = () => {
       setStats({
         totalRevenue,
         totalOrders: totalOrdersCount,
-        newUsers: usersThisMonth || 0,
+        newUsers: usersThisPeriod || 0,
         totalProducts: totalProducts || 0,
         todayVisitors,
         revenueChange,
