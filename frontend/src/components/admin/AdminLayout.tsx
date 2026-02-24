@@ -112,6 +112,7 @@ const AdminLayout = () => {
         { title: '쿠폰 관리', path: '/admin/coupons', icon: Tag },
         { title: '이벤트 관리', path: '/admin/events', icon: Activity },
         { title: '프로모션 카드', path: '/admin/promotion-cards', icon: Image },
+        { title: '광고 슬라이드', path: '/admin/ad-slides', icon: Image },
       ]
     },
     { 
