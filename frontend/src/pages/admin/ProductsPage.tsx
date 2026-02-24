@@ -229,8 +229,11 @@ const AdminProductsPage = () => {
         }
 
         alert('상품이 수정되었습니다.')
-        setShowModal(false)
+        closeModal()
         await fetchProducts()
+        
+        // 홈페이지 새로고침을 위한 이벤트 발생
+        window.dispatchEvent(new Event('productUpdated'))
       } else {
         // 새 상품 등록
         const { data, error } = await supabase
@@ -246,7 +249,7 @@ const AdminProductsPage = () => {
 
         if (data && data.length > 0) {
           alert('상품이 등록되었습니다.')
-          setShowModal(false)
+          closeModal()
           await fetchProducts()
           
           // 홈페이지 새로고침을 위한 이벤트 발생 (다른 탭이 열려있을 경우)
@@ -326,21 +329,78 @@ const AdminProductsPage = () => {
 
   const openEditModal = (product: Product) => {
     setEditingProduct(product)
+    
+    // features 파싱 (배열인 경우)
+    let features: string[] = []
+    if (product.features) {
+      if (Array.isArray(product.features)) {
+        features = product.features.filter((f: any) => typeof f === 'string' && !f.startsWith('{'))
+      }
+    }
+    
+    // images 파싱 (배열인 경우)
+    let images: string[] = []
+    if (product.images) {
+      if (Array.isArray(product.images)) {
+        images = product.images.filter((img: any) => typeof img === 'string' && img.trim())
+      }
+    }
+    
     setFormData({
-      name: product.name,
-      slug: product.slug,
+      name: product.name || '',
+      slug: product.slug || '',
       description: product.description || '',
       detailed_description: '',
-      price: product.price,
+      price: product.price || 0,
       original_price: product.original_price || 0,
       discount: product.discount || 0,
       category_id: product.category_id || '',
       image_url: product.image_url || '',
-      images: [],
+      images: images,
       badge: product.badge || '',
-      stock: product.stock,
+      stock: product.stock || 0,
       min_stock: 0,
-      is_active: product.is_active,
+      is_active: product.is_active !== undefined ? product.is_active : true,
+      product_code: '',
+      barcode: '',
+      manufacturer: '',
+      origin: '',
+      shipping_fee: 0,
+      shipping_info: product.shipping_info || '',
+      features: features,
+      keywords: '',
+      meta_title: '',
+      meta_description: '',
+      sale_start_date: '',
+      sale_end_date: '',
+      weight: 0,
+      dimensions: '',
+      warranty: '',
+    })
+    setNewImageUrl('')
+    setNewFeature('')
+    setShowModal(true)
+  }
+  
+  const closeModal = () => {
+    setShowModal(false)
+    setEditingProduct(null)
+    // 완전 초기화
+    setFormData({
+      name: '',
+      slug: '',
+      description: '',
+      detailed_description: '',
+      price: 0,
+      original_price: 0,
+      discount: 0,
+      category_id: '',
+      image_url: '',
+      images: [],
+      badge: '',
+      stock: 0,
+      min_stock: 0,
+      is_active: true,
       product_code: '',
       barcode: '',
       manufacturer: '',
@@ -359,7 +419,6 @@ const AdminProductsPage = () => {
     })
     setNewImageUrl('')
     setNewFeature('')
-    setShowModal(true)
   }
 
   const getCategoryName = (categoryId: string) => {
@@ -593,7 +652,7 @@ const AdminProductsPage = () => {
             {/* Header */}
             <div className="bg-blue-600 text-white px-6 py-4 flex items-center justify-between">
               <h2 className="text-lg font-semibold">{editingProduct ? '상품 정보 수정' : '신규 상품 등록'}</h2>
-              <button onClick={() => setShowModal(false)} className="text-white hover:bg-blue-700 p-1 rounded">
+              <button onClick={closeModal} className="text-white hover:bg-blue-700 p-1 rounded">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -718,10 +777,22 @@ const AdminProductsPage = () => {
                         <td className="px-4 py-3">
                           <input
                             type="number"
-                            value={formData.price || ''}
-                            onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) || 0 })}
+                            min="0"
+                            step="1"
+                            value={formData.price === 0 ? '' : formData.price}
+                            onChange={(e) => {
+                              const val = e.target.value === '' ? 0 : Number(e.target.value)
+                              setFormData({ ...formData, price: isNaN(val) ? 0 : val })
+                            }}
+                            onBlur={(e) => {
+                              const val = e.target.value === '' ? 0 : Number(e.target.value)
+                              if (isNaN(val) || val < 0) {
+                                setFormData({ ...formData, price: 0 })
+                              }
+                            }}
                             className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
                             style={{ fontSize: '13px' }}
+                            placeholder="0"
                           />
                         </td>
                       </tr>
@@ -730,10 +801,22 @@ const AdminProductsPage = () => {
                         <td className="px-4 py-3">
                           <input
                             type="number"
-                            value={formData.original_price || ''}
-                            onChange={(e) => setFormData({ ...formData, original_price: Number(e.target.value) || 0 })}
+                            min="0"
+                            step="1"
+                            value={formData.original_price === 0 ? '' : formData.original_price}
+                            onChange={(e) => {
+                              const val = e.target.value === '' ? 0 : Number(e.target.value)
+                              setFormData({ ...formData, original_price: isNaN(val) ? 0 : val })
+                            }}
+                            onBlur={(e) => {
+                              const val = e.target.value === '' ? 0 : Number(e.target.value)
+                              if (isNaN(val) || val < 0) {
+                                setFormData({ ...formData, original_price: 0 })
+                              }
+                            }}
                             className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
                             style={{ fontSize: '13px' }}
+                            placeholder="0"
                           />
                         </td>
                       </tr>
@@ -742,10 +825,25 @@ const AdminProductsPage = () => {
                         <td className="px-4 py-3">
                           <input
                             type="number"
-                            value={formData.discount || ''}
-                            onChange={(e) => setFormData({ ...formData, discount: Number(e.target.value) || 0 })}
+                            min="0"
+                            max="100"
+                            step="1"
+                            value={formData.discount === 0 ? '' : formData.discount}
+                            onChange={(e) => {
+                              const val = e.target.value === '' ? 0 : Number(e.target.value)
+                              setFormData({ ...formData, discount: isNaN(val) ? 0 : Math.min(100, Math.max(0, val)) })
+                            }}
+                            onBlur={(e) => {
+                              const val = e.target.value === '' ? 0 : Number(e.target.value)
+                              if (isNaN(val) || val < 0) {
+                                setFormData({ ...formData, discount: 0 })
+                              } else if (val > 100) {
+                                setFormData({ ...formData, discount: 100 })
+                              }
+                            }}
                             className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
                             style={{ fontSize: '13px' }}
+                            placeholder="0"
                           />
                         </td>
                       </tr>
@@ -754,10 +852,22 @@ const AdminProductsPage = () => {
                         <td className="px-4 py-3">
                           <input
                             type="number"
-                            value={formData.shipping_fee || ''}
-                            onChange={(e) => setFormData({ ...formData, shipping_fee: Number(e.target.value) || 0 })}
+                            min="0"
+                            step="1"
+                            value={formData.shipping_fee === 0 ? '' : formData.shipping_fee}
+                            onChange={(e) => {
+                              const val = e.target.value === '' ? 0 : Number(e.target.value)
+                              setFormData({ ...formData, shipping_fee: isNaN(val) ? 0 : val })
+                            }}
+                            onBlur={(e) => {
+                              const val = e.target.value === '' ? 0 : Number(e.target.value)
+                              if (isNaN(val) || val < 0) {
+                                setFormData({ ...formData, shipping_fee: 0 })
+                              }
+                            }}
                             className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
                             style={{ fontSize: '13px' }}
+                            placeholder="0"
                           />
                         </td>
                       </tr>
@@ -779,10 +889,22 @@ const AdminProductsPage = () => {
                         <td className="px-4 py-3">
                           <input
                             type="number"
-                            value={formData.stock || ''}
-                            onChange={(e) => setFormData({ ...formData, stock: Number(e.target.value) || 0 })}
+                            min="0"
+                            step="1"
+                            value={formData.stock === 0 ? '' : formData.stock}
+                            onChange={(e) => {
+                              const val = e.target.value === '' ? 0 : Number(e.target.value)
+                              setFormData({ ...formData, stock: isNaN(val) ? 0 : Math.max(0, val) })
+                            }}
+                            onBlur={(e) => {
+                              const val = e.target.value === '' ? 0 : Number(e.target.value)
+                              if (isNaN(val) || val < 0) {
+                                setFormData({ ...formData, stock: 0 })
+                              }
+                            }}
                             className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
                             style={{ fontSize: '13px' }}
+                            placeholder="0"
                           />
                         </td>
                       </tr>
@@ -791,10 +913,22 @@ const AdminProductsPage = () => {
                         <td className="px-4 py-3">
                           <input
                             type="number"
-                            value={formData.min_stock || ''}
-                            onChange={(e) => setFormData({ ...formData, min_stock: Number(e.target.value) || 0 })}
+                            min="0"
+                            step="1"
+                            value={formData.min_stock === 0 ? '' : formData.min_stock}
+                            onChange={(e) => {
+                              const val = e.target.value === '' ? 0 : Number(e.target.value)
+                              setFormData({ ...formData, min_stock: isNaN(val) ? 0 : Math.max(0, val) })
+                            }}
+                            onBlur={(e) => {
+                              const val = e.target.value === '' ? 0 : Number(e.target.value)
+                              if (isNaN(val) || val < 0) {
+                                setFormData({ ...formData, min_stock: 0 })
+                              }
+                            }}
                             className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
                             style={{ fontSize: '13px' }}
+                            placeholder="0"
                           />
                         </td>
                       </tr>
@@ -855,11 +989,22 @@ const AdminProductsPage = () => {
                         <td className="px-4 py-3">
                           <input
                             type="number"
+                            min="0"
                             step="0.01"
-                            value={formData.weight || ''}
-                            onChange={(e) => setFormData({ ...formData, weight: Number(e.target.value) || 0 })}
+                            value={formData.weight === 0 ? '' : formData.weight}
+                            onChange={(e) => {
+                              const val = e.target.value === '' ? 0 : Number(e.target.value)
+                              setFormData({ ...formData, weight: isNaN(val) ? 0 : Math.max(0, val) })
+                            }}
+                            onBlur={(e) => {
+                              const val = e.target.value === '' ? 0 : Number(e.target.value)
+                              if (isNaN(val) || val < 0) {
+                                setFormData({ ...formData, weight: 0 })
+                              }
+                            }}
                             className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-blue-500"
                             style={{ fontSize: '13px' }}
+                            placeholder="0"
                           />
                         </td>
                       </tr>
@@ -1150,7 +1295,7 @@ const AdminProductsPage = () => {
             {/* Footer Buttons */}
             <div className="bg-gray-100 border-t border-gray-300 px-6 py-4 flex justify-end gap-3">
               <button
-                onClick={() => setShowModal(false)}
+                onClick={closeModal}
                 className="px-6 py-2 bg-white border border-gray-400 text-gray-700 hover:bg-gray-50"
                 style={{ fontSize: '13px', fontWeight: '500' }}
               >
