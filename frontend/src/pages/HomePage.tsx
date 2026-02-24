@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronLeft, ChevronRight, Phone, Star, ArrowRight, ShoppingCart, Sofa, Lamp, Blinds, Wallpaper, Package, UtensilsCrossed, Bath, Flower2, PaintBucket, Wrench, SprayCan, Sparkles, Heart } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Phone, Star, Sofa, Lamp, Blinds, Wallpaper, Package, UtensilsCrossed, Bath, Flower2, PaintBucket, Wrench, SprayCan, Sparkles, Heart } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
 interface Banner {
