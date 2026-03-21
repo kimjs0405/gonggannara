@@ -36,18 +36,18 @@ const BrandMainPage = () => {
 
   return (
     <div className="bg-white">
-      <section className="py-10 md:py-16">
-        <div className="max-w-[1200px] mx-auto px-4">
-          <div className="border border-gray-200 bg-gradient-to-r from-slate-900 to-blue-700 text-white p-7 md:p-12 relative overflow-hidden">
+      <section className="py-0">
+        <div className="w-full">
+          <div className="bg-gradient-to-r from-slate-900 to-blue-700 text-white relative overflow-hidden min-h-[380px] md:min-h-[460px] flex items-center">
             <div className="absolute -right-16 -top-16 w-48 h-48 rounded-full bg-white/10 blur-2xl" />
             <div className="absolute -left-10 -bottom-20 w-56 h-56 rounded-full bg-blue-400/20 blur-2xl" />
-            <div className="relative">
+            <div className="relative max-w-[1200px] mx-auto px-4 py-12 md:py-16 w-full">
               <p className="inline-flex items-center gap-1.5 text-xs md:text-sm bg-white/15 px-3 py-1.5 rounded-full">
                 <Sparkles className="w-4 h-4" />
                 종합부동산파트너 공간나라
               </p>
-              <h1 className="mt-4 text-3xl md:text-5xl font-black leading-tight">{brand.heroTitle}</h1>
-              <p className="mt-4 text-sm md:text-lg text-white/85">{brand.heroSubtitle}</p>
+              <h1 className="mt-4 text-4xl md:text-6xl font-black leading-tight">{brand.heroTitle}</h1>
+              <p className="mt-4 text-base md:text-2xl text-white/90 max-w-3xl">{brand.heroSubtitle}</p>
               <div className="mt-7 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                 <Link to="/interior" className="bg-white text-slate-900 px-5 py-4 font-bold flex items-center justify-between hover:bg-slate-100 transition-colors">
                   <span className="inline-flex items-center gap-2"><Home className="w-4 h-4" />{brand.interiorCta}</span>
