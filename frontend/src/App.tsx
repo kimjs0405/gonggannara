@@ -1,5 +1,6 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout'
+import BrandMainPage from './pages/BrandMainPage'
 import HomePage from './pages/HomePage'
 import RealEstateHomePage from './pages/RealEstateHomePage'
 import ProductsPage from './pages/ProductsPage'
@@ -30,6 +31,7 @@ import EventsPage from './pages/admin/EventsPage'
 import AdSlidesPage from './pages/admin/AdSlidesPage'
 import BannersPage from './pages/admin/BannersPage'
 import PromotionCardsPage from './pages/admin/PromotionCardsPage'
+import AdminRealEstatePage from './pages/admin/RealEstatePage'
 import AdminReviewsPage from './pages/admin/ReviewsPage'
 import SettingsPage from './pages/admin/SettingsPage'
 
@@ -38,7 +40,7 @@ function App() {
     <Routes>
       {/* 메인 사이트 라우트 */}
       <Route path="/" element={<Layout />}>
-        <Route index element={<Navigate to="/interior" replace />} />
+        <Route index element={<BrandMainPage />} />
         <Route path="interior" element={<HomePage />} />
         <Route path="realestate" element={<RealEstateHomePage />} />
         {/* 쇼핑몰 */}
@@ -78,6 +80,7 @@ function App() {
         <Route path="ad-slides" element={<AdSlidesPage />} />
         <Route path="banners" element={<BannersPage />} />
         <Route path="promotion-cards" element={<PromotionCardsPage />} />
+        <Route path="realestate" element={<AdminRealEstatePage />} />
         <Route path="reviews" element={<AdminReviewsPage />} />
         <Route path="settings" element={<SettingsPage />} />
       </Route>

@@ -119,23 +119,29 @@ const Footer = () => {
             {/* 사업자 정보 */}
             <div className="flex-1 text-xs text-gray-500 space-y-1">
               <p>
-                <span className="font-medium text-gray-700">개성종합네트웍스</span>
+                <span className="font-medium text-gray-700">{isRealEstatePage ? '공간나라부동산공인중개사사무소' : '개성종합네트웍스'}</span>
                 <span className="mx-2">|</span>
-                사업자등록번호 : 289-70-00760
+                {isRealEstatePage ? '부동산등록번호 : 11620-2020-00017' : '사업자등록번호 : 289-70-00760'}
                 <span className="mx-2">|</span>
-                대표 : 김준서
+                대표 : {isRealEstatePage ? '김희관' : '김준서'}
                 <span className="mx-2">|</span>
-                통신판매업신고 : 제2024-서울관악-0001호
+                {isRealEstatePage ? '공인중개사사무소' : '통신판매업신고 : 제2024-서울관악-0001호'}
               </p>
               <p className="flex items-start gap-1">
                 <MapPin className="w-3 h-3 mt-0.5 flex-shrink-0" />
                 <span>서울특별시 관악구 신림동 257-13 1층 대원빌딩</span>
                 <span className="mx-2">|</span>
-                <span>TEL : 02-875-8204</span>
-                <span className="mx-2">|</span>
-                <span>FAX : 02-6434-8090</span>
-                <span className="mx-2">|</span>
-                <span>이메일 : GongganWord@gmail.com</span>
+                {isRealEstatePage ? (
+                  <span>TEL : 1688-1458, 02-888-1060</span>
+                ) : (
+                  <>
+                    <span>TEL : 02-875-8204</span>
+                    <span className="mx-2">|</span>
+                    <span>FAX : 02-6434-8090</span>
+                    <span className="mx-2">|</span>
+                    <span>이메일 : GongganWord@gmail.com</span>
+                  </>
+                )}
               </p>
               <p className="pt-2 text-gray-400">
                 COPYRIGHT © {isRealEstatePage ? '공간나라부동산' : '공간나라인테리어'}. ALL RIGHTS RESERVED.

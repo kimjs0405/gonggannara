@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { Building2, MapPin, Home, Landmark, Phone, ArrowRight } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
@@ -25,7 +25,19 @@ const serviceSteps = [
 ]
 
 const RealEstateHomePage = () => {
+  const [searchParams] = useSearchParams()
   const [listings, setListings] = useState<any[]>([])
+  const selectedType = searchParams.get('type')
+  const typeMap: Record<string, string> = {
+    apartment: '매매',
+    officetel: '매매',
+    'villa-house': '매매',
+    commercial: '매매',
+    office: '매매',
+    jeonse: '전세',
+    monthly: '월세',
+  }
+
   const [loadingListings, setLoadingListings] = useState(true)
 
   useEffect(() => {
@@ -43,12 +55,18 @@ const RealEstateHomePage = () => {
     const fetchListings = async () => {
       setLoadingListings(true)
       try {
-        const { data, error } = await supabase
+        let query = supabase
           .from('real_estate_listings')
           .select('*')
           .eq('is_active', true)
           .order('created_at', { ascending: false })
           .limit(8)
+
+        if (selectedType && typeMap[selectedType]) {
+          query = query.eq('type', typeMap[selectedType])
+        }
+
+        const { data, error } = await query
 
         if (!error && data && data.length > 0) {
           setListings(data)
@@ -63,7 +81,7 @@ const RealEstateHomePage = () => {
     }
 
     fetchListings()
-  }, [])
+  }, [selectedType])
 
   const areas = useMemo(() => {
     if (listings.length === 0) return defaultAreas

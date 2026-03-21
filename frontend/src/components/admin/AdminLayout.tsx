@@ -17,6 +17,7 @@ import {
   Menu,
   X,
   Home,
+  Building2,
   Activity,
   HelpCircle,
   UserCircle,
@@ -114,6 +115,12 @@ const AdminLayout = () => {
         { title: '프로모션 카드', path: '/admin/promotion-cards', icon: Image },
         { title: '광고 슬라이드', path: '/admin/ad-slides', icon: Image },
       ]
+    },
+    { 
+      title: '부동산 관리',
+      path: '/admin/realestate',
+      icon: Building2,
+      badge: null
     },
     { 
       title: '배너 관리', 

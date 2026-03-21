@@ -57,5 +57,22 @@ INSERT INTO settings (key, value) VALUES
     "reviewNotification": true,
     "lowStockNotification": true,
     "marketingEmail": false
+  }'::jsonb),
+  ('brand', '{
+    "heroTitle": "공간나라",
+    "heroSubtitle": "인테리어와 부동산을 하나로 연결하는 공간 라이프 플랫폼",
+    "interiorCta": "공간나라인테리어",
+    "realEstateCta": "공간나라부동산",
+    "introTitle": "당신의 공간 여정을 함께합니다",
+    "introDescription": "집을 찾는 순간부터 공간을 완성하는 순간까지, 공간나라가 한 번에 도와드립니다.",
+    "realEstateCategories": [
+      { "name": "아파트", "slug": "apartment" },
+      { "name": "오피스텔", "slug": "officetel" },
+      { "name": "빌라/주택", "slug": "villa-house" },
+      { "name": "상가", "slug": "commercial" },
+      { "name": "사무실", "slug": "office" },
+      { "name": "전세", "slug": "jeonse" },
+      { "name": "월세", "slug": "monthly" }
+    ]
   }'::jsonb)
 ON CONFLICT (key) DO NOTHING;

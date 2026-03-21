@@ -10,6 +10,15 @@ const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false)
+  const [realEstateCategories, setRealEstateCategories] = useState([
+    { name: '아파트', slug: 'apartment' },
+    { name: '오피스텔', slug: 'officetel' },
+    { name: '빌라/주택', slug: 'villa-house' },
+    { name: '상가', slug: 'commercial' },
+    { name: '사무실', slug: 'office' },
+    { name: '전세', slug: 'jeonse' },
+    { name: '월세', slug: 'monthly' },
+  ])
 
   useEffect(() => {
     // 초기 세션 확인
@@ -25,6 +34,18 @@ const Header = () => {
     })
 
     return () => subscription.unsubscribe()
+  }, [])
+
+  useEffect(() => {
+    const fetchBrandSettings = async () => {
+      const { data } = await supabase.from('settings').select('value').eq('key', 'brand').single()
+      const parsed = (data?.value as any)?.realEstateCategories
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        const valid = parsed.filter((item: any) => item?.name && item?.slug)
+        if (valid.length > 0) setRealEstateCategories(valid)
+      }
+    }
+    fetchBrandSettings()
   }, [])
 
   // 모바일 메뉴 열릴 때 스크롤 방지
@@ -70,7 +91,7 @@ const Header = () => {
             </button>
 
             {/* Logo */}
-            <Link to="/interior" className="flex items-center flex-shrink-0">
+            <Link to="/" className="flex items-center flex-shrink-0">
               <img src="/logo.svg" alt="공간나라" className="h-7 md:h-9" />
             </Link>
 
@@ -149,35 +170,33 @@ const Header = () => {
       <div className="hidden md:block bg-white border-b border-gray-200">
         <div className="max-w-[1200px] mx-auto px-4">
           <div className="flex items-center h-12">
-            {!isRealEstatePage && (
-              <div className="relative">
-                <button
-                  onClick={() => setIsCategoryOpen(!isCategoryOpen)}
-                  onMouseEnter={() => setIsCategoryOpen(true)}
-                  className="flex items-center gap-2 px-5 h-12 bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors"
-                >
-                  <Menu className="w-5 h-5" />
-                  <span>전체카테고리</span>
-                </button>
+            <div className="relative">
+              <button
+                onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+                onMouseEnter={() => setIsCategoryOpen(true)}
+                className="flex items-center gap-2 px-5 h-12 bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors"
+              >
+                <Menu className="w-5 h-5" />
+                <span>전체카테고리</span>
+              </button>
 
-                {isCategoryOpen && (
-                  <div
-                    className="absolute left-0 top-full w-56 bg-blue-600 shadow-lg z-50"
-                    onMouseLeave={() => setIsCategoryOpen(false)}
-                  >
-                    {categories.map((category, index) => (
-                      <Link
-                        key={index}
-                        to={`/products?category=${category.slug}`}
-                        className="flex items-center gap-3 px-5 py-3 text-white hover:bg-blue-700 transition-colors border-t border-blue-500"
-                      >
-                        <span className="text-sm">{category.name}</span>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
+              {isCategoryOpen && (
+                <div
+                  className="absolute left-0 top-full w-56 bg-blue-600 shadow-lg z-50"
+                  onMouseLeave={() => setIsCategoryOpen(false)}
+                >
+                  {(isRealEstatePage ? realEstateCategories : categories).map((category, index) => (
+                    <Link
+                      key={index}
+                      to={isRealEstatePage ? `/realestate?type=${category.slug}` : `/products?category=${category.slug}`}
+                      className="flex items-center gap-3 px-5 py-3 text-white hover:bg-blue-700 transition-colors border-t border-blue-500"
+                    >
+                      <span className="text-sm">{category.name}</span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {/* Main Menu */}
             <nav className="flex items-center ml-2 gap-1">
@@ -293,10 +312,10 @@ const Header = () => {
             <div className="p-4 border-b">
               <p className="text-xs font-medium text-gray-400 mb-2">카테고리</p>
               <div className="space-y-1">
-                {categories.map((category, index) => (
+                {(isRealEstatePage ? realEstateCategories : categories).map((category, index) => (
                   <Link
                     key={index}
-                    to={`/products?category=${category.slug}`}
+                    to={isRealEstatePage ? `/realestate?type=${category.slug}` : `/products?category=${category.slug}`}
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="block py-2.5 px-3 text-gray-700 hover:bg-gray-100 rounded-lg text-sm"
                   >

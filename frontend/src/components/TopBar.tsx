@@ -8,6 +8,7 @@ const TopBar = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const isRealEstatePage = location.pathname.startsWith('/realestate')
+  const isBrandMainPage = location.pathname === '/'
 
   useEffect(() => {
     // 초기 세션 확인
@@ -39,7 +40,7 @@ const TopBar = () => {
     localStorage.removeItem('userEmail')
     localStorage.removeItem('userId')
     setIsLoggedIn(false)
-    navigate('/interior')
+    navigate('/')
   }
 
   return (
@@ -49,8 +50,8 @@ const TopBar = () => {
           {/* Left side */}
           <div className="flex items-center gap-3">
             <span className="text-gray-300">
-              <span className="font-bold text-white">{isRealEstatePage ? '공간나라부동산' : '공간나라인테리어'}</span>
-              {' '} - {isRealEstatePage ? '지역 맞춤 매물 중개 서비스' : '인테리어 용품 쇼핑몰 & 시공 전문'}
+              <span className="font-bold text-white">{isBrandMainPage ? '공간나라' : isRealEstatePage ? '공간나라부동산' : '공간나라인테리어'}</span>
+              {' '} - {isBrandMainPage ? '브랜드 메인 페이지' : isRealEstatePage ? '지역 맞춤 매물 중개 서비스' : '인테리어 용품 쇼핑몰 & 시공 전문'}
             </span>
           </div>
 

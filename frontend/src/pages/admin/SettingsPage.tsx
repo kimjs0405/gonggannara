@@ -10,6 +10,7 @@ import {
   Phone,
   MapPin,
   Clock
+  ,Building2
 } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 
@@ -42,6 +43,15 @@ const SettingsPage = () => {
     reviewNotification: true,
     lowStockNotification: true,
     marketingEmail: false,
+  })
+  const [brandSettings, setBrandSettings] = useState({
+    heroTitle: '공간나라',
+    heroSubtitle: '인테리어와 부동산을 하나로 연결하는 공간 라이프 플랫폼',
+    interiorCta: '공간나라인테리어',
+    realEstateCta: '공간나라부동산',
+    introTitle: '당신의 공간 여정을 함께합니다',
+    introDescription: '집을 찾는 순간부터 공간을 완성하는 순간까지, 공간나라가 한 번에 도와드립니다.',
+    realEstateCategories: '아파트:apartment\n오피스텔:officetel\n빌라/주택:villa-house\n상가:commercial\n사무실:office\n전세:jeonse\n월세:monthly',
   })
 
   useEffect(() => {
@@ -82,6 +92,27 @@ const SettingsPage = () => {
 
       if (notificationData?.value) {
         setNotificationSettings(notificationData.value as typeof notificationSettings)
+      }
+
+      const { data: brandData } = await supabase
+        .from('settings')
+        .select('value')
+        .eq('key', 'brand')
+        .single()
+
+      if (brandData?.value) {
+        const v = brandData.value as any
+        setBrandSettings({
+          heroTitle: v.heroTitle || brandSettings.heroTitle,
+          heroSubtitle: v.heroSubtitle || brandSettings.heroSubtitle,
+          interiorCta: v.interiorCta || brandSettings.interiorCta,
+          realEstateCta: v.realEstateCta || brandSettings.realEstateCta,
+          introTitle: v.introTitle || brandSettings.introTitle,
+          introDescription: v.introDescription || brandSettings.introDescription,
+          realEstateCategories: Array.isArray(v.realEstateCategories)
+            ? v.realEstateCategories.map((c: any) => `${c.name}:${c.slug}`).join('\n')
+            : brandSettings.realEstateCategories,
+        })
       }
     } catch (error) {
       console.error('Error fetching settings:', error)
@@ -124,9 +155,37 @@ const SettingsPage = () => {
           onConflict: 'key'
         })
 
-      if (storeError || shippingError || notificationError) {
+      const parsedCategories = brandSettings.realEstateCategories
+        .split('\n')
+        .map(line => line.trim())
+        .filter(Boolean)
+        .map(line => {
+          const [name, slug] = line.split(':')
+          return { name: (name || '').trim(), slug: (slug || '').trim() }
+        })
+        .filter(item => item.name && item.slug)
+
+      const { error: brandError } = await supabase
+        .from('settings')
+        .upsert({
+          key: 'brand',
+          value: {
+            heroTitle: brandSettings.heroTitle,
+            heroSubtitle: brandSettings.heroSubtitle,
+            interiorCta: brandSettings.interiorCta,
+            realEstateCta: brandSettings.realEstateCta,
+            introTitle: brandSettings.introTitle,
+            introDescription: brandSettings.introDescription,
+            realEstateCategories: parsedCategories,
+          },
+          updated_at: new Date().toISOString(),
+        }, {
+          onConflict: 'key'
+        })
+
+      if (storeError || shippingError || notificationError || brandError) {
         alert('설정 저장 중 오류가 발생했습니다.')
-        console.error('Error saving settings:', { storeError, shippingError, notificationError })
+        console.error('Error saving settings:', { storeError, shippingError, notificationError, brandError })
       } else {
         setSaved(true)
         setTimeout(() => setSaved(false), 3000)
@@ -142,6 +201,7 @@ const SettingsPage = () => {
     { id: 'shipping', label: '배송 설정', icon: Truck },
     { id: 'payment', label: '결제 설정', icon: CreditCard },
     { id: 'notification', label: '알림 설정', icon: Bell },
+    { id: 'brand', label: '브랜드/부동산', icon: Building2 },
     { id: 'security', label: '보안 설정', icon: Shield },
   ]
 
@@ -297,6 +357,44 @@ const SettingsPage = () => {
                   onChange={(e) => setStoreSettings({ ...storeSettings, businessHours: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
                 />
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'brand' && (
+            <div className="space-y-6">
+              <h2 className="text-lg font-bold text-gray-800 pb-4 border-b border-gray-100">브랜드/부동산 설정</h2>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">브랜드 메인 타이틀</label>
+                  <input value={brandSettings.heroTitle} onChange={(e) => setBrandSettings({ ...brandSettings, heroTitle: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">브랜드 소개 타이틀</label>
+                  <input value={brandSettings.introTitle} onChange={(e) => setBrandSettings({ ...brandSettings, introTitle: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">브랜드 메인 서브타이틀</label>
+                <textarea value={brandSettings.heroSubtitle} onChange={(e) => setBrandSettings({ ...brandSettings, heroSubtitle: e.target.value })} rows={2} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">브랜드 소개 설명</label>
+                <textarea value={brandSettings.introDescription} onChange={(e) => setBrandSettings({ ...brandSettings, introDescription: e.target.value })} rows={2} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500" />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">인테리어 버튼 문구</label>
+                  <input value={brandSettings.interiorCta} onChange={(e) => setBrandSettings({ ...brandSettings, interiorCta: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">부동산 버튼 문구</label>
+                  <input value={brandSettings.realEstateCta} onChange={(e) => setBrandSettings({ ...brandSettings, realEstateCta: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">부동산 카테고리 (한 줄에 하나, 형식: 이름:slug)</label>
+                <textarea value={brandSettings.realEstateCategories} onChange={(e) => setBrandSettings({ ...brandSettings, realEstateCategories: e.target.value })} rows={8} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 font-mono text-sm" />
               </div>
             </div>
           )}
