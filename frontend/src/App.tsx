@@ -1,6 +1,7 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import Layout from './components/Layout'
 import HomePage from './pages/HomePage'
+import RealEstateHomePage from './pages/RealEstateHomePage'
 import ProductsPage from './pages/ProductsPage'
 import ProductDetailPage from './pages/ProductDetailPage'
 import CartPage from './pages/CartPage'
@@ -37,7 +38,9 @@ function App() {
     <Routes>
       {/* 메인 사이트 라우트 */}
       <Route path="/" element={<Layout />}>
-        <Route index element={<HomePage />} />
+        <Route index element={<Navigate to="/interior" replace />} />
+        <Route path="interior" element={<HomePage />} />
+        <Route path="realestate" element={<RealEstateHomePage />} />
         {/* 쇼핑몰 */}
         <Route path="products" element={<ProductsPage />} />
         <Route path="products/:id" element={<ProductDetailPage />} />

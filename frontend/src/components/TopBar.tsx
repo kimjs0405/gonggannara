@@ -1,11 +1,13 @@
 import { Phone } from 'lucide-react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 
 const TopBar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const navigate = useNavigate()
+  const location = useLocation()
+  const isRealEstatePage = location.pathname.startsWith('/realestate')
 
   useEffect(() => {
     // 초기 세션 확인
@@ -37,7 +39,7 @@ const TopBar = () => {
     localStorage.removeItem('userEmail')
     localStorage.removeItem('userId')
     setIsLoggedIn(false)
-    navigate('/')
+    navigate('/interior')
   }
 
   return (
@@ -47,7 +49,8 @@ const TopBar = () => {
           {/* Left side */}
           <div className="flex items-center gap-3">
             <span className="text-gray-300">
-              <span className="font-bold text-white">공간나라</span> - 인테리어 용품 쇼핑몰 & 시공 전문
+              <span className="font-bold text-white">{isRealEstatePage ? '공간나라부동산' : '공간나라인테리어'}</span>
+              {' '} - {isRealEstatePage ? '지역 맞춤 매물 중개 서비스' : '인테리어 용품 쇼핑몰 & 시공 전문'}
             </span>
           </div>
 

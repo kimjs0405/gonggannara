@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { Search, Menu, ShoppingCart, User, Phone, X } from 'lucide-react'
+import { Link, useLocation } from 'react-router-dom'
+import { Search, Menu, ShoppingCart, User, Phone, X, Home, Building2 } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
 const Header = () => {
+  const location = useLocation()
   const [isCategoryOpen, setIsCategoryOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -49,11 +50,10 @@ const Header = () => {
   ]
 
   const menuItems = [
-    { name: '견적문의', path: '/estimate' },
-    { name: '포트폴리오', path: '/portfolio' },
-    { name: '고객후기', path: '/reviews' },
-    { name: '회사소개', path: '/about' },
+    { name: '공간나라인테리어', path: '/interior', icon: Home },
+    { name: '공간나라부동산', path: '/realestate', icon: Building2 },
   ]
+  const isRealEstatePage = location.pathname.startsWith('/realestate')
 
   return (
     <header className="bg-white sticky top-0 z-50">
@@ -70,7 +70,7 @@ const Header = () => {
             </button>
 
             {/* Logo */}
-            <Link to="/" className="flex items-center flex-shrink-0">
+            <Link to="/interior" className="flex items-center flex-shrink-0">
               <img src="/logo.svg" alt="공간나라" className="h-7 md:h-9" />
             </Link>
 
@@ -81,7 +81,7 @@ const Header = () => {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="인테리어 용품을 검색하세요"
+                  placeholder={isRealEstatePage ? '부동산 지역/매물 키워드를 검색하세요' : '인테리어 용품을 검색하세요'}
                   className="w-full h-11 pl-4 pr-14 border-2 border-blue-500 rounded-full focus:outline-none focus:border-blue-600 text-sm"
                 />
                 <button className="absolute right-2 w-9 h-9 bg-blue-500 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors">
@@ -99,11 +99,11 @@ const Header = () => {
 
             {/* CTA Button - Desktop */}
             <Link
-              to="/estimate"
+              to={isRealEstatePage ? '/realestate' : '/estimate'}
               className="hidden md:block flex-shrink-0 bg-blue-600 text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
             >
               <div className="text-center">
-                <p className="font-bold">무료 견적상담</p>
+                <p className="font-bold">{isRealEstatePage ? '매물 상담문의' : '무료 견적상담'}</p>
               </div>
             </Link>
 
@@ -149,34 +149,35 @@ const Header = () => {
       <div className="hidden md:block bg-white border-b border-gray-200">
         <div className="max-w-[1200px] mx-auto px-4">
           <div className="flex items-center h-12">
-            {/* Category Button */}
-            <div className="relative">
-              <button
-                onClick={() => setIsCategoryOpen(!isCategoryOpen)}
-                onMouseEnter={() => setIsCategoryOpen(true)}
-                className="flex items-center gap-2 px-5 h-12 bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors"
-              >
-                <Menu className="w-5 h-5" />
-                <span>전체카테고리</span>
-              </button>
-
-              {isCategoryOpen && (
-                <div
-                  className="absolute left-0 top-full w-56 bg-blue-600 shadow-lg z-50"
-                  onMouseLeave={() => setIsCategoryOpen(false)}
+            {!isRealEstatePage && (
+              <div className="relative">
+                <button
+                  onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+                  onMouseEnter={() => setIsCategoryOpen(true)}
+                  className="flex items-center gap-2 px-5 h-12 bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors"
                 >
-                  {categories.map((category, index) => (
-                    <Link
-                      key={index}
-                      to={`/products?category=${category.slug}`}
-                      className="flex items-center gap-3 px-5 py-3 text-white hover:bg-blue-700 transition-colors border-t border-blue-500"
-                    >
-                      <span className="text-sm">{category.name}</span>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
+                  <Menu className="w-5 h-5" />
+                  <span>전체카테고리</span>
+                </button>
+
+                {isCategoryOpen && (
+                  <div
+                    className="absolute left-0 top-full w-56 bg-blue-600 shadow-lg z-50"
+                    onMouseLeave={() => setIsCategoryOpen(false)}
+                  >
+                    {categories.map((category, index) => (
+                      <Link
+                        key={index}
+                        to={`/products?category=${category.slug}`}
+                        className="flex items-center gap-3 px-5 py-3 text-white hover:bg-blue-700 transition-colors border-t border-blue-500"
+                      >
+                        <span className="text-sm">{category.name}</span>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Main Menu */}
             <nav className="flex items-center ml-2 gap-1">
@@ -184,8 +185,11 @@ const Header = () => {
                 <Link
                   key={item.name}
                   to={item.path}
-                  className="px-4 py-3 font-medium text-gray-700 hover:text-blue-600 transition-colors"
+                  className={`px-4 py-3 font-medium transition-colors flex items-center gap-1.5 ${
+                    location.pathname.startsWith(item.path) ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
+                  }`}
                 >
+                  <item.icon className="w-4 h-4" />
                   {item.name}
                 </Link>
               ))}

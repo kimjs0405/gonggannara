@@ -23,6 +23,17 @@ const HomePage = () => {
   const [isLoggingIn, setIsLoggingIn] = useState(false)
   const [banners, setBanners] = useState<Banner[]>([])
 
+  useEffect(() => {
+    document.title = '공간나라인테리어 - 인테리어 전문 쇼핑몰'
+    let descriptionTag = document.querySelector('meta[name="description"]')
+    if (!descriptionTag) {
+      descriptionTag = document.createElement('meta')
+      descriptionTag.setAttribute('name', 'description')
+      document.head.appendChild(descriptionTag)
+    }
+    descriptionTag.setAttribute('content', '공간나라인테리어에서 가구, 조명, 홈데코 쇼핑과 인테리어 시공 상담을 한 번에 이용하세요.')
+  }, [])
+
   // 기본 배너 (DB에 배너가 없을 때)
   const defaultBanners = [
     {
