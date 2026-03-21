@@ -46,7 +46,7 @@ const SettingsPage = () => {
   })
   const [brandSettings, setBrandSettings] = useState({
     heroTitle: '공간나라',
-    heroSubtitle: '인테리어와 부동산을 하나로 연결하는 공간 라이프 플랫폼',
+    heroSubtitle: '종합부동산파트너 공간나라',
     interiorCta: '공간나라인테리어',
     realEstateCta: '공간나라부동산',
     introTitle: '당신의 공간 여정을 함께합니다',

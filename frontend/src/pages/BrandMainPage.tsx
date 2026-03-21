@@ -6,7 +6,7 @@ import { supabase } from '../lib/supabase'
 const BrandMainPage = () => {
   const [brand, setBrand] = useState({
     heroTitle: '공간나라',
-    heroSubtitle: '인테리어와 부동산을 하나로 연결하는 공간 라이프 플랫폼',
+    heroSubtitle: '종합부동산파트너 공간나라',
     interiorCta: '공간나라인테리어',
     realEstateCta: '공간나라부동산',
     introTitle: '당신의 공간 여정을 함께합니다',
@@ -44,7 +44,7 @@ const BrandMainPage = () => {
             <div className="relative">
               <p className="inline-flex items-center gap-1.5 text-xs md:text-sm bg-white/15 px-3 py-1.5 rounded-full">
                 <Sparkles className="w-4 h-4" />
-                공간 통합 브랜드
+                종합부동산파트너 공간나라
               </p>
               <h1 className="mt-4 text-3xl md:text-5xl font-black leading-tight">{brand.heroTitle}</h1>
               <p className="mt-4 text-sm md:text-lg text-white/85">{brand.heroSubtitle}</p>
