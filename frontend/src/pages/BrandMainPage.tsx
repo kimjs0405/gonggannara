@@ -36,12 +36,12 @@ const BrandMainPage = () => {
 
   return (
     <div className="bg-white">
-      <section className="py-0">
-        <div className="w-full">
+      <section className="py-10 md:py-16">
+        <div className="max-w-[1200px] mx-auto px-4">
           <div className="bg-gradient-to-r from-slate-900 to-blue-700 text-white relative overflow-hidden min-h-[380px] md:min-h-[460px] flex items-center">
             <div className="absolute -right-16 -top-16 w-48 h-48 rounded-full bg-white/10 blur-2xl" />
             <div className="absolute -left-10 -bottom-20 w-56 h-56 rounded-full bg-blue-400/20 blur-2xl" />
-            <div className="relative max-w-[1200px] mx-auto px-4 py-12 md:py-16 w-full">
+            <div className="relative px-7 md:px-12 py-12 md:py-16 w-full">
               <p className="inline-flex items-center gap-1.5 text-xs md:text-sm bg-white/15 px-3 py-1.5 rounded-full">
                 <Sparkles className="w-4 h-4" />
                 종합부동산파트너 공간나라
