@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_레이어_1" data-name="레이어 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4000 1000">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #1d2087;
+      }
+
+      .cls-2 {
+        font-family: Paperlogy-8ExtraBold, Paperlogy;
+        font-size: 710px;
+        font-weight: 700;
+      }
+    </style>
+  </defs>
+  <text class="cls-2" transform="translate(1275.31 787.97)"><tspan x="0" y="0">공간나라</tspan></text>
+  <rect class="cls-1" x="205" y="238.32" width="349.94" height="650.32"/>
+  <rect class="cls-1" x="709.77" y="111.35" width="349.94" height="650.32"/>
+</svg>
